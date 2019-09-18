@@ -26,5 +26,152 @@
     "secret": "dddd321456789012345678901234567921",
     "code": "NA",
     "enabled": true
+  },
+  {
+    "host": "er5.mymtproto.xyz",
+    "port": "82",
+    "secret": "dd7bd0afc91f3436a168c6c8b62c78688a",
+    "code": "EU",
+    "enabled": true
+  },
+  {
+    "host": "jjjvadad.tk",
+    "port": "55",
+    "secret": "dd9b21c91cce87c0d0ea222962ed90a4c7",
+    "code": "EU",
+    "enabled": true
+  },
+  {
+    "host": "NEWproxyFOUR.n4t.co",
+    "port": "443",
+    "secret": "dd00000000000000000000000000000000",
+    "code": "EU",
+    "enabled": true
+  },
+  {
+    "host": "er4.mymtproto.xyz",
+    "port": "80",
+    "secret": "dd7bd0afc91f3436a168c6c8b62c78688a",
+    "code": "EU",
+    "enabled": true
+  },
+  {
+    "host": "hos3.n4t.co",
+    "port": "443",
+    "secret": "dd00000000000000000000000000000000",
+    "code": "EU",
+    "enabled": true
+  },
+  {
+    "host": "7etw2xl.TurboMT.live",
+    "port": "443",
+    "secret": "dddd123456789012345678901234567890",
+    "code": "NA",
+    "enabled": true
+  },
+  {
+    "host": "Shooter.ChMTP.Info",
+    "port": "88",
+    "secret": "dd00000000000000000000000000000000",
+    "code": "EU",
+    "enabled": true
+  },
+  {
+    "host": "ToKhobi.MyFirewall.org",
+    "port": "80",
+    "secret": "00000000000000000000000000000000",
+    "code": "EU",
+    "enabled": true
+  },
+  {
+    "host": "c.ronaldo.mtproxygo.xyz",
+    "port": "80",
+    "secret": "dddd321456789012345678901234567921",
+    "code": "NA",
+    "enabled": true
+  },
+  {
+    "host": "zz.proxygo.xyz",
+    "port": "80",
+    "secret": "dddd321456789012345678901234567921",
+    "code": "NA",
+    "enabled": true
+  },
+  {
+    "host": "new4.bartarin.xyz",
+    "port": "88",
+    "secret": "dd7bd0afc91f3436a168c6c8b62c78688a",
+    "code": "EU",
+    "enabled": true
+  },
+  {
+    "host": "powerful-conection.ddns.net",
+    "port": "443",
+    "secret": "dd112233445566778899aabbccddeeff",
+    "code": "EU",
+    "enabled": true
+  },
+  {
+    "host": "v79.Bestmt.info",
+    "port": "443",
+    "secret": "dd00000000000000000000000000000000",
+    "code": "EU",
+    "enabled": true
+  },
+  {
+    "host": "chili.mtproxies.com",
+    "port": "443",
+    "secret": "ee54d4920e90309e82dad8a6cc3f4d71746368696c692e6d7470726f786965732e636f6d",
+    "code": "AS",
+    "enabled": true
+  },
+  {
+    "host": "Matrix.For-All.tk",
+    "port": "443",
+    "secret": "dd540e3ca27f4612b1e2bdf1229e0a9c63",
+    "code": "EU",
+    "enabled": true
+  },
+  {
+    "host": "papa.mtproxies.com",
+    "port": "443",
+    "secret": "ee54d4920e90309e82dad8a6cc3f4d717473686f702e6972616e63656c6c2e6972",
+    "code": "AS",
+    "enabled": true
+  },
+  {
+    "host": "drproxyfree.dnsup.net",
+    "port": "443",
+    "secret": "ddcce326a3387761c8677a6526228206c2",
+    "code": "NA",
+    "enabled": true
+  },
+  {
+    "host": "emperorproxy.dynu.net",
+    "port": "443",
+    "secret": "dd00000000000000000000000000000000",
+    "code": "EU",
+    "enabled": true
+  },
+  {
+    "host": "Strong.ChMTP.Info",
+    "port": "88",
+    "secret": "dd00000000000000000000000000000000",
+    "code": "EU",
+    "enabled": true
+  },
+  {
+    "host": "netproxy.dnsup.net",
+    "port": "8001",
+    "secret": "ddcde326a3659891c8307a6526228206c1",
+    "code": "NA",
+    "enabled": true
+  },
+  {
+    "host": "god.imtproto.info",
+    "port": "7980",
+    "secret": "dd8b2394ad2ecef7e607d5f52b31a45768",
+    "code": "NA",
+    "enabled": true
   }
 ]
