@@ -12,5 +12,19 @@
     "secret": "ee54d4920e90309e82dad8a6cc3f4d717473686f702e6972616e63656c6c2e6972",
     "code": "AS",
     "enabled": true
+  },
+  {
+    "host": "power.pmtt.xyz",
+    "port": "80",
+    "secret": "dddd321456789012345678901234567921",
+    "code": "NA",
+    "enabled": true
+  },
+  {
+    "host": "proxy.yahosein.xyz",
+    "port": "80",
+    "secret": "dddd321456789012345678901234567921",
+    "code": "NA",
+    "enabled": true
   }
 ]
