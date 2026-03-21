@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="viewModel"
+            type="com.walhalla.mtprotolist.fragment.MtprotoProxyListViewModel" />
+    </data>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="16dp">
+
+        <EditText
+            android:id="@+id/editTextServer"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/hint_server"
+            tools:ignore="Autofill,TextFields" />
+
+        <EditText
+            android:id="@+id/editTextPort"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/hint_port"
+            android:inputType="number"
+            android:maxLength="5"
+            tools:ignore="Autofill" />
+
+        <EditText
+            android:id="@+id/editTextSecret"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/hint_secret"
+            android:inputType="textPassword"
+            tools:ignore="Autofill" />
+
+        <!--        android:onClick="@{() -> viewModel.onAddProxyClicked()}"-->
+        <Button
+            android:id="@+id/button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="+"
+            tools:ignore="HardcodedText" />
+
+    </LinearLayout>
+    <!--    <LinearLayout-->
+    <!--        android:layout_width="match_parent"-->
+    <!--        android:layout_height="match_parent"-->
+    <!--        android:background="#44FFFFFF"-->
+    <!--        android:orientation="vertical">-->
+
+    <!--        &lt;!&ndash; Добавьте EditText для ввода прокси данных &ndash;&gt;-->
+    <!--        <EditText-->
+    <!--            android:id="@+id/editTextHost"-->
+    <!--            android:layout_width="match_parent"-->
+    <!--            android:layout_height="wrap_content"-->
+    <!--            android:hint="Host"-->
+    <!--            android:inputType="text" />-->
+
+    <!--        <EditText-->
+    <!--            android:id="@+id/editTextPort"-->
+    <!--            android:layout_width="match_parent"-->
+    <!--            android:layout_height="wrap_content"-->
+    <!--            android:hint="@string/proxy_port"-->
+    <!--            android:inputType="number"-->
+    <!--            tools:ignore="Autofill" />-->
+
+    <!--    </LinearLayout>-->
+</layout>

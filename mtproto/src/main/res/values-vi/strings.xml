@@ -1,0 +1,17 @@
+<resources><string name="action_proxy_connect">Nhấn để kết nối qua proxy</string>
+    <string name="proxy_port">Cổng:</string>
+    <string name="data_successfully_updated">Dữ liệu đã được cập nhật thành công</string>
+    <string name="msg_no_notes1">Dữ liệu trống\nKiểm tra\nCài đặt mạng,\nDataUsageSummary\ncũng như</string>
+    <string name="part1">Cài đặt mạng</string>
+
+    <string name="share_proxy_data">Chia sẻ proxy</string>
+    <string name="action_mirror">Gương trang web proxy</string>
+    <string name="err_telegram_client_not_unstalled">Ứng dụng Telegram chưa được cài đặt</string>
+    <string name="copied_to_clipboard">Sao chép vào clipboard</string>
+    <string name="pref_category_lang">Địa phương hóa</string>
+    <string name="pref_title_lang">Chọn ngôn ngữ</string>
+    <string name="pref_category_other">Thêm vào</string>
+    <string name="pref_title_copyright">Bản quyền</string>
+    <string name="pref_title_dev_name">Phát triển bởi</string>
+    <string name="pref_title_more">Ứng dụng khác</string>
+</resources>

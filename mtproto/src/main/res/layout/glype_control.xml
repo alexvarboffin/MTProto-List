@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="#FFFFFF"
+    android:orientation="vertical"
+    tools:context=".GlypeControlView">
+
+    <TextView
+        android:id="@+id/title"
+        style="@style/TextAppearance.AppCompat.Headline"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:text="Enter Url to Browse"
+        android:textSize="18sp" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <EditText
+            android:id="@+id/input"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:hint="Enter URL"
+            android:textSize="16sp" />
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="8dp"
+            android:text="Go" />
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/options_toggle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:onClick="toggleOptions"
+        android:text="options"
+        android:textColor="@android:color/holo_blue_dark" />
+
+    <LinearLayout
+        android:id="@+id/options"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:orientation="vertical"
+        android:visibility="gone">
+
+        <CheckBox
+            android:id="@+id/encodeURL"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:checked="true"
+            android:text="Encrypt URL" />
+
+        <CheckBox
+            android:id="@+id/encodePage"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Encrypt Page" />
+
+        <CheckBox
+            android:id="@+id/allowCookies"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:checked="true"
+            android:text="Allow Cookies" />
+
+        <CheckBox
+            android:id="@+id/stripTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Remove Page Titles" />
+
+        <CheckBox
+            android:id="@+id/stripJS"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Remove Scripts" />
+
+        <CheckBox
+            android:id="@+id/stripObjects"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Remove Objects" />
+    </LinearLayout>
+
+</LinearLayout>

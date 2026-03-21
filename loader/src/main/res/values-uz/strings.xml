@@ -1,0 +1,18 @@
+<resources>
+    <string name="action_proxy_connect">Прокси орқали уланганда босилган</string>
+    <string name="proxy_port">Порт:</string>
+    <string name="data_successfully_updated">Маълумот муваффақиятли янгиланди</string>
+    <string name="msg_no_notes1">Маълумот бўш\nТекшириш\nТармоқ қайта созламалари,\nDataUsageSummary\nва</string>
+    <string name="part1">Тармоқ қайта созламалари</string>
+
+    <string name="share_proxy_data">Проксини баҳамлаш</string>
+    <string name="action_mirror">Прокси сайти тозалаш</string>
+    <string name="err_telegram_client_not_unstalled">Telegram клиенти орнатилмаган</string>
+    <string name="copied_to_clipboard">Клипборга нусхаланди</string>
+    <string name="pref_category_lang">Локализация</string>
+    <string name="pref_title_lang">Тил танлови</string>
+    <string name="pref_category_other">Қўшимча</string>
+    <string name="pref_title_copyright">Авторлик ҳуқуқи</string>
+    <string name="pref_title_dev_name">Ишлаб чиқарган</string>
+    <string name="pref_title_more">Бошқа дастурлар</string>
+</resources>

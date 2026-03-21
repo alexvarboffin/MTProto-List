@@ -1,0 +1,17 @@
+<resources><string name="action_proxy_connect">프록시를 통한 연결</string>
+    <string name="proxy_port">포트:</string>
+    <string name="data_successfully_updated">데이터가 성공적으로 업데이트되었습니다</string>
+    <string name="msg_no_notes1">데이터가 비어 있습니다\n확인하세요\n네트워크 설정,\nDataUsageSummary\n그리고</string>
+    <string name="part1">네트워크 설정</string>
+
+    <string name="share_proxy_data">프록시 공유</string>
+    <string name="action_mirror">프록시 사이트 미러</string>
+    <string name="err_telegram_client_not_unstalled">Telegram 클라이언트가 설치되어 있지 않습니다</string>
+    <string name="copied_to_clipboard">클립보드에 복사되었습니다</string>
+    <string name="pref_category_lang">로컬라이제이션</string>
+    <string name="pref_title_lang">언어 선택</string>
+    <string name="pref_category_other">추가 옵션</string>
+    <string name="pref_title_copyright">저작권</string>
+    <string name="pref_title_dev_name">개발자</string>
+    <string name="pref_title_more">다른 애플리케이션</string>
+</resources>

@@ -1,0 +1,1 @@
+ bundletool build-apks --bundle=/MyApp/my_app.aab --output=/MyApp/my_app.apks --mode=universal

@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <item>
+        <shape android:shape="rectangle">
+<!--            @dimen/button_padding_bottom_pressed-->
+            <padding
+                android:bottom="8dp"
+                android:left="0dp"
+                android:right="0dp" />
+            <solid android:color="#6200EA" />
+            <corners android:radius="12.0dip" />
+            <stroke
+                android:width="1.0dip"
+                android:color="#6200EA" />
+        </shape>
+    </item>
+
+    <item>
+        <shape android:shape="rectangle">
+            <padding android:bottom="8dp" android:top="10dp"/>
+            <solid android:color="#4368DC" />
+            <corners android:radius="12.0dip" />
+            <stroke
+                android:width="1.0dip"
+                android:color="#5993fe" />
+        </shape>
+    </item>
+</layer-list>

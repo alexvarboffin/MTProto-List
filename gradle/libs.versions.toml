@@ -1,0 +1,83 @@
+[versions]
+agp = "8.13.2"
+kotlin = "2.0.0"
+googleServices = "4.4.2"
+crashlyticsPlugin = "3.0.2"
+
+# Android SDK
+minSdk = "21"
+targetSdk = "35"
+compileSdk = "35"
+
+# Libraries
+appcompat = "1.7.0"
+material = "1.12.0"
+constraintlayout = "2.2.0"
+gson = "2.11.0"
+picasso = "2.71828"
+qrgen = "3.0.1"
+swiperefresh = "1.1.0"
+multidex = "2.0.1"
+firebaseCore = "21.1.1"
+firebaseDatabase = "21.0.0"
+crashlytics = "19.2.1"
+analytics = "22.1.2"
+gmsAds = "23.5.0"
+lifecycle = "2.8.7"
+onesignal = "5.1.25"
+localeChanger = "1.1"
+preference = "1.2.1"
+pulsator = "1.0.3"
+androidBrowserHelper = "2.5.0"
+appUpdate = "2.1.0"
+sdp = "1.1.1"
+konfetti = "2.0.4"
+room = "2.6.1"
+junit = "4.13.2"
+runner = "1.0.2"
+espressoCore = "3.0.2"
+appcompatV7 = "28.0.0"
+
+[libraries]
+androidx-appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "appcompat" }
+google-material = { group = "com.google.android.material", name = "material", version.ref = "material" }
+androidx-constraintlayout = { group = "androidx.constraintlayout", name = "constraintlayout", version.ref = "constraintlayout" }
+gson = { group = "com.google.code.gson", name = "gson", version.ref = "gson" }
+picasso = { group = "com.squareup.picasso", name = "picasso", version.ref = "picasso" }
+qrgen = { group = "com.github.kenglxn.QRGen", name = "android", version.ref = "qrgen" }
+androidx-swiperefreshlayout = { group = "androidx.swiperefreshlayout", name = "swiperefreshlayout", version.ref = "swiperefresh" }
+androidx-multidex = { group = "androidx.multidex", name = "multidex", version.ref = "multidex" }
+firebase-core = { group = "com.google.firebase", name = "firebase-core", version.ref = "firebaseCore" }
+firebase-database = { group = "com.google.firebase", name = "firebase-database", version.ref = "firebaseDatabase" }
+firebase-crashlytics = { group = "com.google.firebase", name = "firebase-crashlytics", version.ref = "crashlytics" }
+firebase-analytics = { group = "com.google.firebase", name = "firebase-analytics", version.ref = "analytics" }
+play-services-ads = { group = "com.google.android.gms", name = "play-services-ads", version.ref = "gmsAds" }
+androidx-lifecycle-process = { group = "androidx.lifecycle", name = "lifecycle-process", version.ref = "lifecycle" }
+androidx-lifecycle-runtime = { group = "androidx.lifecycle", name = "lifecycle-runtime", version.ref = "lifecycle" }
+androidx-lifecycle-common-java8 = { group = "androidx.lifecycle", name = "lifecycle-common-java8", version.ref = "lifecycle" }
+androidx-lifecycle-viewmodel = { group = "androidx.lifecycle", name = "lifecycle-viewmodel", version.ref = "lifecycle" }
+androidx-lifecycle-viewmodel-ktx = { group = "androidx.lifecycle", name = "lifecycle-viewmodel-ktx", version.ref = "lifecycle" }
+onesignal = { group = "com.onesignal", name = "OneSignal", version.ref = "onesignal" }
+localechanger = { group = "com.github.franmontiel", name = "LocaleChanger", version.ref = "localeChanger" }
+androidx-preference = { group = "androidx.preference", name = "preference", version.ref = "preference" }
+pulsator4droid = { group = "pl.bclogic", name = "pulsator4droid", version.ref = "pulsator" }
+androidbrowserhelper = { group = "com.google.androidbrowserhelper", name = "androidbrowserhelper", version.ref = "androidBrowserHelper" }
+play-app-update = { group = "com.google.android.play", name = "app-update", version.ref = "appUpdate" }
+play-app-update-ktx = { group = "com.google.android.play", name = "app-update-ktx", version.ref = "appUpdate" }
+sdp-android = { group = "com.intuit.sdp", name = "sdp-android", version.ref = "sdp" }
+konfetti-xml = { group = "nl.dionsegijn", name = "konfetti-xml", version.ref = "konfetti" }
+room-runtime = { group = "androidx.room", name = "room-runtime", version.ref = "room" }
+room-compiler = { group = "androidx.room", name = "room-compiler", version.ref = "room" }
+kotlin-stdlib = { group = "org.jetbrains.kotlin", name = "kotlin-stdlib", version.ref = "kotlin" }
+kotlin-stdlib-jdk8 = { group = "org.jetbrains.kotlin", name = "kotlin-stdlib-jdk8", version.ref = "kotlin" }
+junit = { group = "junit", name = "junit", version.ref = "junit" }
+runner = { group = "com.android.support.test", name = "runner", version.ref = "runner" }
+espresso-core = { group = "com.android.support.test.espresso", name = "espresso-core", version.ref = "espressoCore" }
+appcompat-v7 = { group = "com.android.support", name = "appcompat-v7", version.ref = "appcompatV7" }
+
+[plugins]
+android-application = { id = "com.android.application", version.ref = "agp" }
+android-library = { id = "com.android.library", version.ref = "agp" }
+kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
+google-services = { id = "com.google.gms.google-services", version.ref = "googleServices" }
+firebase-crashlytics = { id = "com.google.firebase.crashlytics", version.ref = "crashlyticsPlugin" }

@@ -1,0 +1,23 @@
+<resources><string name="action_proxy_connect">انقر للاتصال عبر الوكيل</string>
+    <string name="proxy_port">المنفذ:</string>
+    <string name="data_successfully_updated">تم تحديث البيانات بنجاح</string>
+    <string name="msg_no_notes1" translatable="false">البيانات فارغة\nتحقق\nمن إعدادات الشبكة،\nDataUsageSummary
+        \nو
+    </string>
+    <string name="part1">إعدادات الشبكة</string>
+    <string name="part2">DataUsageSummary</string>
+    <string name="msg_no_notes2" translatable="false">
+    <a href="market://details?id=com.google.android.gms">
+        يُرجى التحديث\nGoogle Play Service</a>
+</string>
+    <string name="share_proxy_data">مشاركة الوكيل</string>
+    <string name="action_mirror">موقع وكيل المواقع المتعددة</string>
+    <string name="err_telegram_client_not_unstalled">لم يتم تثبيت عميل تليجرام</string>
+    <string name="copied_to_clipboard">تم النسخ إلى الحافظة</string>
+    <string name="pref_category_lang">اللغة</string>
+    <string name="pref_title_lang">اختيار اللغة</string>
+    <string name="pref_category_other">إضافي</string>
+    <string name="pref_title_copyright">حقوق الطبع والنشر</string>
+    <string name="pref_title_dev_name">تم تطويره بواسطة</string>
+    <string name="pref_title_more">تطبيقات أخرى</string>
+</resources>

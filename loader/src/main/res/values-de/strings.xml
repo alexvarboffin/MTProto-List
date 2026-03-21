@@ -1,0 +1,20 @@
+<resources>
+    <string name="action_proxy_connect">Klicken Sie hier, um über einen Proxy zu verbinden</string>
+    <string name="proxy_port">Hafen:</string>
+    <string name="data_successfully_updated">Daten erfolgreich aktualisiert</string>
+    <string name="msg_no_notes1">Daten sind leer\nÜberprüfen\nNetzwerkeinstellungen,\nDataUsageSummary
+        \nund
+    </string>
+    <string name="part1">Netzwerkeinstellungen</string>
+
+    <string name="share_proxy_data">Proxy teilen</string>
+    <string name="action_mirror">Proxy Site Mirror</string>
+    <string name="err_telegram_client_not_unstalled">Telegramm-Client nicht installiert</string>
+    <string name="copied_to_clipboard">In die Zwischenablage kopiert</string>
+    <string name="pref_category_lang">Lokalisierung</string>
+    <string name="pref_title_lang">Sprachauswahl</string>
+    <string name="pref_category_other">Zusätzlich</string>
+    <string name="pref_title_copyright">Urheberrecht</string>
+    <string name="pref_title_dev_name">Entwickelt von</string>
+    <string name="pref_title_more">Andere Anwendungen</string>
+</resources>

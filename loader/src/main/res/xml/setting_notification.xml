@@ -1,0 +1,45 @@
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+
+
+    <PreferenceCategory
+        android:key="pref_category_lang"
+        android:title="@string/pref_category_lang">
+
+        <ListPreference
+            android:entries="@array/lang_entries"
+            android:entryValues="@array/lang_values"
+            android:key="pref_key_lang"
+            android:summary="(ru, en)"
+            android:title="@string/pref_title_lang" />
+    </PreferenceCategory>
+
+
+    <PreferenceCategory android:title="@string/pref_category_other">
+        <Preference
+            android:summary="@string/play_google_pub"
+            android:title="@string/pref_title_dev_name" />
+        <Preference
+            android:key="pref_copyright"
+            android:summary="@string/pref_summary_copyright"
+            android:title="@string/pref_title_copyright" />
+        <Preference
+            android:key="pref_title_term"
+            android:title="@string/action_privacy_policy" />
+        <Preference
+            android:key="key_more"
+            android:title="@string/pref_title_more" />
+        <Preference
+            android:key="key_rate"
+            android:title="@string/action_rate_app" />
+        <Preference
+            android:key="key_about"
+            android:summary="@string/app_name"
+            android:title="@string/action_about" />
+        <Preference
+            android:key="key_contributors"
+            android:summary="WhD, Abuzer Rafey, Siddiqov Mukhriddin"
+            android:title="Contributors" />
+
+    </PreferenceCategory>
+
+</PreferenceScreen>

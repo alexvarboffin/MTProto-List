@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="16dp">
+
+<!--    <TextView-->
+<!--        android:id="@+id/statusTextView"-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:text="Status: " />-->
+
+    <TextView
+        android:id="@+id/countryTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Country: " />
+
+    <TextView
+        android:id="@+id/countryCodeTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Country Code: " />
+
+    <TextView
+        android:id="@+id/regionTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Region: " />
+
+    <TextView
+        android:id="@+id/regionNameTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Region Name: " />
+
+    <TextView
+        android:id="@+id/cityTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="City: " />
+
+    <TextView
+        android:id="@+id/zipTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="ZIP: " />
+
+    <TextView
+        android:id="@+id/latLonTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Lat/Lon: " />
+
+    <TextView
+        android:id="@+id/timezoneTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Timezone: " />
+
+    <TextView
+        android:id="@+id/ispTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="ISP: " />
+
+    <TextView
+        android:id="@+id/orgTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Org: " />
+
+    <TextView
+        android:id="@+id/asTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="AS: " />
+
+</LinearLayout>

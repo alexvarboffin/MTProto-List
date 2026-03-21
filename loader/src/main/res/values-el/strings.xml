@@ -1,0 +1,21 @@
+<resources>
+    <string name="action_proxy_connect">Κάντε κλικ για σύνδεση μέσω προκείμενου</string>
+    <string name="proxy_port">Θύρα:</string>
+    <string name="data_successfully_updated">Τα δεδομένα ενημερώθηκαν με επιτυχία</string>
+    <string name="msg_no_notes1">Τα δεδομένα είναι κενά\nΕλέγξτε\nτις ρυθμίσεις δικτύου,\nDataUsageSummary
+        \nκαι
+    </string>
+    <string name="part1">Ρυθμίσεις δικτύου</string>
+
+    <string name="share_proxy_data">Κοινοποίηση προκυρηγμένου</string>
+    <string name="action_mirror">Καθρέφτης Ιστότοπου Προκυρηγμένου</string>
+    <string name="err_telegram_client_not_unstalled">Ο πελάτης Telegram δεν είναι εγκατεστημένος</string>
+    <string name="copied_to_clipboard">Αντιγράφηκε στο πρόχειρο</string>
+    <string name="pref_category_lang">Τοπικοποίηση</string>
+    <string name="pref_title_lang">Επιλογή γλώσσας</string>
+    <string name="pref_category_other">Επιπλέον</string>
+    <string name="pref_title_copyright">Πνευματικά δικαιώματα</string>
+    <string name="pref_title_dev_name">Αναπτύχθηκε από</string>
+    <string name="pref_title_more">Άλλες εφαρμογές</string>
+
+</resources>

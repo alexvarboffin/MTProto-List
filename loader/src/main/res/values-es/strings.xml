@@ -1,0 +1,20 @@
+<resources>
+    <string name="action_proxy_connect">Haz clic para conectar a través de proxy</string>
+    <string name="proxy_port">Puerto:</string>
+    <string name="data_successfully_updated">Datos actualizados correctamente</string>
+    <string name="msg_no_notes1">Los datos están vacíos\nVerifica\nla Configuración de red,\nDataUsageSummary
+        \ny
+    </string>
+    <string name="part1">Configuración de red</string>
+
+    <string name="share_proxy_data">Compartir proxy</string>
+    <string name="action_mirror">Espejo del sitio de proxy</string>
+    <string name="err_telegram_client_not_unstalled">Cliente de Telegram no instalado</string>
+    <string name="copied_to_clipboard">Copiado al portapapeles</string>
+    <string name="pref_category_lang">Localización</string>
+    <string name="pref_title_lang">Selección de idioma</string>
+    <string name="pref_category_other">Adicionalmente</string>
+    <string name="pref_title_copyright">Derechos de autor</string>
+    <string name="pref_title_dev_name">Desarrollado por</string>
+    <string name="pref_title_more">Otras aplicaciones</string>
+</resources>

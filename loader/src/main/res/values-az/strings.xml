@@ -1,0 +1,18 @@
+<resources>
+    <string name="action_proxy_connect">Proksi vasitəsilə qoşulmaq üçün basın</string>
+    <string name="proxy_port">Port:</string>
+    <string name="data_successfully_updated">Məlumatlar uğurla yeniləndi</string>
+    <string name="msg_no_notes1">Məlumatlar boşdur\nYoxlayın\nŞəbəkə parametrləri,\nDataUsageSummary\nvə</string>
+    <string name="part1">Şəbəkə parametrləri</string>
+
+    <string name="share_proxy_data">Proksi bölüşmək</string>
+    <string name="action_mirror">Proksi Sayt Ayna</string>
+    <string name="err_telegram_client_not_unstalled">Telegram klienti quraşdırılmayıb</string>
+    <string name="copied_to_clipboard">Klipborda kopyalandı</string>
+    <string name="pref_category_lang">Yerli ayar</string>
+    <string name="pref_title_lang">Dil seçimi</string>
+    <string name="pref_category_other">Əlavə olaraq</string>
+    <string name="pref_title_copyright">Təsnifat hüququ</string>
+    <string name="pref_title_dev_name">Tərtibatçı</string>
+    <string name="pref_title_more">Digər tətbiqlər</string>
+</resources>

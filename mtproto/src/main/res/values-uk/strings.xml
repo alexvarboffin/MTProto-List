@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+	<string name="app_name" translatable="false">MTProto List</string>
+
+    <string name="action_proxy_connect">Натисни для підключення через проксі</string>
+
+    <string name="share_qr_code" translatable="false">Share QRcode</string>
+    <string name="proxy_port">Порт:</string>
+    <string name="data_successfully_updated">Дані успішно оновлені</string>
+
+
+
+    <string name="share_proxy_data">Поділитися проксей</string>
+    <string name="action_mirror">Сайти з проксі</string>
+
+    <string name="err_telegram_client_not_unstalled">Клієнт Telegram не встановлений</string>
+    <string name="copied_to_clipboard">Скопійовано в буфер обміну</string>
+
+    <string name="msg_no_notes1" translatable="false">Дані порожні\nПеревірте\nНалаштування мережі,\nDataUsageSummary
+        \nта
+    </string>
+
+    <string name="part1">Налаштування мережі</string>
+    <string name="part2">DataUsageSummary</string>
+
+    <string name="pref_category_lang">Локалізація</string>
+    <string name="pref_title_lang">Вибір мови</string>
+    <string name="pref_category_other">Додатково</string>
+    <string name="pref_title_copyright">Авторське право</string>
+    <string name="pref_title_dev_name">Розроблено</string>
+    <string name="pref_title_more">Інші додатки</string>
+
+</resources>

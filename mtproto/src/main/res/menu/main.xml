@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item
+        android:id="@+id/action_refresh"
+        android:icon="@drawable/ic_refresh"
+        android:orderInCategory="11"
+        android:title="@null"
+        app:showAsAction="always" />
+
+    <!--    <item-->
+    <!--        android:id="@+id/action_rate_app"-->
+    <!--        android:icon="@drawable/ic_star_white_24dp"-->
+    <!--        android:title="@string/action_rate_app" />-->
+
+    <item
+        android:id="@+id/menu_container"
+        android:icon="@drawable/ic_more_vert_black_24dp"
+        android:menuCategory="container"
+        android:title="@null"
+        app:showAsAction="ifRoom">
+        <menu>
+
+            <item
+                android:id="@+id/action_share_app"
+                android:icon="@drawable/ic_share_black_24dp"
+                android:title="@string/action_share_app" />
+            <item
+                android:id="@+id/action_rate_app"
+                android:icon="@drawable/ic_star_black_24dp"
+                android:title="@string/action_rate_app" />
+            <item
+                android:id="@+id/action_discover_more_app"
+                android:icon="@drawable/ic_apps_black_24dp"
+                android:title="@string/action_discover_more_app" />
+            <item
+                android:id="@+id/action_about"
+                android:icon="@drawable/ic_menu_info"
+                android:title="@string/action_about" />
+
+            <item
+                android:id="@+id/action_settings"
+                android:icon="@drawable/ic_settings_black_24dp"
+                android:title="@string/action_settings" />
+
+            <item
+                android:id="@+id/action_privacy_policy"
+                android:icon="@drawable/ic_security_black_24dp"
+                android:title="@string/action_privacy_policy" />
+<!--            <item-->
+<!--                android:id="@+id/action_feedback"-->
+<!--                android:icon="@drawable/ic_feedback_black_24dp"-->
+<!--                android:title="@string/action_contact_us" />-->
+            <item
+                android:id="@+id/action_mirror"
+                android:icon="@drawable/ic_feedback_black_24dp"
+                android:title="@string/action_mirror" />
+
+            <!--            <item-->
+            <!--                android:id="@+id/action_exit"-->
+            <!--                android:icon="@drawable/ic_exit_to_app_black_24dp"-->
+            <!--                android:title="@string/action_exit" />-->
+
+<!--            <item-->
+<!--                android:id="@+id/action_more_app_01"-->
+<!--                android:icon="@drawable/ic_round_music_video_24"-->
+<!--                android:title="@string/action_more_app_01" />-->
+
+<!--            <item-->
+<!--                android:id="@+id/action_more_app_02"-->
+<!--                android:icon="@drawable/ic_apps_black_24dp"-->
+<!--                android:title="@string/action_more_app_02" />-->
+        </menu>
+    </item>
+
+</menu>

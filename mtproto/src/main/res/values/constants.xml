@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!--    // list of file extensions for download,-->
+    <!--    // if webview URL ends with this extension, that file will be downloaded via download manager,-->
+    <!--    // keep this array empty if you do not want to use download manager-->
+
+    <string-array name="download_file_types">
+        <item>.zip</item>
+        <item>.rar</item>
+        <!--        <item>.pdf</item>-->
+        <item>.doc</item>
+        <item>.xls</item>
+        <item>.mp3</item>
+        <item>.wma</item>
+        <item>.ogg</item>
+        <item>.m4a</item>
+        <item>.wav</item>
+        <item>.avi</item>
+        <item>.mov</item>
+        <item>.mp4</item>
+        <item>.mpg</item>
+        <item>.3gp</item>
+    </string-array>
+
+
+    <!--    // rules for opening links in external browser,-->
+    <!--    // if URL link contains the string, it will be opened in external browser,-->
+    <!--    // these rules have higher priority than OPEN_LINKS_IN_EXTERNAL_BROWSER option-->
+    <string-array name="links_opened_in_external_browser">
+        <item>target=blank</item>
+        <item>target=external</item>
+<!--   removed     <item>play.google.com/store</item>-->
+        <item>youtube.com/watch</item>
+        <item>privacy.pdf</item>
+        <item>vk.com</item>
+        <item>apps.rustore.ru</item>
+
+    </string-array>
+</resources>
