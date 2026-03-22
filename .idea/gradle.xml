@@ -7,6 +7,18 @@
         <option name="testRunner" value="CHOOSE_PER_TEST" />
         <option name="externalProjectPath" value="$PROJECT_DIR$" />
         <option name="gradleJvm" value="#GRADLE_LOCAL_JAVA_HOME" />
+        <option name="modules">
+          <set>
+            <option value="$PROJECT_DIR$" />
+            <option value="$PROJECT_DIR$/loader" />
+            <option value="$PROJECT_DIR$/mtproto" />
+            <option value="$PROJECT_DIR$/../WalhallaUI/features/ui" />
+            <option value="$PROJECT_DIR$/../WalhallaUI/features/wads" />
+            <option value="$PROJECT_DIR$/../WalhallaUI/features/webview" />
+            <option value="G:/source/walhalla/sdk/Skazkinanoch/nativetemplates" />
+            <option value="G:/source/walhalla/sdk/multithreader/threader" />
+          </set>
+        </option>
       </GradleProjectSettings>
     </option>
   </component>

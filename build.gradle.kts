@@ -7,15 +7,6 @@ plugins {
     alias(libs.plugins.firebase.crashlytics) apply false
 }
 
-allprojects {
-    repositories {
-        google()
-        mavenLocal()
-        mavenCentral()
-        maven { url = uri("https://jitpack.io") }
-    }
-}
-
 tasks.register<Delete>("clean") {
     delete(layout.buildDirectory)
 }
