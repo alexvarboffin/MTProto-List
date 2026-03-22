@@ -1,5 +1,5 @@
-include(":mtproto")
-include(":loader")
+//include(":mtproto")
+//include(":loader")
 
 include(":ui")
 project(":ui").projectDir = File("C:\\src\\Synced\\WalhallaUI\\features\\ui")
@@ -18,5 +18,5 @@ project(":nativetemplates").projectDir = File("G:\\source\\walhalla\\sdk\\Skazki
 // include(":feature:webview-main")
 include(":webview")
 project(":webview").projectDir = File("C:\\src\\Synced\\WalhallaUI\\features\\webview\\")
-include(":mylibrary999")
+
 include(":LoaderNew")
