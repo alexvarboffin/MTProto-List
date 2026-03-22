@@ -19,3 +19,4 @@ project(":nativetemplates").projectDir = File("G:\\source\\walhalla\\sdk\\Skazki
 include(":webview")
 project(":webview").projectDir = File("C:\\src\\Synced\\WalhallaUI\\features\\webview\\")
 include(":mylibrary999")
+include(":LoaderNew")
