@@ -6,7 +6,6 @@ import android.view.View;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.walhalla.mtprotolist.Config;
-import com.walhalla.mtprotolist.LessonState;
 import com.walhalla.mtprotolist.PicassoHelper;
 import com.walhalla.mtprotolist.R;
 import com.walhalla.mtprotolist.entity.MtprotoProxy;
@@ -51,7 +50,7 @@ public class TProxyViewHolder extends RecyclerView.ViewHolder {
         if (data.code == null || data.code.isEmpty()) {
             helper.loadEmptyImage(binding.personPhoto, itemView.getContext());
         } else {
-            final String icon = String.format(Config.handler, data.code.toLowerCase());
+            final String icon = String.format(Config.ASSET_HANDLER, data.code.toLowerCase());
             helper.rawCountryFlag(icon, binding.personPhoto);
             //DLog.d( "bind: " + icon);
         }

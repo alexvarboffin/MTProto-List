@@ -135,8 +135,8 @@ class MyApp : MultiDexApplication(), DefaultLifecycleObserver, ActivityLifecycle
             getString(R.string.rewardedId)
         )
 
-        val w = RewardManager.getInstance()
-        w.init(m0)
+        val w = RewardManager.instance
+        w?.init(m0)
 
         if (!TextUtils.isEmpty(OAI)) {
             // OneSignal Initialization
@@ -258,6 +258,7 @@ class MyApp : MultiDexApplication(), DefaultLifecycleObserver, ActivityLifecycle
             // one that shows the ad.
             currentActivity = activity
         }
+
 
         if (BuildConfig.DEBUG) {
             Toast.makeText(activity, "###" + activity.getLocalClassName(), Toast.LENGTH_SHORT)

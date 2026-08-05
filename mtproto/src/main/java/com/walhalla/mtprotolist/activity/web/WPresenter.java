@@ -25,7 +25,6 @@ import androidx.annotation.RequiresApi;
 
 import androidx.appcompat.app.AlertDialog;
 
-import com.walhalla.ui.BuildConfig;
 import com.walhalla.ui.DLog;
 import com.walhalla.webview.ChromeView;
 import com.walhalla.webview.CustomWebViewClient;
@@ -122,7 +121,7 @@ public class WPresenter implements MyWebChromeClient.Callback {
 //            }
 //        });
 
-        view.setWebChromeClient(new MyWebChromeClient(this));
+        view.setWebChromeClient(new MyWebChromeClient(activity,view,this));
     }
 
 //    public void openImageChooser(WebView webView, ValueCallback<Uri[]> filePathCallback, WebChromeClient.FileChooserParams fileChooserParams) {
@@ -191,9 +190,9 @@ public class WPresenter implements MyWebChromeClient.Callback {
         //System.getProperty("http.agent")
         setCustomUserAgent(a);
         //a.setUserAgentString("Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:109.0) Gecko/20100101 Firefox/118.0");
-        if (BuildConfig.DEBUG) {
+        //if (BuildConfig.DEBUG) {
             //@@@ mView.setBackgroundColor(Color.parseColor("#80770000"));
-        }
+        //}
         var0 = new CustomWebViewClient(mView, chromeView, activity);
         mView.setWebViewClient(var0);
         makeFileSelector21_x(mView);

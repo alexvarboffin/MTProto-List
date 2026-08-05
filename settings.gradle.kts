@@ -9,6 +9,9 @@ pluginManagement {
         }
         mavenCentral()
         gradlePluginPortal()
+        maven {
+            url = uri("https://jitpack.io")
+        }
     }
 }
 
@@ -17,6 +20,9 @@ dependencyResolutionManagement {
     repositories {
         google()
         mavenCentral()
+        maven {
+            url = uri("https://jitpack.io")
+        }
     }
 }
 rootProject.name = "mtproto"
@@ -28,14 +34,15 @@ project(":ui").projectDir = File("C:\\Synced\\WalhallaUI\\features\\ui")
 
 include(":wads")
 project(":wads").projectDir = File("C:\\Synced\\WalhallaUI\\features\\wads\\")
+
 include(":shared")
-project(":shared").projectDir = File("C:\\Synced\\WalhallaUI\\features\\wads\\")
+project(":shared").projectDir = File("C:\\Synced\\WalhallaUI\\shared\\")
 
 include(":threader")
-project(":threader").projectDir = File("G:\\source\\walhalla\\sdk\\multithreader\\threader\\")
+project(":threader").projectDir = File("C:\\SYNCED\\multithreader\\threader\\")
 
-include(":nativetemplates")
-project(":nativetemplates").projectDir = File("G:\\source\\walhalla\\sdk\\Skazkinanoch\\nativetemplates\\")
+//include(":nativetemplates")
+//project(":nativetemplates").projectDir = File("G:\\source\\walhalla\\sdk\\Skazkinanoch\\nativetemplates\\")
 
 // include(":data0")
 
@@ -43,3 +50,4 @@ project(":nativetemplates").projectDir = File("G:\\source\\walhalla\\sdk\\Skazki
 include(":webview")
 project(":webview").projectDir = File("C:\\Synced\\WalhallaUI\\features\\webview\\")
 
+include(":mtprotocompose")

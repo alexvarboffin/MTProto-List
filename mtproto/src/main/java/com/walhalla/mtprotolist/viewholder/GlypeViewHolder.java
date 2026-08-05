@@ -42,7 +42,7 @@ public class GlypeViewHolder extends RecyclerView.ViewHolder {
         if (data.code == null || data.code.isEmpty()) {
             helper.loadEmptyImage(binding.personPhoto, itemView.getContext());
         } else {
-            final String icon = String.format(Config.handler, data.code.toLowerCase());
+            final String icon = String.format(Config.ASSET_HANDLER, data.code.toLowerCase());
             helper.rawCountryFlag(icon, binding.personPhoto);
             //DLog.d( "bind: " + icon);
         }
