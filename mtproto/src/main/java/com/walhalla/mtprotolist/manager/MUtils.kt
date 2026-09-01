@@ -54,7 +54,7 @@ class MUtils(private val h: Handler) {
                 if (response.isSuccessful()) {
                     val jsonResponse = JSONArray(response.body()!!.string())
                     h.post {
-                        val geoError = applyGeoResponse(jsonResponse, serverList)
+                        val geoError = applyGeoResponseToMtproto(jsonResponse, serverList)
                         if (geoError == null) {
                             callback.onResponse(serverList)
                         } else {
@@ -97,7 +97,7 @@ class MUtils(private val h: Handler) {
                 if (response.isSuccessful()) {
                     val jsonResponse = JSONArray(response.body()!!.string())
                     h.post {
-                        val geoError = applyGeoResponse(jsonResponse, serverList)
+                        val geoError = applyGeoResponseToProxyInfo(jsonResponse, serverList)
                         if (geoError == null) {
                             callback.onResponse(serverList)
                         } else {
@@ -116,7 +116,7 @@ class MUtils(private val h: Handler) {
         }
     }
 
-    private fun applyGeoResponse(response: JSONArray, serverList: MutableList<ProxyInfo>): String? {
+    private fun applyGeoResponseToProxyInfo(response: JSONArray, serverList: MutableList<ProxyInfo>): String? {
         if (response.length() != serverList.size) {
             return "Geo lookup failed"
         }
@@ -140,7 +140,7 @@ class MUtils(private val h: Handler) {
         return null
     }
 
-    private fun applyGeoResponse(response: JSONArray, serverList: List<MtprotoProxy>): String? {
+    private fun applyGeoResponseToMtproto(response: JSONArray, serverList: List<MtprotoProxy>): String? {
         if (response.length() != serverList.size) {
             return "Geo lookup failed"
         }
