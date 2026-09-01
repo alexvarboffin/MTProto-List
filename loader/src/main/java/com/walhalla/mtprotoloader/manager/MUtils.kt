@@ -23,10 +23,12 @@ class MUtils(private val h: Handler) {
     private val executor: Executor = Executors.newCachedThreadPool() // Пул потоков
 
     fun getProxyType(info: ProxyInfo, callback: Callback<ProxyInfo>) {
+        if(info.proxyUrl == null) return
+
         executor.execute {
             val client = OkHttpClient()
             val request = Request.Builder()
-                .url(info.proxyUrl)
+                .url(info.proxyUrl?:"")
                 .build()
             try {
                 val response = client.newCall(request).execute()
@@ -55,7 +57,7 @@ class MUtils(private val h: Handler) {
                 }
             } catch (e: Exception) {
                 h.post(Runnable {
-                    callback.onError(e.javaClass.getSimpleName())
+                    callback.onError(e.javaClass.simpleName)
                 })
             }
         }
@@ -130,7 +132,7 @@ class MUtils(private val h: Handler) {
 
                 val response = client.newCall(request).execute()
 
-                if (response.isSuccessful()) {
+                if (response.isSuccessful) {
                     // Обработка успешного ответа
                     val jsonResponse = JSONArray(response.body()!!.string())
                     h.post(Runnable {
@@ -146,11 +148,7 @@ class MUtils(private val h: Handler) {
             } catch (e: Exception) {
                 e.printStackTrace()
                 val errorMessage = e.message // Обработка исключений
-                h.post(object : Runnable {
-                    override fun run() {
-                        callback.onError(errorMessage)
-                    }
-                })
+                h.post { callback.onError(errorMessage) }
             }
         }
     }
