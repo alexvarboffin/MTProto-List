@@ -21,8 +21,10 @@ import com.walhalla.ui.DLog.handleException
 class InfoMtProtoDialog : DialogFragment() {
     private lateinit var binding: InfoDialogBinding
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?,
     ): View {
         binding = InfoDialogBinding.inflate(inflater, container, false)
         return binding.root
@@ -112,7 +114,11 @@ class InfoMtProtoDialog : DialogFragment() {
                 binding.disable.isEnabled = true
                 server.enabled = server.enabled == false
                 updateDisableButtonLabel(server)
-                Toast.makeText(requireContext(), error.message ?: "Firebase update failed", Toast.LENGTH_LONG).show()
+                Toast.makeText(
+                    requireContext(),
+                    error.message ?: "Firebase update failed",
+                    Toast.LENGTH_LONG,
+                ).show()
             }
     }
 
@@ -128,7 +134,6 @@ class InfoMtProtoDialog : DialogFragment() {
         }
     }
 }
-
 
 private fun String?.noneNullPlaceholder(): String {
     return if (isNullOrEmpty() || this == "null") "-" else this
