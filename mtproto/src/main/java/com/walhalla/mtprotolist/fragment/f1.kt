@@ -85,7 +85,7 @@ class f1 : CompatFragment(),
             }
 
             override fun copyClipboard(text: String) {
-                if (!TextUtils.isEmpty(text) && getActivity() != null) {
+                if (!TextUtils.isEmpty(text) && activity != null) {
                     val clipboard = requireActivity()
                         .getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager?
                     val clip = ClipData.newPlainText("Copy", text)
@@ -109,7 +109,7 @@ class f1 : CompatFragment(),
             }
 
             override fun copyPort(data: MtprotoProxy) {
-                copyClipboard(data.port)
+                copyClipboard(data.port?:"")
             }
 
 
@@ -125,10 +125,7 @@ class f1 : CompatFragment(),
                     )
                     sharingIntent.putExtra(Intent.EXTRA_TEXT, content)
                     startActivity(
-                        Intent.createChooser(
-                            sharingIntent,
-                            getString(R.string.share_proxy_data) + " - " + content
-                        )
+                        Intent.createChooser(sharingIntent, getString(R.string.share_proxy_data) + " - " + content)
                     )
                 }
             }
