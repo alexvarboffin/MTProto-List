@@ -9,15 +9,15 @@
         <option name="gradleJvm" value="#GRADLE_LOCAL_JAVA_HOME" />
         <option name="modules">
           <set>
+            <option value="$PROJECT_DIR$/../../../../SYNCED/multithreader/threader" />
+            <option value="$PROJECT_DIR$/../../../../Synced/WalhallaUI/features/ui" />
+            <option value="$PROJECT_DIR$/../../../../Synced/WalhallaUI/features/wads" />
+            <option value="$PROJECT_DIR$/../../../../Synced/WalhallaUI/features/webview" />
+            <option value="$PROJECT_DIR$/../../../../Synced/WalhallaUI/shared" />
             <option value="$PROJECT_DIR$" />
             <option value="$PROJECT_DIR$/loader" />
             <option value="$PROJECT_DIR$/mtproto" />
             <option value="$PROJECT_DIR$/mtprotocompose" />
-            <option value="$PROJECT_DIR$/../multithreader/threader" />
-            <option value="$PROJECT_DIR$/../WalhallaUI/features/ui" />
-            <option value="$PROJECT_DIR$/../WalhallaUI/features/wads" />
-            <option value="$PROJECT_DIR$/../WalhallaUI/features/webview" />
-            <option value="$PROJECT_DIR$/../WalhallaUI/shared" />
           </set>
         </option>
       </GradleProjectSettings>

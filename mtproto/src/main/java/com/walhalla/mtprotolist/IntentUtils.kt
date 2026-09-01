@@ -10,7 +10,7 @@ class IntentUtils {
     private fun info(activity: Activity, format: String?) {
         //Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(format));
         val intent = Intent(Intent.ACTION_VIEW)
-        intent.data = format.toUri()
+        intent.data = format?.toUri() ?: return
         //intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         //intent.setPackage(packageInfo.packageName);
         //org.telegram.ui.LaunchActivity

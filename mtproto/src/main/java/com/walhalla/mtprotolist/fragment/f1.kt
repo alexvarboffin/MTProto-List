@@ -222,9 +222,9 @@ class f1 : CompatFragment(),
         super.onCreate(savedInstanceState)
         setHasOptionsMenu(true)
         //m = new MProtoFragmentPresenter(getContext(), this);
-        m = KSUtil.getInstance(activity)
+        m = KSUtil.getInstance(requireContext())
         rm = RewardManager.instance
-        val data: MutableSet<Int?> = HashSet<Int?>()
+        val data: MutableSet<Int> = HashSet()
         data.add(4)
         data.add(6)
         data.add(7)

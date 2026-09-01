@@ -59,6 +59,8 @@ review-ktx = { module = "com.google.android.play:review-ktx", version.ref = "rev
 jsoup = { module = "org.jsoup:jsoup", version.ref = "jsoup" }
 play-app-update = { module = "com.google.android.play:app-update", version.ref = "appUpdate" }
 play-app-update-ktx = { module = "com.google.android.play:app-update-ktx", version.ref = "appUpdate" }
+app-update = { module = "com.google.android.play:app-update", version.ref = "appUpdate" }
+app-update-ktx = { module = "com.google.android.play:app-update-ktx", version.ref = "appUpdate" }
 
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "android-core" }
 androidx-core = { module = "androidx.core:core", version.ref = "android-core" }
