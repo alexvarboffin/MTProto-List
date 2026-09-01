@@ -14,12 +14,14 @@ import com.walhalla.mtprotolist.Config
 import com.walhalla.mtprotolist.HashUtils
 import com.walhalla.mtprotolist.R
 import com.walhalla.mtprotolist.databinding.InfoDialogBinding
+import com.walhalla.mtprotolist.manager.VideoRepository
 import com.walhalla.mtprotolist.webproxy.ProxyInfo
 import com.walhalla.ui.DLog.d
 import com.walhalla.ui.DLog.handleException
 
 class InfoGlypeDialog : DialogFragment() {
     private lateinit var binding: InfoDialogBinding
+    private val videoRepository = VideoRepository()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -38,6 +40,7 @@ class InfoGlypeDialog : DialogFragment() {
             bindServerInfo(server)
             if (Config.BuildConfigDEBUG) {
                 setupDisableButton(server)
+                setupUpdateGeoButton(server)
             }
         } catch (e: Exception) {
             handleException(e)
@@ -89,6 +92,35 @@ class InfoGlypeDialog : DialogFragment() {
 
     private fun updateDisableButtonLabel(server: ProxyInfo) {
         binding.disable.text = if (server.enabled) "DISABLE" else "ENABLE"
+    }
+
+    private fun setupUpdateGeoButton(server: ProxyInfo) {
+        binding.updateGeo.visibility = View.VISIBLE
+        binding.updateGeo.setOnClickListener {
+            updateGeoInFirebase(server)
+        }
+    }
+
+    private fun updateGeoInFirebase(server: ProxyInfo) {
+        binding.updateGeo.isEnabled = false
+        videoRepository.updateProxyInfoGeo(
+            server,
+            onSuccess = { updated ->
+                if (!isAdded) return@updateProxyInfoGeo
+                bindServerInfo(updated)
+                binding.updateGeo.isEnabled = true
+                Toast.makeText(requireContext(), "Geo updated in Firebase", Toast.LENGTH_SHORT).show()
+            },
+            onError = { error ->
+                if (!isAdded) return@updateProxyInfoGeo
+                binding.updateGeo.isEnabled = true
+                Toast.makeText(
+                    requireContext(),
+                    error ?: "Geo update failed",
+                    Toast.LENGTH_LONG,
+                ).show()
+            },
+        )
     }
 
     private fun toggleEnabledInFirebase(server: ProxyInfo) {
