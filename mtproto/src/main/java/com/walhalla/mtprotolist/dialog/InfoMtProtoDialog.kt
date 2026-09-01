@@ -72,7 +72,7 @@ class InfoMtProtoDialog : DialogFragment() {
                     val gmmIntentUri = ("geo:" + server.lat + "," + server.lon + "?z=15").toUri()
                     //Uri gmmIntentUri = Uri.parse("geo:" + latLon + "?z=15");
                     //geo:49.4423,11.0191?z=15
-                    d("@@@@" + gmmIntentUri)
+                    d("@@@@$gmmIntentUri")
 
                     // Create an intent to open Google Maps
                     val mapIntent = Intent(Intent.ACTION_VIEW, gmmIntentUri)
