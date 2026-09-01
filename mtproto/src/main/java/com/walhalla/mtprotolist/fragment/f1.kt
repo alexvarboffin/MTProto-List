@@ -76,7 +76,7 @@ class f1 : CompatFragment(),
                 val content = String.format(Config.PROXY_HANDLER, data.host, data.port, data.secret)
                 AlertDialog.Builder(requireActivity())
                     .setIcon(R.mipmap.ic_launcher)
-                    .setTitle("PROXY " + data.host)
+                    .setTitle(getString(R.string.dialog_proxy_title, data.host))
                     .setMessage(content)
                     .setPositiveButton(
                         android.R.string.ok,

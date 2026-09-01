@@ -98,10 +98,16 @@ fun InfoBottomSheet(
                             is InfoTarget.Mtproto -> target.proxy.enabled != false
                             is InfoTarget.Web -> target.proxy.enabled
                         }
-                        Text(if (enabled) "DISABLE" else "ENABLE")
+                        Text(
+                            if (enabled) {
+                                stringResource(R.string.action_disable)
+                            } else {
+                                stringResource(R.string.action_enable)
+                            },
+                        )
                     }
                     Button(onClick = onUpdateGeo, modifier = Modifier.weight(1f)) {
-                        Text("UPDATE GEO")
+                        Text(stringResource(R.string.action_update_geo))
                     }
                 }
             }

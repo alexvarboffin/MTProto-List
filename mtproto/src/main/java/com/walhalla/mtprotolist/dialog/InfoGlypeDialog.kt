@@ -74,7 +74,7 @@ class InfoGlypeDialog : DialogFragment() {
             if (mapIntent.resolveActivity(requireActivity().packageManager) != null) {
                 startActivity(mapIntent)
             } else {
-                Toast.makeText(requireContext(), "Google Maps not installed", Toast.LENGTH_SHORT).show()
+                Toast.makeText(requireContext(), getString(R.string.err_maps_not_installed), Toast.LENGTH_SHORT).show()
             }
         }
         binding.timezoneTextView.text = getString(R.string.timezone, server.timezone)
@@ -92,7 +92,11 @@ class InfoGlypeDialog : DialogFragment() {
     }
 
     private fun updateDisableButtonLabel(server: ProxyInfo) {
-        binding.disable.text = if (server.enabled) "DISABLE" else "ENABLE"
+        binding.disable.text = if (server.enabled) {
+            getString(R.string.action_disable)
+        } else {
+            getString(R.string.action_enable)
+        }
     }
 
     private fun setupUpdateGeoButton(server: ProxyInfo) {

@@ -81,11 +81,11 @@
         android:visibility="gone"
         android:id="@+id/disable"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" android:text="DISABLE"/>
+        android:layout_height="wrap_content" android:text="@string/action_disable"/>
 
     <Button
         android:visibility="gone"
         android:id="@+id/updateGeo"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" android:text="UPDATE GEO"/>
+        android:layout_height="wrap_content" android:text="@string/action_update_geo"/>
 </LinearLayout>

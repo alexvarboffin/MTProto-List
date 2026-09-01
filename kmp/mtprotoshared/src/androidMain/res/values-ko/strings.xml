@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="action_about">정보</string>
+    <string name="action_disable">비활성화</string>
+    <string name="action_discover_more_app">더 많은 앱</string>
+    <string name="action_enable">활성화</string>
+    <string name="action_exit">종료</string>
+    <string name="action_glype_connect">프록시로 이동</string>
+    <string name="action_mirror">프록시 사이트 미러</string>
+    <string name="action_privacy_policy">개인정보 처리방침</string>
+    <string name="action_proxy_connect">프록시를 통한 연결</string>
+    <string name="action_rate_app">앱 평가</string>
+    <string name="action_settings">설정</string>
+    <string name="action_share_app">앱 공유</string>
+    <string name="action_update_geo">GEO 업데이트</string>
+    <string name="as_info">AS Information: %1$s</string>
+    <string name="button_agree" translatable="false">Agree</string>
+    <string name="city">City: %1$s</string>
+    <string name="copied_to_clipboard">클립보드에 복사되었습니다</string>
+    <string name="country">Country: %1$s</string>
+    <string name="country_code">Country Code: %1$s</string>
+    <string name="data_successfully_updated">데이터가 성공적으로 업데이트되었습니다</string>
+    <string name="dialog_proxy_title">PROXY %1$s</string>
+    <string name="dialog_webproxy_title">WEB-PROXY %1$s</string>
+    <string name="disclaimer_message" translatable="false">This service is provided as is, without warranty of any kind. Use of this service is entirely at your own risk. We cannot take responsibility for any direct or indirect damages resulting from the use of this service.\n
+            The service allows indirect browsing of external, third-party websites. We are not responsible for the content on any external websites that may be accessible through our service. A website viewed through our service is in no way owned by or associated with this website.\n
+            The term \"indirect browsing\" refers to the server which you connect to. During \"direct\" browsing, you connect to the server which provides the resource you are requesting. During \"indirect\" browsing, you connect to our server. Our script downloads the requested resource and forwards it to you.\n
+            Any resource (such as web pages, images, files) downloaded through our service may be modified. This may include, but is not limited to, editing URLs so that any resources referenced by the target resource are also downloaded indirectly. The accuracy and reliablity of this process is not guaranteed. The resource which you receive may not be an accurate representation of the resource requested.\n
+            A side-effect of indirect browsing may be anonymity. By connecting to our server instead of the target server, the target server does not see your IP address. However, we do not guarantee our service will be truly anonymous. The downloaded resource may reference other resources which your browser may automatically download. The service attempts to reroute all such requests through our server but may not be entirely successful. A single direct request will compromise your anonymity.\n
+            This service may download a resource over a secure connection but this may be sent back to you over an unsecure connection. Do not enter confidential information unless you are on a secure connection to our server.</string>
+    <string name="disclaimer_title" translatable="false">Disclaimer</string>
+    <string name="err_maps_not_installed">Google 지도가 설치되어 있지 않습니다</string>
+    <string name="err_telegram_client_not_unstalled">Telegram 클라이언트가 설치되어 있지 않습니다</string>
+    <string name="error_empty_field">빈 필드</string>
+    <string name="hint_port">포트</string>
+    <string name="hint_secret">비밀키</string>
+    <string name="hint_server">서버</string>
+    <string name="isp">Internet Service Provider: %1$s</string>
+    <string name="lat_lon">Latitude and Longitude: %1$f, %2$f</string>
+    <string name="msg_no_notes1">데이터가 비어 있습니다\n확인하세요\n네트워크 설정,\nDataUsageSummary\n그리고</string>
+    <string name="msg_no_notes2" translatable="false">Please Update Google Play Service</string>
+    <string name="org">Organization: %1$s</string>
+    <string name="part1">네트워크 설정</string>
+    <string name="part2" translatable="false">DataUsageSummary</string>
+    <string name="pref_category_lang">로컬라이제이션</string>
+    <string name="pref_category_other">추가 옵션</string>
+    <string name="pref_summary_contributors" translatable="false">WhD, Abuzer Rafey, Siddiqov Mukhriddin</string>
+    <string name="pref_summary_copyright" translatable="false">Created by Walhalla %1$d Dynamics. \nAll right reserved</string>
+    <string name="pref_title_contributors">기여자</string>
+    <string name="pref_title_copyright">저작권</string>
+    <string name="pref_title_dev_name">개발자</string>
+    <string name="pref_title_lang">언어 선택</string>
+    <string name="pref_title_more">다른 애플리케이션</string>
+    <string name="pref_title_night_mode">야간 모드</string>
+    <string name="proxy_port">포트:</string>
+    <string name="proxy_type_label">Type:</string>
+    <string name="region">Region: %1$s</string>
+    <string name="region_name">Region Name: %1$s</string>
+    <string name="share_proxy_data">프록시 공유</string>
+    <string name="share_qr_code" translatable="false">Share QRcode</string>
+    <string name="status">상태: %1$s</string>
+    <string name="tab_mtproto" translatable="false">MTProto</string>
+    <string name="tab_webproxy" translatable="false">WebProxy</string>
+    <string name="timezone">Timezone: %1$s</string>
+    <string name="webview_title">WebProxy (%1$s)</string>
+    <string name="wv_menu_clear_cookies">쿠키 삭제</string>
+    <string name="wv_menu_copy_url">Copy current URL to Buffer</string>
+    <string name="wv_menu_home">Home</string>
+    <string name="wwPageUpdated">페이지가 업데이트되었습니다</string>
+    <string name="zip">ZIP Code: %1$s</string>
+</resources>

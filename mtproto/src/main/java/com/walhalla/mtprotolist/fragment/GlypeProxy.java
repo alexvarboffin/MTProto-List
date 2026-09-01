@@ -77,7 +77,7 @@ public class GlypeProxy extends CompatFragment {
             String content = data.proxyUrl;
             new AlertDialog.Builder(getActivity())
                     .setIcon(R.mipmap.ic_launcher)
-                    .setTitle("WEB-PROXY " + data.ip)
+                    .setTitle(getString(R.string.dialog_webproxy_title, data.ip))
                     .setMessage(content)
                     .setPositiveButton(android.R.string.ok, (dialog, which) -> dialog.cancel())
                     .show();

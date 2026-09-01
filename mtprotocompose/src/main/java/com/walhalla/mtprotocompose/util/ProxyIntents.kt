@@ -81,6 +81,6 @@ fun openMaps(context: Context, lat: Double, lon: Double) {
     if (intent.resolveActivity(context.packageManager) != null) {
         context.startActivity(intent)
     } else {
-        Toast.makeText(context, "Google Maps not installed", Toast.LENGTH_SHORT).show()
+        Toast.makeText(context, context.getString(R.string.err_maps_not_installed), Toast.LENGTH_SHORT).show()
     }
 }

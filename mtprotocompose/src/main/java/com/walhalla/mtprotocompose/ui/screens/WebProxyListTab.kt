@@ -151,7 +151,7 @@ fun WebProxyListTab(
     viewContent?.let { (title, content) ->
         AlertDialog(
             onDismissRequest = { viewContent = null },
-            title = { Text("WEB-PROXY $title") },
+            title = { Text(stringResource(R.string.dialog_webproxy_title, title)) },
             text = { Text(content) },
             confirmButton = {
                 TextButton(onClick = { viewContent = null }) {

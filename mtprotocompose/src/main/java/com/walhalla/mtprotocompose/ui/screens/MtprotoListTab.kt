@@ -190,7 +190,7 @@ fun MtprotoListTab(
     viewContent?.let { (title, content) ->
         AlertDialog(
             onDismissRequest = { viewContent = null },
-            title = { Text("PROXY $title") },
+            title = { Text(stringResource(R.string.dialog_proxy_title, title)) },
             text = { Text(content) },
             confirmButton = {
                 TextButton(onClick = { viewContent = null }) {

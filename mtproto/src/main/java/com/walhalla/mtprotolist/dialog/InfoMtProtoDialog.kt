@@ -69,7 +69,7 @@ class InfoMtProtoDialog : DialogFragment() {
             if (mapIntent.resolveActivity(requireActivity().packageManager) != null) {
                 startActivity(mapIntent)
             } else {
-                Toast.makeText(requireContext(), "Google Maps not installed", Toast.LENGTH_SHORT).show()
+                Toast.makeText(requireContext(), getString(R.string.err_maps_not_installed), Toast.LENGTH_SHORT).show()
             }
         }
         binding.timezoneTextView.text = getString(R.string.timezone, server.timezone.noneNullPlaceholder())
@@ -87,7 +87,11 @@ class InfoMtProtoDialog : DialogFragment() {
     }
 
     private fun updateDisableButtonLabel(server: MtprotoProxy) {
-        binding.disable.text = if (server.enabled != false) "DISABLE" else "ENABLE"
+        binding.disable.text = if (server.enabled != false) {
+            getString(R.string.action_disable)
+        } else {
+            getString(R.string.action_enable)
+        }
     }
 
     private fun setupUpdateGeoButton(server: MtprotoProxy) {

@@ -64,7 +64,7 @@ fun WebViewScreen(
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text("WebProxy ($title)") },
+                title = { Text(stringResource(R.string.webview_title, title)) },
                 navigationIcon = {
                     IconButton(onClick = onBack) {
                         Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = null)

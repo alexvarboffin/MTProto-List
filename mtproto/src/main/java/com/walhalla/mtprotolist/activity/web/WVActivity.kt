@@ -193,7 +193,7 @@ class WVActivity : AppCompatActivity(), ChromeView, UWVlayoutCallback {
     @SuppressLint("NewApi")
     override fun onResume() {
         super.onResume()
-        binding!!.toolbar.setTitle("WebProxy (" + title + ")")
+        binding!!.toolbar.setTitle(getString(R.string.webview_title, title))
         //binding.toolbar.setSubtitle("" + url);
         //@        binding.webview.onResume();
 //        if (binding.adView != null) {
