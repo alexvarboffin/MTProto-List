@@ -53,8 +53,8 @@ class WVActivity : AppCompatActivity(), ChromeView, UWVlayoutCallback {
     override fun onPageStarted(url: String?) {
         hideSwipeRefreshing()
         if (this.isProgressEnabled) {
-            binding!!.progressBar.setVisibility(View.VISIBLE)
-            binding!!.progressBar.setIndeterminate(true)
+            binding!!.progressBar.visibility = View.VISIBLE
+            binding!!.progressBar.isIndeterminate = true
         }
     }
 
@@ -84,7 +84,7 @@ class WVActivity : AppCompatActivity(), ChromeView, UWVlayoutCallback {
 
     private fun injectCSS() {
         try {
-            val inputStream = getAssets().open("style.css")
+            val inputStream = assets.open("style.css")
             val buffer = ByteArray(inputStream.available())
             inputStream.read(buffer)
             inputStream.close()
