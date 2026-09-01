@@ -15,6 +15,8 @@
             <option value="$PROJECT_DIR$/../../../../Synced/WalhallaUI/features/webview" />
             <option value="$PROJECT_DIR$/../../../../Synced/WalhallaUI/shared" />
             <option value="$PROJECT_DIR$" />
+            <option value="$PROJECT_DIR$/kmp" />
+            <option value="$PROJECT_DIR$/kmp/mtprotoshared" />
             <option value="$PROJECT_DIR$/loader" />
             <option value="$PROJECT_DIR$/mtproto" />
             <option value="$PROJECT_DIR$/mtprotocompose" />

@@ -2,6 +2,7 @@ plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
+    alias(libs.plugins.google.services)
 }
 
 android {
@@ -14,8 +15,8 @@ android {
         targetSdk = libs.versions.android.targetSdk.get().toInt()
         versionCode = 1
         versionName = "1.0"
-
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+        multiDexEnabled = true
     }
 
     buildTypes {
@@ -42,17 +43,36 @@ android {
 
 dependencies {
     implementation(project(":kmp:mtprotoshared"))
+    implementation(project(":ui"))
+    implementation(project(":wads"))
+    implementation(project(":webview"))
 
     implementation(libs.androidx.core.ktx)
+    implementation(libs.androidx.appcompat)
     implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(libs.androidx.lifecycle.viewmodel.compose)
     implementation(libs.androidx.lifecycle.runtime.compose)
     implementation(libs.androidx.activity.compose)
     implementation(libs.androidx.navigation.compose)
     implementation(libs.kotlinx.coroutines.android)
+    implementation(libs.androidx.multidex)
+    implementation(libs.gson)
+    implementation(libs.qrgen)
+    implementation(libs.picasso) {
+        exclude(group = "com.android.support")
+    }
+    implementation(libs.play.services.ads)
+    implementation(libs.firebase.database)
+    implementation(libs.localechanger)
+    implementation(libs.androidx.preference.ktx)
+
+    implementation(libs.androidx.lifecycle.process)
+    implementation(libs.konfetti.xml)
+    implementation(libs.onesignal)
 
     implementation(platform(libs.androidx.compose.bom))
     implementation(libs.androidx.compose.ui)
+    implementation("androidx.compose.foundation:foundation")
     implementation(libs.androidx.compose.ui.graphics)
     implementation(libs.androidx.compose.ui.tooling.preview)
     implementation(libs.androidx.compose.material3)
@@ -66,3 +86,5 @@ dependencies {
     debugImplementation(libs.androidx.compose.ui.tooling)
     debugImplementation(libs.androidx.compose.ui.test.manifest)
 }
+
+apply(plugin = "com.google.gms.google-services")
