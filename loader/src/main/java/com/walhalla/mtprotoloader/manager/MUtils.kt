@@ -8,10 +8,10 @@ import com.walhalla.mtprotolist.utils.QueryFormat.getQueryArray
 import com.walhalla.mtprotolist.webproxy.ProxyInfo
 import com.walhalla.ui.DLog.d
 import com.walhalla.ui.DLog.handleException
-import okhttp3.MediaType
+import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.OkHttpClient
 import okhttp3.Request
-import okhttp3.RequestBody
+import okhttp3.RequestBody.Companion.toRequestBody
 import org.json.JSONArray
 import org.json.JSONException
 import java.util.concurrent.Executor
@@ -32,7 +32,7 @@ class MUtils(private val h: Handler) {
                 .build()
             try {
                 val response = client.newCall(request).execute()
-                val responseBody = response.body()!!.string()
+                val responseBody = response.body?.string().orEmpty()
 
                 if (responseBody.contains("Glype")) {
                     h.post {
@@ -80,8 +80,8 @@ class MUtils(private val h: Handler) {
         executor.execute(Runnable {
             try {
                 val jsonArray = getArray0(serverList)
-                val JSON = MediaType.parse("application/json; charset=utf-8")
-                val requestBody = RequestBody.create(JSON, jsonArray.toString())
+                val requestBody = jsonArray.toString()
+                    .toRequestBody("application/json; charset=utf-8".toMediaType())
 
                 val request = Request.Builder()
                     .url(urlCheckIpBatch)
@@ -90,17 +90,15 @@ class MUtils(private val h: Handler) {
 
                 val response = client.newCall(request).execute()
 
-                if (response.isSuccessful()) {
-                    // Обработка успешного ответа
-                    val jsonResponse = JSONArray(response.body()!!.string())
+                if (response.isSuccessful) {
+                    val jsonResponse = JSONArray(response.body?.string().orEmpty())
                     h.post {
                         if (setIpInfo(jsonResponse, serverList)) {
                             callback.onResponse(serverList)
                         }
                     }
                 } else {
-                    // Обработка ошибки
-                    val errorMessage = response.message()
+                    val errorMessage = response.message
                     h.post(Runnable { callback.onError(errorMessage) })
                 }
             } catch (e: Exception) {
@@ -122,8 +120,8 @@ class MUtils(private val h: Handler) {
         executor.execute {
             try {
                 val jsonArray = getQueryArray(serverList)
-                val JSON = MediaType.parse("application/json; charset=utf-8")
-                val requestBody = RequestBody.create(JSON, jsonArray.toString())
+                val requestBody = jsonArray.toString()
+                    .toRequestBody("application/json; charset=utf-8".toMediaType())
 
                 val request = Request.Builder()
                     .url(urlCheckIpBatch)
@@ -133,16 +131,14 @@ class MUtils(private val h: Handler) {
                 val response = client.newCall(request).execute()
 
                 if (response.isSuccessful) {
-                    // Обработка успешного ответа
-                    val jsonResponse = JSONArray(response.body()!!.string())
+                    val jsonResponse = JSONArray(response.body?.string().orEmpty())
                     h.post(Runnable {
                         if (setIpInfo1(jsonResponse, serverList)) {
                             callback.onResponse(serverList)
                         }
                     })
                 } else {
-                    // Обработка ошибки
-                    val errorMessage = response.message()
+                    val errorMessage = response.message
                     h.post { callback.onError(errorMessage) }
                 }
             } catch (e: Exception) {
@@ -202,10 +198,10 @@ class MUtils(private val h: Handler) {
                 d("@@@@@@@$ipInfo")
 
                 val server = serverList[i]
-                server.setCity(ipInfo.getString(Config.KEY_CITY))
-                server.setRegionName(ipInfo.getString(Config.KEY_REGION_NAME))
-                server.setLat(ipInfo.getDouble(Config.KEY_LAT))
-                server.setLon(ipInfo.getDouble(Config.KEY_LON))
+                server.city = ipInfo.getString(Config.KEY_CITY)
+                server.regionName = ipInfo.getString(Config.KEY_REGION_NAME)
+                server.lat = ipInfo.getDouble(Config.KEY_LAT)
+                server.lon = ipInfo.getDouble(Config.KEY_LON)
                 server.code = ipInfo.getString("countryCode")
 
 

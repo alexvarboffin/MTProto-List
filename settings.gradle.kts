@@ -51,3 +51,4 @@ include(":webview")
 project(":webview").projectDir = File("C:\\Synced\\WalhallaUI\\features\\webview\\")
 
 include(":mtprotocompose")
+include(":kmp:mtprotoshared")

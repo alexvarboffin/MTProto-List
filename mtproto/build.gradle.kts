@@ -102,6 +102,8 @@ android {
 }
 
 dependencies {
+    implementation(project(":kmp:mtprotoshared"))
+    implementation(libs.kotlinx.coroutines.android)
     implementation(fileTree(mapOf("dir" to "libs", "include" to listOf("*.jar", "*.aar"))))
 
     implementation(libs.androidx.appcompat)

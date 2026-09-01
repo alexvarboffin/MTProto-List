@@ -15,6 +15,7 @@ import com.walhalla.mtprotolist.HashUtils
 import com.walhalla.mtprotolist.R
 import com.walhalla.mtprotolist.databinding.InfoDialogBinding
 import com.walhalla.mtprotolist.manager.VideoRepository
+import com.walhalla.mtprotolist.util.ProxyDialogArgs
 import com.walhalla.mtprotolist.webproxy.ProxyInfo
 import com.walhalla.ui.DLog.d
 import com.walhalla.ui.DLog.handleException
@@ -34,7 +35,7 @@ class InfoGlypeDialog : DialogFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        val server = arguments?.getSerializable(KEY_ARG_DATA) as? ProxyInfo ?: return
+        val server = ProxyDialogArgs.decodeWebProxy(arguments?.getString(KEY_ARG_DATA)) ?: return
 
         try {
             bindServerInfo(server)
@@ -163,7 +164,7 @@ class InfoGlypeDialog : DialogFragment() {
         fun newInstance(data: ProxyInfo?): InfoGlypeDialog {
             val dialog = InfoGlypeDialog()
             val args = Bundle()
-            args.putSerializable(KEY_ARG_DATA, data)
+            args.putString(KEY_ARG_DATA, ProxyDialogArgs.encodeWebProxy(data))
             dialog.arguments = args
             return dialog
         }

@@ -16,6 +16,7 @@ import com.walhalla.mtprotolist.R
 import com.walhalla.mtprotolist.databinding.InfoDialogBinding
 import com.walhalla.mtprotolist.entity.MtprotoProxy
 import com.walhalla.mtprotolist.manager.VideoRepository
+import com.walhalla.mtprotolist.util.ProxyDialogArgs
 import com.walhalla.ui.DLog.d
 import com.walhalla.ui.DLog.handleException
 
@@ -34,7 +35,7 @@ class InfoMtProtoDialog : DialogFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        val server = arguments?.getSerializable(KEY_ARG_DATA) as? MtprotoProxy ?: return
+        val server = ProxyDialogArgs.decodeMtproto(arguments?.getString(KEY_ARG_DATA)) ?: return
 
         try {
             bindServerInfo(server)
@@ -160,7 +161,7 @@ class InfoMtProtoDialog : DialogFragment() {
         fun newInstance(data: MtprotoProxy?): InfoMtProtoDialog {
             val dialog = InfoMtProtoDialog()
             val args = Bundle()
-            args.putSerializable(KEY_ARG_DATA, data)
+            args.putString(KEY_ARG_DATA, ProxyDialogArgs.encodeMtproto(data))
             dialog.arguments = args
             return dialog
         }
