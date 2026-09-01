@@ -35,30 +35,30 @@ class MUtils(private val h: Handler) {
                 val responseBody = response.body()!!.string()
 
                 if (responseBody.contains("Glype")) {
-                    h.post(Runnable {
+                    h.post {
                         info.type = "Glype"
                         callback.onResponse(info)
-                    })
+                    }
                 } else if (responseBody.contains("PHP-Proxy")) {
-                    h.post(Runnable {
+                    h.post {
                         info.type = "PHP-Proxy"
                         callback.onResponse(info)
-                    })
+                    }
                 } else if (responseBody.contains("PHProxy")) {
-                    h.post(Runnable {
+                    h.post {
                         info.type = "PHProxy"
                         callback.onResponse(info)
-                    })
+                    }
                 } else {
-                    h.post(Runnable {
+                    h.post {
                         info.type = "Other"
                         callback.onResponse(info)
-                    })
+                    }
                 }
             } catch (e: Exception) {
-                h.post(Runnable {
+                h.post {
                     callback.onError(e.javaClass.simpleName)
-                })
+                }
             }
         }
     }
