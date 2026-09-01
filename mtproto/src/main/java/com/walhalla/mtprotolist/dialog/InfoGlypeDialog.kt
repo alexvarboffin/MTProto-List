@@ -63,7 +63,7 @@ class InfoGlypeDialog : DialogFragment() {
                 server.lat,
                 server.lon
             )
-            binding!!.latLonTextView.setPaintFlags(binding!!.latLonTextView.getPaintFlags() or Paint.UNDERLINE_TEXT_FLAG)
+            binding!!.latLonTextView.paintFlags = binding!!.latLonTextView.paintFlags or Paint.UNDERLINE_TEXT_FLAG
             binding!!.latLonTextView.setOnClickListener(View.OnClickListener { v: View? ->
                 //String latLon = binding.latLonTextView.getText().toString();
                 // Extract latitude and longitude from the string
@@ -83,7 +83,7 @@ class InfoGlypeDialog : DialogFragment() {
                 //mapIntent.setPackage("com.google.android.apps.maps");
 
                 // Check if there's an app to handle the intent
-                if (mapIntent.resolveActivity(requireActivity().getPackageManager()) != null) {
+                if (mapIntent.resolveActivity(requireActivity().packageManager) != null) {
                     startActivity(mapIntent)
                 } else {
                     // Handle the case where Google Maps is not installed
