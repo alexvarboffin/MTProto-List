@@ -136,7 +136,7 @@ public class GlypeProxy extends CompatFragment {
         }
 
         @Override
-        public void info(ProxyInfo data) {
+        public void proxyInfo(ProxyInfo data) {
             DialogFragment dialog = InfoGlypeDialog.newInstance(data);
             dialog.show(getChildFragmentManager(), "info_dialog");
         }

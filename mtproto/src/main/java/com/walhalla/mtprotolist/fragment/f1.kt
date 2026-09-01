@@ -103,7 +103,7 @@ class f1 : CompatFragment(),
             override fun delete(data: MtprotoProxy) {
             }
 
-            override fun info(data: MtprotoProxy) {
+            override fun proxyInfo(data: MtprotoProxy) {
                 val infoDialog = InfoMtProtoDialog.newInstance(data)
                 infoDialog.show(getParentFragmentManager(), "info_dialog")
             }

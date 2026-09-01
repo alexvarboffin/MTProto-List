@@ -16,7 +16,7 @@ interface ProtoAdapterCallback<T> {
 
     fun delete(data: T)
 
-    fun info(data: T)
+    fun proxyInfo(data: T)
 
     fun copyPort(data: T)
 }

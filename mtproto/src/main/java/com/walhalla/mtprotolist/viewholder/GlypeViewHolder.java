@@ -72,7 +72,7 @@ public class GlypeViewHolder extends RecyclerView.ViewHolder {
             callback.copyClipboard(data.proxyUrl);
         });
         binding.info.setOnClickListener(v -> {
-            callback.info(data);
+            callback.proxyInfo(data);
         });
     }
 }

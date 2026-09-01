@@ -15,25 +15,30 @@ import com.walhalla.mtprotolist.entity.MtprotoProxy
 import com.walhalla.ui.DLog.d
 import com.walhalla.ui.DLog.handleException
 import androidx.core.net.toUri
+import androidx.transition.Visibility
+import com.walhalla.mtprotolist.Config
 
 class InfoMtProtoDialog : DialogFragment() {
-    private var binding: InfoDialogBinding? = null
+    private lateinit var binding: InfoDialogBinding
 
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
         binding = InfoDialogBinding.inflate(inflater, container, false)
-        return binding!!.getRoot()
+        return binding.getRoot()
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
+        if(Config.BuildConfigDEBUG){
+            binding.disable.visibility = View.VISIBLE
+            binding.disable.setOnClickListener {
+                Toast.makeText(context, "@@@@", Toast.LENGTH_SHORT).show()
+            }
+        }
         try {
             arguments?.let {
-                val server = it.getSerializable(KEY_ARG_DATA) as MtprotoProxy?
+                val server = it.getSerializable(KEY_ARG_DATA) as MtprotoProxy
                 //            if(Config.BuildConfigDEBUG && TextUtils.isEmpty(server.country)){
 //                VideoRepository mm = new VideoRepository(result -> {
 //
@@ -41,27 +46,27 @@ class InfoMtProtoDialog : DialogFragment() {
 //                mm.bbbbb(server);
 //            }
                 //binding.statusTextView.setText(getString(R.string.status, server.status));
-                binding!!.countryTextView.text = getString(R.string.country, server!!.country)
-                binding!!.countryCodeTextView.text = getString(
+                binding.countryTextView.text = getString(R.string.country, server.country)
+                binding.countryCodeTextView.text = getString(
                     R.string.country_code,
                     server.code
                 ) //countryCode
-                binding!!.regionTextView.text =
+                binding.regionTextView.text =
                     getString(R.string.region, server.region.noneNullPlaceholder())
-                binding!!.regionNameTextView.text =
+                binding.regionNameTextView.text =
                     getString(R.string.region_name, server.regionName.noneNullPlaceholder())
-                binding!!.cityTextView.text =
+                binding.cityTextView.text =
                     getString(R.string.city, server.city.noneNullPlaceholder())
-                binding!!.zipTextView.text =
+                binding.zipTextView.text =
                     getString(R.string.zip, server.zip.noneNullPlaceholder())
 
-                binding!!.latLonTextView.text = getString(
+                binding.latLonTextView.text = getString(
                     R.string.lat_lon,
                     server.lat,
                     server.lon
                 )
-                binding!!.latLonTextView.setPaintFlags(binding!!.latLonTextView.paintFlags or Paint.UNDERLINE_TEXT_FLAG)
-                binding!!.latLonTextView.setOnClickListener { v: View? ->
+                binding.latLonTextView.setPaintFlags(binding.latLonTextView.paintFlags or Paint.UNDERLINE_TEXT_FLAG)
+                binding.latLonTextView.setOnClickListener { v: View? ->
                     //String latLon = binding.latLonTextView.getText().toString();
                     // Extract latitude and longitude from the string
 //                String[] latLonArray = latLon.split(",");
@@ -91,10 +96,10 @@ class InfoMtProtoDialog : DialogFragment() {
                         ).show()
                     }
                 }
-                binding!!.timezoneTextView.text = getString(R.string.timezone, server.timezone.noneNullPlaceholder())
-                binding!!.ispTextView.text = getString(R.string.isp, server.isp.noneNullPlaceholder())
-                binding!!.orgTextView.text = getString(R.string.org, server.org.noneNullPlaceholder())
-                binding!!.asTextView.text = getString(R.string.as_info, server.`as`.noneNullPlaceholder())
+                binding.timezoneTextView.text = getString(R.string.timezone, server.timezone.noneNullPlaceholder())
+                binding.ispTextView.text = getString(R.string.isp, server.isp.noneNullPlaceholder())
+                binding.orgTextView.text = getString(R.string.org, server.org.noneNullPlaceholder())
+                binding.asTextView.text = getString(R.string.as_info, server.`as`.noneNullPlaceholder())
             }
         } catch (e: Exception) {
             handleException(e)

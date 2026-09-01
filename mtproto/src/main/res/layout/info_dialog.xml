@@ -77,4 +77,11 @@
         android:layout_height="wrap_content"
         android:text="AS: " />
 
+    <Button
+        android:visibility="gone"
+        android:id="@+id/disable"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" android:text="DISABLE">
+
+    </Button>
 </LinearLayout>

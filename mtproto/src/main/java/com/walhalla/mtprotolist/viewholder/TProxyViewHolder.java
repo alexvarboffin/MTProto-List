@@ -81,7 +81,7 @@ public class TProxyViewHolder extends RecyclerView.ViewHolder {
         });
 
         binding.info.setOnClickListener(v -> {
-            callback.info(data);
+            callback.proxyInfo(data);
         });
 
         if (isItemUnlocked(getAdapterPosition())) {
