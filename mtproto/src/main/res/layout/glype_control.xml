@@ -13,7 +13,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="8dp"
-        android:text="Enter Url to Browse"
+        android:text="@string/glype_enter_url_title"
         android:textSize="18sp" />
 
     <LinearLayout
@@ -26,14 +26,14 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:hint="Enter URL"
+            android:hint="@string/glype_enter_url_hint"
             android:textSize="16sp" />
 
         <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="8dp"
-            android:text="Go" />
+            android:text="@string/glype_action_go" />
     </LinearLayout>
 
     <TextView
@@ -42,7 +42,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
         android:onClick="toggleOptions"
-        android:text="options"
+        android:text="@string/glype_options"
         android:textColor="@android:color/holo_blue_dark" />
 
     <LinearLayout
@@ -58,38 +58,38 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:checked="true"
-            android:text="Encrypt URL" />
+            android:text="@string/glype_encrypt_url" />
 
         <CheckBox
             android:id="@+id/encodePage"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Encrypt Page" />
+            android:text="@string/glype_encrypt_page" />
 
         <CheckBox
             android:id="@+id/allowCookies"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:checked="true"
-            android:text="Allow Cookies" />
+            android:text="@string/glype_allow_cookies" />
 
         <CheckBox
             android:id="@+id/stripTitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Remove Page Titles" />
+            android:text="@string/glype_remove_page_titles" />
 
         <CheckBox
             android:id="@+id/stripJS"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Remove Scripts" />
+            android:text="@string/glype_remove_scripts" />
 
         <CheckBox
             android:id="@+id/stripObjects"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Remove Objects" />
+            android:text="@string/glype_remove_objects" />
     </LinearLayout>
 
 </LinearLayout>

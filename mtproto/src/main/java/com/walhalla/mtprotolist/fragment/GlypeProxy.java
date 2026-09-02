@@ -77,7 +77,7 @@ public class GlypeProxy extends CompatFragment {
             String content = data.proxyUrl;
             new AlertDialog.Builder(getActivity())
                     .setIcon(R.mipmap.ic_launcher)
-                    .setTitle("WEB-PROXY " + data.ip)
+                    .setTitle(getString(R.string.dialog_webproxy_title, data.ip))
                     .setMessage(content)
                     .setPositiveButton(android.R.string.ok, (dialog, which) -> dialog.cancel())
                     .show();
@@ -88,7 +88,7 @@ public class GlypeProxy extends CompatFragment {
             if (!TextUtils.isEmpty(text) && getActivity() != null) {
                 ClipboardManager clipboard = (ClipboardManager) getActivity()
                         .getSystemService(Context.CLIPBOARD_SERVICE);
-                ClipData clip = ClipData.newPlainText("Copy", text);
+                ClipData clip = ClipData.newPlainText(getString(R.string.label_copy), text);
                 if (clipboard != null) {
                     clipboard.setPrimaryClip(clip);
                     Toast.makeText(getActivity(),
@@ -136,7 +136,7 @@ public class GlypeProxy extends CompatFragment {
         }
 
         @Override
-        public void info(ProxyInfo data) {
+        public void proxyInfo(ProxyInfo data) {
             DialogFragment dialog = InfoGlypeDialog.newInstance(data);
             dialog.show(getChildFragmentManager(), "info_dialog");
         }
@@ -419,7 +419,7 @@ public class GlypeProxy extends CompatFragment {
                                         //DLog.d("@@@@" + category.proxyUrl);
                                     } catch (Exception e) {
                                         DLog.handleException(e);
-                                        onRetrievalFailed("Failed to getUrl value." + e.getLocalizedMessage());
+                                        onRetrievalFailed(getString(R.string.err_failed_get_url, e.getLocalizedMessage()));
                                     }
                                 }
 
@@ -427,7 +427,7 @@ public class GlypeProxy extends CompatFragment {
                                     Collections.reverse(tmp);
                                     onMessageRetrieved(tmp);
                                 } else {
-                                    onRetrievalFailed("Database is empty, reinstall the Application");
+                                    onRetrievalFailed(getString(R.string.err_database_empty));
                                 }
                             }
 
@@ -443,7 +443,7 @@ public class GlypeProxy extends CompatFragment {
             }
         } catch (Exception e) {
             DLog.handleException(e);
-            onRetrievalFailed("loadCategory: " + e.getLocalizedMessage());
+            onRetrievalFailed(getString(R.string.err_load_category, e.getLocalizedMessage()));
         }
 
 //        if (Config.ENABLE_NATIVE_ADS) {

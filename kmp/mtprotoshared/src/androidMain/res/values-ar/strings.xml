@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="action_about">حول</string>
+    <string name="action_disable">تعطيل</string>
+    <string name="action_discover_more_app">اكتشف المزيد</string>
+    <string name="action_enable">تفعيل</string>
+    <string name="action_exit">خروج</string>
+    <string name="action_glype_connect">انتقل إلى البروكسي</string>
+    <string name="action_mirror">موقع وكيل المواقع المتعددة</string>
+    <string name="action_privacy_policy">سياسة الخصوصية</string>
+    <string name="action_proxy_connect">انقر للاتصال عبر الوكيل</string>
+    <string name="action_rate_app">قيّم التطبيق</string>
+    <string name="action_restart">إعادة التشغيل</string>
+    <string name="action_settings">الإعدادات</string>
+    <string name="action_share_app">مشاركة التطبيق</string>
+    <string name="action_update_geo">تحديث GEO</string>
+    <string name="app_update_downloaded">تم تنزيل تحديث للتو.</string>
+    <string name="as_info">AS Information: %1$s</string>
+    <string name="button_agree" translatable="false">Agree</string>
+    <string name="city">City: %1$s</string>
+    <string name="copied_to_clipboard">تم النسخ إلى الحافظة</string>
+    <string name="country">Country: %1$s</string>
+    <string name="country_code">Country Code: %1$s</string>
+    <string name="data_successfully_updated">تم تحديث البيانات بنجاح</string>
+    <string name="debug_state_disabled">معطّل</string>
+    <string name="debug_state_enabled">مفعّل</string>
+    <string name="dialog_proxy_title">PROXY %1$s</string>
+    <string name="dialog_webproxy_title">WEB-PROXY %1$s</string>
+    <string name="disclaimer_message" translatable="false">This service is provided as is, without warranty of any kind. Use of this service is entirely at your own risk. We cannot take responsibility for any direct or indirect damages resulting from the use of this service.\n
+            The service allows indirect browsing of external, third-party websites. We are not responsible for the content on any external websites that may be accessible through our service. A website viewed through our service is in no way owned by or associated with this website.\n
+            The term \"indirect browsing\" refers to the server which you connect to. During \"direct\" browsing, you connect to the server which provides the resource you are requesting. During \"indirect\" browsing, you connect to our server. Our script downloads the requested resource and forwards it to you.\n
+            Any resource (such as web pages, images, files) downloaded through our service may be modified. This may include, but is not limited to, editing URLs so that any resources referenced by the target resource are also downloaded indirectly. The accuracy and reliablity of this process is not guaranteed. The resource which you receive may not be an accurate representation of the resource requested.\n
+            A side-effect of indirect browsing may be anonymity. By connecting to our server instead of the target server, the target server does not see your IP address. However, we do not guarantee our service will be truly anonymous. The downloaded resource may reference other resources which your browser may automatically download. The service attempts to reroute all such requests through our server but may not be entirely successful. A single direct request will compromise your anonymity.\n
+            This service may download a resource over a secure connection but this may be sent back to you over an unsecure connection. Do not enter confidential information unless you are on a secure connection to our server.</string>
+    <string name="disclaimer_title" translatable="false">Disclaimer</string>
+    <string name="err_database_empty">قاعدة البيانات فارغة، أعد تثبيت التطبيق</string>
+    <string name="err_failed_get_url">فشل الحصول على URL. %1$s</string>
+    <string name="err_firebase_update_failed">فشل تحديث Firebase</string>
+    <string name="err_geo_update_failed">فشل تحديث Geo</string>
+    <string name="err_invalid_proxy_data">بيانات البروكسي غير صالحة</string>
+    <string name="err_load_category">loadCategory: %1$s</string>
+    <string name="err_maps_not_installed">Google Maps غير مثبت</string>
+    <string name="err_telegram_client_not_unstalled">لم يتم تثبيت عميل تليجرام</string>
+    <string name="error_empty_field">حقل فارغ</string>
+    <string name="glype_action_go">انتقال</string>
+    <string name="glype_allow_cookies">السماح بالكوكيز</string>
+    <string name="glype_encrypt_page">تشفير الصفحة</string>
+    <string name="glype_encrypt_url">تشفير URL</string>
+    <string name="glype_enter_url_hint">أدخل URL</string>
+    <string name="glype_enter_url_title">أدخل URL للتصفح</string>
+    <string name="glype_options">خيارات</string>
+    <string name="glype_remove_objects">إزالة الكائنات</string>
+    <string name="glype_remove_page_titles">إزالة عناوين الصفحات</string>
+    <string name="glype_remove_scripts">إزالة السكربتات</string>
+    <string name="hint_port">المنفذ</string>
+    <string name="hint_secret">السر</string>
+    <string name="hint_server">الخادم</string>
+    <string name="isp">Internet Service Provider: %1$s</string>
+    <string name="label_ad" translatable="false">Ad</string>
+    <string name="label_copy">نسخ</string>
+    <string name="lat_lon">Latitude and Longitude: %1$f, %2$f</string>
+    <string name="msg_firebase_updated">تم تحديث Firebase: %1$s</string>
+    <string name="msg_geo_updated">تم تحديث Geo في Firebase</string>
+    <string name="msg_no_notes1" translatable="false">البيانات فارغة\nتحقق\nمن إعدادات الشبكة،\nDataUsageSummary
+        \nو</string>
+    <string name="msg_no_notes2" translatable="false">&lt;a href="market://details?id=com.google.android.gms"&gt;
+        يُرجى التحديث\nGoogle Play Service&lt;/a&gt;</string>
+    <string name="org">Organization: %1$s</string>
+    <string name="part1">إعدادات الشبكة</string>
+    <string name="part2">DataUsageSummary</string>
+    <string name="pref_category_lang">اللغة</string>
+    <string name="pref_category_other">إضافي</string>
+    <string name="pref_summary_contributors" translatable="false">WhD, Abuzer Rafey, Siddiqov Mukhriddin</string>
+    <string name="pref_summary_copyright" translatable="false">Created by Walhalla %1$d Dynamics. \nAll right reserved</string>
+    <string name="pref_title_contributors">المساهمون</string>
+    <string name="pref_title_copyright">حقوق الطبع والنشر</string>
+    <string name="pref_title_dev_name">تم تطويره بواسطة</string>
+    <string name="pref_title_lang">اختيار اللغة</string>
+    <string name="pref_title_more">تطبيقات أخرى</string>
+    <string name="pref_title_night_mode">الوضع الليلي</string>
+    <string name="proxy_port">المنفذ:</string>
+    <string name="proxy_type_label">Type:</string>
+    <string name="region">Region: %1$s</string>
+    <string name="region_name">Region Name: %1$s</string>
+    <string name="share_proxy_data">مشاركة الوكيل</string>
+    <string name="share_qr_code" translatable="false">Share QRcode</string>
+    <string name="status">الحالة: %1$s</string>
+    <string name="tab_mtproto" translatable="false">MTProto</string>
+    <string name="tab_webproxy" translatable="false">WebProxy</string>
+    <string name="timezone">Timezone: %1$s</string>
+    <string name="webview_title">WebProxy (%1$s)</string>
+    <string name="wv_menu_clear_cookies">مسح ملفات تعريف الارتباط</string>
+    <string name="wv_menu_copy_url">Copy current URL to Buffer</string>
+    <string name="wv_menu_home">Home</string>
+    <string name="wwPageUpdated">تم تحديث الصفحة</string>
+    <string name="zip">ZIP Code: %1$s</string>
+</resources>

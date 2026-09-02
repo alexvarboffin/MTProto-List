@@ -77,7 +77,7 @@
         <activity
             android:name=".activity.ActivitySetting"
             android:screenOrientation="portrait"
-            android:theme="@style/AppTheme"
+            android:theme="@style/AppTheme.NoActionBar"
             tools:ignore="DiscouragedApi,LockedOrientationActivity" />
 
         <!--        android:label="Clipboard Monitor"-->
@@ -90,6 +90,10 @@
         <receiver
             android:name="com.android.lib.CustomTabsBroadcastReceiver"
             android:enabled="true" />
+        <property
+            android:name="android.adservices.AD_SERVICES_CONFIG"
+            android:resource="@xml/gma_ad_services_config"
+            tools:replace="android:resource" />
 
     </application>
     <queries>

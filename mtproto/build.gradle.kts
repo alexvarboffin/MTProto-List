@@ -23,12 +23,30 @@ android {
         applicationId = "com.walhalla.mtprotolist"
         minSdkVersion(libs.versions.android.minSdk.get().toInt())
         targetSdkVersion(libs.versions.android.targetSdk.get().toInt())
-        
+
         val code = versionCodeDate()
         versionCode = code
         versionName = "1.1.$code"
 
-        resConfigs("en", "es", "fr", "de", "it", "pt", "el", "ru", "ja", "zh-rCN", "zh-rTW", "ko", "ar", "uk", "vi", "uz", "az")
+        resConfigs(
+            "en",
+            "es",
+            "fr",
+            "de",
+            "it",
+            "pt",
+            "el",
+            "ru",
+            "ja",
+            "zh-rCN",
+            "zh-rTW",
+            "ko",
+            "ar",
+            "uk",
+            "vi",
+            "uz",
+            "az"
+        )
         multiDexEnabled = true
         testInstrumentationRunner = "android.support.test.runner.AndroidJUnitRunner"
     }
@@ -62,7 +80,10 @@ android {
         getByName("release") {
             isMinifyEnabled = true
             isShrinkResources = false
-            proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
+            proguardFiles(
+                getDefaultProguardFile("proguard-android-optimize.txt"),
+                "proguard-rules.pro"
+            )
             signingConfig = signingConfigs.getByName("x0")
             versionNameSuffix = ".release"
         }
@@ -72,19 +93,27 @@ android {
         sourceCompatibility = JavaVersion.VERSION_17
         targetCompatibility = JavaVersion.VERSION_17
     }
+    buildFeatures {
+        buildConfig = true
+    }
+    kotlinOptions {
+        jvmTarget = "17"
+    }
 }
 
 dependencies {
+    implementation(project(":kmp:mtprotoshared"))
+    implementation(libs.kotlinx.coroutines.android)
     implementation(fileTree(mapOf("dir" to "libs", "include" to listOf("*.jar", "*.aar"))))
-    
+
     implementation(libs.androidx.appcompat)
     implementation(libs.material)
     implementation(libs.androidx.constraintlayout)
     implementation(project(":webview"))
 
-    testImplementation("junit:junit:4.13.2")
-    androidTestImplementation("androidx.test:runner:1.6.2")
-    androidTestImplementation("androidx.test.espresso:espresso-core:3.6.1")
+    testImplementation(libs.junit)
+    androidTestImplementation(libs.androidx.runner)
+    androidTestImplementation(libs.androidx.espresso.core)
     implementation(libs.gson)
 
     implementation(project(":ui"))
@@ -108,7 +137,7 @@ dependencies {
     implementation(libs.androidx.lifecycle.common.java8)
     implementation(libs.androidx.lifecycle.viewmodel)
     implementation(libs.androidx.lifecycle.viewmodel.ktx)
-    
+
     implementation(libs.localechanger)
     implementation(libs.androidx.preference.ktx)
     implementation(libs.pulsator4droid)

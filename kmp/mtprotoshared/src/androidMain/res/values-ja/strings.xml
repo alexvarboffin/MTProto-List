@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="action_about">アプリについて</string>
+    <string name="action_disable">無効</string>
+    <string name="action_discover_more_app">他のアプリ</string>
+    <string name="action_enable">有効</string>
+    <string name="action_exit">終了</string>
+    <string name="action_glype_connect">プロキシへ移動</string>
+    <string name="action_mirror">プロキシサイトミラー</string>
+    <string name="action_privacy_policy">プライバシーポリシー</string>
+    <string name="action_proxy_connect">プロキシ経由で接続するにはクリック</string>
+    <string name="action_rate_app">アプリを評価</string>
+    <string name="action_restart">再起動</string>
+    <string name="action_settings">設定</string>
+    <string name="action_share_app">アプリを共有</string>
+    <string name="action_update_geo">GEO更新</string>
+    <string name="app_update_downloaded">更新がダウンロードされました。</string>
+    <string name="as_info">AS Information: %1$s</string>
+    <string name="button_agree" translatable="false">Agree</string>
+    <string name="city">City: %1$s</string>
+    <string name="copied_to_clipboard">クリップボードにコピーされました</string>
+    <string name="country">Country: %1$s</string>
+    <string name="country_code">Country Code: %1$s</string>
+    <string name="data_successfully_updated">データが正常に更新されました</string>
+    <string name="debug_state_disabled">無効</string>
+    <string name="debug_state_enabled">有効</string>
+    <string name="dialog_proxy_title">PROXY %1$s</string>
+    <string name="dialog_webproxy_title">WEB-PROXY %1$s</string>
+    <string name="disclaimer_message" translatable="false">This service is provided as is, without warranty of any kind. Use of this service is entirely at your own risk. We cannot take responsibility for any direct or indirect damages resulting from the use of this service.\n
+            The service allows indirect browsing of external, third-party websites. We are not responsible for the content on any external websites that may be accessible through our service. A website viewed through our service is in no way owned by or associated with this website.\n
+            The term \"indirect browsing\" refers to the server which you connect to. During \"direct\" browsing, you connect to the server which provides the resource you are requesting. During \"indirect\" browsing, you connect to our server. Our script downloads the requested resource and forwards it to you.\n
+            Any resource (such as web pages, images, files) downloaded through our service may be modified. This may include, but is not limited to, editing URLs so that any resources referenced by the target resource are also downloaded indirectly. The accuracy and reliablity of this process is not guaranteed. The resource which you receive may not be an accurate representation of the resource requested.\n
+            A side-effect of indirect browsing may be anonymity. By connecting to our server instead of the target server, the target server does not see your IP address. However, we do not guarantee our service will be truly anonymous. The downloaded resource may reference other resources which your browser may automatically download. The service attempts to reroute all such requests through our server but may not be entirely successful. A single direct request will compromise your anonymity.\n
+            This service may download a resource over a secure connection but this may be sent back to you over an unsecure connection. Do not enter confidential information unless you are on a secure connection to our server.</string>
+    <string name="disclaimer_title" translatable="false">Disclaimer</string>
+    <string name="err_database_empty">データベースが空です。アプリを再インストールしてください</string>
+    <string name="err_failed_get_url">URLの取得に失敗しました。%1$s</string>
+    <string name="err_firebase_update_failed">Firebaseの更新に失敗しました</string>
+    <string name="err_geo_update_failed">Geoの更新に失敗しました</string>
+    <string name="err_invalid_proxy_data">無効なプロキシデータ</string>
+    <string name="err_load_category">loadCategory: %1$s</string>
+    <string name="err_maps_not_installed">Google Mapsがインストールされていません</string>
+    <string name="err_telegram_client_not_unstalled">Telegramクライアントがインストールされていません</string>
+    <string name="error_empty_field">空のフィールド</string>
+    <string name="glype_action_go">移動</string>
+    <string name="glype_allow_cookies">Cookieを許可</string>
+    <string name="glype_encrypt_page">ページを暗号化</string>
+    <string name="glype_encrypt_url">URLを暗号化</string>
+    <string name="glype_enter_url_hint">URLを入力</string>
+    <string name="glype_enter_url_title">閲覧するURLを入力</string>
+    <string name="glype_options">オプション</string>
+    <string name="glype_remove_objects">オブジェクトを削除</string>
+    <string name="glype_remove_page_titles">ページタイトルを削除</string>
+    <string name="glype_remove_scripts">スクリプトを削除</string>
+    <string name="hint_port">ポート</string>
+    <string name="hint_secret">シークレット</string>
+    <string name="hint_server">サーバー</string>
+    <string name="isp">Internet Service Provider: %1$s</string>
+    <string name="label_ad" translatable="false">Ad</string>
+    <string name="label_copy">コピー</string>
+    <string name="lat_lon">Latitude and Longitude: %1$f, %2$f</string>
+    <string name="msg_firebase_updated">Firebaseを更新しました: %1$s</string>
+    <string name="msg_geo_updated">FirebaseでGeoを更新しました</string>
+    <string name="msg_no_notes1">データが空です\n確認してください\nネットワーク設定、\nDataUsageSummary\nおよび</string>
+    <string name="msg_no_notes2" translatable="false">Please Update Google Play Service</string>
+    <string name="org">Organization: %1$s</string>
+    <string name="part1">ネットワーク設定</string>
+    <string name="part2" translatable="false">DataUsageSummary</string>
+    <string name="pref_category_lang">ローカライゼーション</string>
+    <string name="pref_category_other">追加</string>
+    <string name="pref_summary_contributors" translatable="false">WhD, Abuzer Rafey, Siddiqov Mukhriddin</string>
+    <string name="pref_summary_copyright" translatable="false">Created by Walhalla %1$d Dynamics. \nAll right reserved</string>
+    <string name="pref_title_contributors">貢献者</string>
+    <string name="pref_title_copyright">著作権</string>
+    <string name="pref_title_dev_name">開発者</string>
+    <string name="pref_title_lang">言語の選択</string>
+    <string name="pref_title_more">その他のアプリケーション</string>
+    <string name="pref_title_night_mode">ナイトモード</string>
+    <string name="proxy_port">ポート：</string>
+    <string name="proxy_type_label">Type:</string>
+    <string name="region">Region: %1$s</string>
+    <string name="region_name">Region Name: %1$s</string>
+    <string name="share_proxy_data">プロキシを共有</string>
+    <string name="share_qr_code" translatable="false">Share QRcode</string>
+    <string name="status">ステータス: %1$s</string>
+    <string name="tab_mtproto" translatable="false">MTProto</string>
+    <string name="tab_webproxy" translatable="false">WebProxy</string>
+    <string name="timezone">Timezone: %1$s</string>
+    <string name="webview_title">WebProxy (%1$s)</string>
+    <string name="wv_menu_clear_cookies">Cookieを消去</string>
+    <string name="wv_menu_copy_url">Copy current URL to Buffer</string>
+    <string name="wv_menu_home">Home</string>
+    <string name="wwPageUpdated">ページを更新しました</string>
+    <string name="zip">ZIP Code: %1$s</string>
+</resources>

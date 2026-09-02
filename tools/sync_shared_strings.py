@@ -1,0 +1,1093 @@
+#!/usr/bin/env python3
+"""Sync translatable strings into kmp/mtprotoshared androidMain/res."""
+
+from __future__ import annotations
+
+import re
+import xml.etree.ElementTree as ET
+from pathlib import Path
+
+ROOT = Path(__file__).resolve().parents[1]
+STRINGS_SOURCE = ROOT / "tools" / "strings_source" / "mtproto" / "res"
+MTPROTO_RES = (
+    STRINGS_SOURCE
+    if (STRINGS_SOURCE / "values" / "strings.xml").exists()
+    else ROOT / "mtproto" / "src" / "main" / "res"
+)
+COMPOSE_SOURCE = ROOT / "tools" / "strings_source" / "compose_strings.xml"
+COMPOSE_RES = ROOT / "mtprotocompose" / "src" / "main" / "res"
+SHARED_RES = ROOT / "kmp" / "mtprotoshared" / "src" / "androidMain" / "res"
+WALHALLA_SHARED = Path(r"C:\Synced\WalhallaUI\shared\src\main\res")
+
+LOCALES = [
+    "en",
+    "es",
+    "fr",
+    "de",
+    "it",
+    "pt",
+    "el",
+    "ru",
+    "ja",
+    "zh-rCN",
+    "zh-rTW",
+    "ko",
+    "ar",
+    "uk",
+    "vi",
+    "az",
+    "uz",
+]
+
+# Keys that stay in app modules (ads, legacy junk).
+APP_ONLY_KEYS = {
+    "app_name",
+    "facebook_app_id",
+    "nav_header_title",
+    "nav_header_subtitle",
+    "nav_header_desc",
+    "menu_home",
+    "menu_gallery",
+    "menu_slideshow",
+    "menu_tools",
+    "menu_share",
+    "menu_send",
+    "admob_app_id",
+    "b1",
+    "ad_unit_id",
+    "run1",
+    "rewardedId",
+}
+
+EXTRA_DEFAULT = {
+    "tab_mtproto": "MTProto",
+    "tab_webproxy": "WebProxy",
+    "action_settings": "Settings",
+    "action_share_app": "Share App",
+    "action_rate_app": "Rate App",
+    "action_discover_more_app": "Discover More Apps",
+    "action_about": "About",
+    "action_privacy_policy": "Privacy Policy",
+    "action_exit": "Exit",
+    "pref_title_contributors": "Contributors",
+    "pref_title_night_mode": "Night mode",
+    "pref_summary_contributors": "WhD, Abuzer Rafey, Siddiqov Mukhriddin",
+    "dialog_proxy_title": "PROXY %1$s",
+    "dialog_webproxy_title": "WEB-PROXY %1$s",
+    "webview_title": "WebProxy (%1$s)",
+    "action_disable": "DISABLE",
+    "action_enable": "ENABLE",
+    "action_update_geo": "UPDATE GEO",
+    "err_maps_not_installed": "Google Maps not installed",
+}
+
+EXTRA_STRINGS = {
+    "msg_geo_updated": "Geo updated in Firebase",
+    "err_geo_update_failed": "Geo update failed",
+    "err_invalid_proxy_data": "Invalid proxy data",
+    "msg_firebase_updated": "Firebase updated: %1$s",
+    "err_firebase_update_failed": "Firebase update failed",
+    "debug_state_enabled": "enabled",
+    "debug_state_disabled": "disabled",
+    "err_failed_get_url": "Failed to getUrl value. %1$s",
+    "err_database_empty": "Database is empty, reinstall the Application",
+    "err_load_category": "loadCategory: %1$s",
+    "label_copy": "Copy",
+    "app_update_downloaded": "An update has just been downloaded.",
+    "action_restart": "RESTART",
+    "glype_enter_url_title": "Enter Url to Browse",
+    "glype_enter_url_hint": "Enter URL",
+    "glype_action_go": "Go",
+    "glype_options": "options",
+    "glype_encrypt_url": "Encrypt URL",
+    "glype_encrypt_page": "Encrypt Page",
+    "glype_allow_cookies": "Allow Cookies",
+    "glype_remove_page_titles": "Remove Page Titles",
+    "glype_remove_scripts": "Remove Scripts",
+    "glype_remove_objects": "Remove Objects",
+    "label_ad": "Ad",
+}
+
+EXTRA_STRINGS_LOCALE: dict[str, dict[str, str]] = {
+    "ru": {
+        "msg_geo_updated": "Geo обновлено в Firebase",
+        "err_geo_update_failed": "Не удалось обновить Geo",
+        "err_invalid_proxy_data": "Некорректные данные прокси",
+        "msg_firebase_updated": "Firebase обновлён: %1$s",
+        "err_firebase_update_failed": "Не удалось обновить Firebase",
+        "debug_state_enabled": "включено",
+        "debug_state_disabled": "отключено",
+        "err_failed_get_url": "Не удалось получить URL. %1$s",
+        "err_database_empty": "База данных пуста, переустановите приложение",
+        "err_load_category": "loadCategory: %1$s",
+        "label_copy": "Копировать",
+        "app_update_downloaded": "Обновление загружено.",
+        "action_restart": "ПЕРЕЗАПУСК",
+        "glype_enter_url_title": "Введите URL для просмотра",
+        "glype_enter_url_hint": "Введите URL",
+        "glype_action_go": "Перейти",
+        "glype_options": "опции",
+        "glype_encrypt_url": "Шифровать URL",
+        "glype_encrypt_page": "Шифровать страницу",
+        "glype_allow_cookies": "Разрешить cookies",
+        "glype_remove_page_titles": "Удалить заголовки страниц",
+        "glype_remove_scripts": "Удалить скрипты",
+        "glype_remove_objects": "Удалить объекты",
+    },
+    "uk": {
+        "msg_geo_updated": "Geo оновлено в Firebase",
+        "err_geo_update_failed": "Не вдалося оновити Geo",
+        "err_invalid_proxy_data": "Некоректні дані проксі",
+        "msg_firebase_updated": "Firebase оновлено: %1$s",
+        "err_firebase_update_failed": "Не вдалося оновити Firebase",
+        "debug_state_enabled": "увімкнено",
+        "debug_state_disabled": "вимкнено",
+        "err_failed_get_url": "Не вдалося отримати URL. %1$s",
+        "err_database_empty": "База даних порожня, перевстановіть застосунок",
+        "err_load_category": "loadCategory: %1$s",
+        "label_copy": "Копіювати",
+        "app_update_downloaded": "Оновлення завантажено.",
+        "action_restart": "ПЕРЕЗАПУСК",
+        "glype_enter_url_title": "Введіть URL для перегляду",
+        "glype_enter_url_hint": "Введіть URL",
+        "glype_action_go": "Перейти",
+        "glype_options": "опції",
+        "glype_encrypt_url": "Шифрувати URL",
+        "glype_encrypt_page": "Шифрувати сторінку",
+        "glype_allow_cookies": "Дозволити cookies",
+        "glype_remove_page_titles": "Прибрати заголовки сторінок",
+        "glype_remove_scripts": "Прибрати скрипти",
+        "glype_remove_objects": "Прибрати об'єкти",
+    },
+    "es": {
+        "msg_geo_updated": "Geo actualizado en Firebase",
+        "err_geo_update_failed": "Error al actualizar Geo",
+        "err_invalid_proxy_data": "Datos de proxy no válidos",
+        "msg_firebase_updated": "Firebase actualizado: %1$s",
+        "err_firebase_update_failed": "Error al actualizar Firebase",
+        "debug_state_enabled": "activado",
+        "debug_state_disabled": "desactivado",
+        "err_failed_get_url": "Error al obtener URL. %1$s",
+        "err_database_empty": "La base de datos está vacía, reinstala la aplicación",
+        "err_load_category": "loadCategory: %1$s",
+        "label_copy": "Copiar",
+        "app_update_downloaded": "Se acaba de descargar una actualización.",
+        "action_restart": "REINICIAR",
+        "glype_enter_url_title": "Introduce la URL para navegar",
+        "glype_enter_url_hint": "Introduce la URL",
+        "glype_action_go": "Ir",
+        "glype_options": "opciones",
+        "glype_encrypt_url": "Cifrar URL",
+        "glype_encrypt_page": "Cifrar página",
+        "glype_allow_cookies": "Permitir cookies",
+        "glype_remove_page_titles": "Eliminar títulos de página",
+        "glype_remove_scripts": "Eliminar scripts",
+        "glype_remove_objects": "Eliminar objetos",
+    },
+    "fr": {
+        "msg_geo_updated": "Geo mis à jour dans Firebase",
+        "err_geo_update_failed": "Échec de la mise à jour Geo",
+        "err_invalid_proxy_data": "Données proxy invalides",
+        "msg_firebase_updated": "Firebase mis à jour : %1$s",
+        "err_firebase_update_failed": "Échec de la mise à jour Firebase",
+        "debug_state_enabled": "activé",
+        "debug_state_disabled": "désactivé",
+        "err_failed_get_url": "Échec de récupération de l'URL. %1$s",
+        "err_database_empty": "La base de données est vide, réinstallez l'application",
+        "err_load_category": "loadCategory: %1$s",
+        "label_copy": "Copier",
+        "app_update_downloaded": "Une mise à jour vient d'être téléchargée.",
+        "action_restart": "REDÉMARRER",
+        "glype_enter_url_title": "Entrez l'URL à consulter",
+        "glype_enter_url_hint": "Entrez l'URL",
+        "glype_action_go": "Aller",
+        "glype_options": "options",
+        "glype_encrypt_url": "Chiffrer l'URL",
+        "glype_encrypt_page": "Chiffrer la page",
+        "glype_allow_cookies": "Autoriser les cookies",
+        "glype_remove_page_titles": "Supprimer les titres de page",
+        "glype_remove_scripts": "Supprimer les scripts",
+        "glype_remove_objects": "Supprimer les objets",
+    },
+    "de": {
+        "msg_geo_updated": "Geo in Firebase aktualisiert",
+        "err_geo_update_failed": "Geo-Aktualisierung fehlgeschlagen",
+        "err_invalid_proxy_data": "Ungültige Proxy-Daten",
+        "msg_firebase_updated": "Firebase aktualisiert: %1$s",
+        "err_firebase_update_failed": "Firebase-Aktualisierung fehlgeschlagen",
+        "debug_state_enabled": "aktiviert",
+        "debug_state_disabled": "deaktiviert",
+        "err_failed_get_url": "URL konnte nicht abgerufen werden. %1$s",
+        "err_database_empty": "Datenbank ist leer, App neu installieren",
+        "err_load_category": "loadCategory: %1$s",
+        "label_copy": "Kopieren",
+        "app_update_downloaded": "Ein Update wurde gerade heruntergeladen.",
+        "action_restart": "NEUSTART",
+        "glype_enter_url_title": "URL zum Surfen eingeben",
+        "glype_enter_url_hint": "URL eingeben",
+        "glype_action_go": "Los",
+        "glype_options": "Optionen",
+        "glype_encrypt_url": "URL verschlüsseln",
+        "glype_encrypt_page": "Seite verschlüsseln",
+        "glype_allow_cookies": "Cookies erlauben",
+        "glype_remove_page_titles": "Seitentitel entfernen",
+        "glype_remove_scripts": "Skripte entfernen",
+        "glype_remove_objects": "Objekte entfernen",
+    },
+    "it": {
+        "msg_geo_updated": "Geo aggiornato in Firebase",
+        "err_geo_update_failed": "Aggiornamento Geo non riuscito",
+        "err_invalid_proxy_data": "Dati proxy non validi",
+        "msg_firebase_updated": "Firebase aggiornato: %1$s",
+        "err_firebase_update_failed": "Aggiornamento Firebase non riuscito",
+        "debug_state_enabled": "abilitato",
+        "debug_state_disabled": "disabilitato",
+        "err_failed_get_url": "Impossibile ottenere l'URL. %1$s",
+        "err_database_empty": "Database vuoto, reinstalla l'applicazione",
+        "err_load_category": "loadCategory: %1$s",
+        "label_copy": "Copia",
+        "app_update_downloaded": "È stato appena scaricato un aggiornamento.",
+        "action_restart": "RIAVVIA",
+        "glype_enter_url_title": "Inserisci URL da visitare",
+        "glype_enter_url_hint": "Inserisci URL",
+        "glype_action_go": "Vai",
+        "glype_options": "opzioni",
+        "glype_encrypt_url": "Cifra URL",
+        "glype_encrypt_page": "Cifra pagina",
+        "glype_allow_cookies": "Consenti cookie",
+        "glype_remove_page_titles": "Rimuovi titoli pagina",
+        "glype_remove_scripts": "Rimuovi script",
+        "glype_remove_objects": "Rimuovi oggetti",
+    },
+    "pt": {
+        "msg_geo_updated": "Geo atualizado no Firebase",
+        "err_geo_update_failed": "Falha ao atualizar Geo",
+        "err_invalid_proxy_data": "Dados de proxy inválidos",
+        "msg_firebase_updated": "Firebase atualizado: %1$s",
+        "err_firebase_update_failed": "Falha ao atualizar Firebase",
+        "debug_state_enabled": "ativado",
+        "debug_state_disabled": "desativado",
+        "err_failed_get_url": "Falha ao obter URL. %1$s",
+        "err_database_empty": "Banco de dados vazio, reinstale o aplicativo",
+        "err_load_category": "loadCategory: %1$s",
+        "label_copy": "Copiar",
+        "app_update_downloaded": "Uma atualização acaba de ser baixada.",
+        "action_restart": "REINICIAR",
+        "glype_enter_url_title": "Digite a URL para navegar",
+        "glype_enter_url_hint": "Digite a URL",
+        "glype_action_go": "Ir",
+        "glype_options": "opções",
+        "glype_encrypt_url": "Criptografar URL",
+        "glype_encrypt_page": "Criptografar página",
+        "glype_allow_cookies": "Permitir cookies",
+        "glype_remove_page_titles": "Remover títulos da página",
+        "glype_remove_scripts": "Remover scripts",
+        "glype_remove_objects": "Remover objetos",
+    },
+    "el": {
+        "msg_geo_updated": "Το Geo ενημερώθηκε στο Firebase",
+        "err_geo_update_failed": "Αποτυχία ενημέρωσης Geo",
+        "err_invalid_proxy_data": "Μη έγκυρα δεδομένα proxy",
+        "msg_firebase_updated": "Το Firebase ενημερώθηκε: %1$s",
+        "err_firebase_update_failed": "Αποτυχία ενημέρωσης Firebase",
+        "debug_state_enabled": "ενεργό",
+        "debug_state_disabled": "ανενεργό",
+        "err_failed_get_url": "Αποτυχία λήψης URL. %1$s",
+        "err_database_empty": "Η βάση δεδομένων είναι κενή, επανεγκαταστήστε την εφαρμογή",
+        "err_load_category": "loadCategory: %1$s",
+        "label_copy": "Αντιγραφή",
+        "app_update_downloaded": "Μόλις λήφθηκε μια ενημέρωση.",
+        "action_restart": "ΕΠΑΝΕΚΚΙΝΗΣΗ",
+        "glype_enter_url_title": "Εισαγάγετε URL για περιήγηση",
+        "glype_enter_url_hint": "Εισαγάγετε URL",
+        "glype_action_go": "Μετάβαση",
+        "glype_options": "επιλογές",
+        "glype_encrypt_url": "Κρυπτογράφηση URL",
+        "glype_encrypt_page": "Κρυπτογράφηση σελίδας",
+        "glype_allow_cookies": "Να επιτρέπονται cookies",
+        "glype_remove_page_titles": "Αφαίρεση τίτλων σελίδας",
+        "glype_remove_scripts": "Αφαίρεση scripts",
+        "glype_remove_objects": "Αφαίρεση αντικειμένων",
+    },
+    "ja": {
+        "msg_geo_updated": "FirebaseでGeoを更新しました",
+        "err_geo_update_failed": "Geoの更新に失敗しました",
+        "err_invalid_proxy_data": "無効なプロキシデータ",
+        "msg_firebase_updated": "Firebaseを更新しました: %1$s",
+        "err_firebase_update_failed": "Firebaseの更新に失敗しました",
+        "debug_state_enabled": "有効",
+        "debug_state_disabled": "無効",
+        "err_failed_get_url": "URLの取得に失敗しました。%1$s",
+        "err_database_empty": "データベースが空です。アプリを再インストールしてください",
+        "err_load_category": "loadCategory: %1$s",
+        "label_copy": "コピー",
+        "app_update_downloaded": "更新がダウンロードされました。",
+        "action_restart": "再起動",
+        "glype_enter_url_title": "閲覧するURLを入力",
+        "glype_enter_url_hint": "URLを入力",
+        "glype_action_go": "移動",
+        "glype_options": "オプション",
+        "glype_encrypt_url": "URLを暗号化",
+        "glype_encrypt_page": "ページを暗号化",
+        "glype_allow_cookies": "Cookieを許可",
+        "glype_remove_page_titles": "ページタイトルを削除",
+        "glype_remove_scripts": "スクリプトを削除",
+        "glype_remove_objects": "オブジェクトを削除",
+    },
+    "zh-rCN": {
+        "msg_geo_updated": "已在 Firebase 中更新 Geo",
+        "err_geo_update_failed": "Geo 更新失败",
+        "err_invalid_proxy_data": "代理数据无效",
+        "msg_firebase_updated": "Firebase 已更新：%1$s",
+        "err_firebase_update_failed": "Firebase 更新失败",
+        "debug_state_enabled": "已启用",
+        "debug_state_disabled": "已禁用",
+        "err_failed_get_url": "获取 URL 失败。%1$s",
+        "err_database_empty": "数据库为空，请重新安装应用",
+        "err_load_category": "loadCategory: %1$s",
+        "label_copy": "复制",
+        "app_update_downloaded": "更新已下载。",
+        "action_restart": "重启",
+        "glype_enter_url_title": "输入要浏览的 URL",
+        "glype_enter_url_hint": "输入 URL",
+        "glype_action_go": "前往",
+        "glype_options": "选项",
+        "glype_encrypt_url": "加密 URL",
+        "glype_encrypt_page": "加密页面",
+        "glype_allow_cookies": "允许 Cookie",
+        "glype_remove_page_titles": "移除页面标题",
+        "glype_remove_scripts": "移除脚本",
+        "glype_remove_objects": "移除对象",
+    },
+    "zh-rTW": {
+        "msg_geo_updated": "已在 Firebase 中更新 Geo",
+        "err_geo_update_failed": "Geo 更新失敗",
+        "err_invalid_proxy_data": "代理資料無效",
+        "msg_firebase_updated": "Firebase 已更新：%1$s",
+        "err_firebase_update_failed": "Firebase 更新失敗",
+        "debug_state_enabled": "已啟用",
+        "debug_state_disabled": "已停用",
+        "err_failed_get_url": "取得 URL 失敗。%1$s",
+        "err_database_empty": "資料庫為空，請重新安裝應用程式",
+        "err_load_category": "loadCategory: %1$s",
+        "label_copy": "複製",
+        "app_update_downloaded": "更新已下載。",
+        "action_restart": "重新啟動",
+        "glype_enter_url_title": "輸入要瀏覽的 URL",
+        "glype_enter_url_hint": "輸入 URL",
+        "glype_action_go": "前往",
+        "glype_options": "選項",
+        "glype_encrypt_url": "加密 URL",
+        "glype_encrypt_page": "加密頁面",
+        "glype_allow_cookies": "允許 Cookie",
+        "glype_remove_page_titles": "移除頁面標題",
+        "glype_remove_scripts": "移除腳本",
+        "glype_remove_objects": "移除物件",
+    },
+    "ko": {
+        "msg_geo_updated": "Firebase에서 Geo가 업데이트되었습니다",
+        "err_geo_update_failed": "Geo 업데이트 실패",
+        "err_invalid_proxy_data": "잘못된 프록시 데이터",
+        "msg_firebase_updated": "Firebase 업데이트됨: %1$s",
+        "err_firebase_update_failed": "Firebase 업데이트 실패",
+        "debug_state_enabled": "활성화",
+        "debug_state_disabled": "비활성화",
+        "err_failed_get_url": "URL을 가져오지 못했습니다. %1$s",
+        "err_database_empty": "데이터베이스가 비어 있습니다. 앱을 다시 설치하세요",
+        "err_load_category": "loadCategory: %1$s",
+        "label_copy": "복사",
+        "app_update_downloaded": "업데이트가 방금 다운로드되었습니다.",
+        "action_restart": "재시작",
+        "glype_enter_url_title": "탐색할 URL 입력",
+        "glype_enter_url_hint": "URL 입력",
+        "glype_action_go": "이동",
+        "glype_options": "옵션",
+        "glype_encrypt_url": "URL 암호화",
+        "glype_encrypt_page": "페이지 암호화",
+        "glype_allow_cookies": "쿠키 허용",
+        "glype_remove_page_titles": "페이지 제목 제거",
+        "glype_remove_scripts": "스크립트 제거",
+        "glype_remove_objects": "객체 제거",
+    },
+    "ar": {
+        "msg_geo_updated": "تم تحديث Geo في Firebase",
+        "err_geo_update_failed": "فشل تحديث Geo",
+        "err_invalid_proxy_data": "بيانات البروكسي غير صالحة",
+        "msg_firebase_updated": "تم تحديث Firebase: %1$s",
+        "err_firebase_update_failed": "فشل تحديث Firebase",
+        "debug_state_enabled": "مفعّل",
+        "debug_state_disabled": "معطّل",
+        "err_failed_get_url": "فشل الحصول على URL. %1$s",
+        "err_database_empty": "قاعدة البيانات فارغة، أعد تثبيت التطبيق",
+        "err_load_category": "loadCategory: %1$s",
+        "label_copy": "نسخ",
+        "app_update_downloaded": "تم تنزيل تحديث للتو.",
+        "action_restart": "إعادة التشغيل",
+        "glype_enter_url_title": "أدخل URL للتصفح",
+        "glype_enter_url_hint": "أدخل URL",
+        "glype_action_go": "انتقال",
+        "glype_options": "خيارات",
+        "glype_encrypt_url": "تشفير URL",
+        "glype_encrypt_page": "تشفير الصفحة",
+        "glype_allow_cookies": "السماح بالكوكيز",
+        "glype_remove_page_titles": "إزالة عناوين الصفحات",
+        "glype_remove_scripts": "إزالة السكربتات",
+        "glype_remove_objects": "إزالة الكائنات",
+    },
+    "vi": {
+        "msg_geo_updated": "Đã cập nhật Geo trong Firebase",
+        "err_geo_update_failed": "Cập nhật Geo thất bại",
+        "err_invalid_proxy_data": "Dữ liệu proxy không hợp lệ",
+        "msg_firebase_updated": "Đã cập nhật Firebase: %1$s",
+        "err_firebase_update_failed": "Cập nhật Firebase thất bại",
+        "debug_state_enabled": "đã bật",
+        "debug_state_disabled": "đã tắt",
+        "err_failed_get_url": "Không lấy được URL. %1$s",
+        "err_database_empty": "Cơ sở dữ liệu trống, hãy cài lại ứng dụng",
+        "err_load_category": "loadCategory: %1$s",
+        "label_copy": "Sao chép",
+        "app_update_downloaded": "Bản cập nhật vừa được tải xuống.",
+        "action_restart": "KHỞI ĐỘNG LẠI",
+        "glype_enter_url_title": "Nhập URL để duyệt",
+        "glype_enter_url_hint": "Nhập URL",
+        "glype_action_go": "Đi",
+        "glype_options": "tùy chọn",
+        "glype_encrypt_url": "Mã hóa URL",
+        "glype_encrypt_page": "Mã hóa trang",
+        "glype_allow_cookies": "Cho phép cookie",
+        "glype_remove_page_titles": "Xóa tiêu đề trang",
+        "glype_remove_scripts": "Xóa script",
+        "glype_remove_objects": "Xóa đối tượng",
+    },
+    "az": {
+        "msg_geo_updated": "Firebase-də Geo yeniləndi",
+        "err_geo_update_failed": "Geo yenilənməsi alınmadı",
+        "err_invalid_proxy_data": "Yanlış proxy məlumatı",
+        "msg_firebase_updated": "Firebase yeniləndi: %1$s",
+        "err_firebase_update_failed": "Firebase yenilənməsi alınmadı",
+        "debug_state_enabled": "aktiv",
+        "debug_state_disabled": "deaktiv",
+        "err_failed_get_url": "URL alınmadı. %1$s",
+        "err_database_empty": "Verilənlər bazası boşdur, tətbiqi yenidən quraşdırın",
+        "err_load_category": "loadCategory: %1$s",
+        "label_copy": "Kopyala",
+        "app_update_downloaded": "Yeniləmə endirildi.",
+        "action_restart": "YENİDƏN BAŞLAT",
+        "glype_enter_url_title": "Baxmaq üçün URL daxil edin",
+        "glype_enter_url_hint": "URL daxil edin",
+        "glype_action_go": "Keç",
+        "glype_options": "seçimlər",
+        "glype_encrypt_url": "URL şifrələ",
+        "glype_encrypt_page": "Səhifəni şifrələ",
+        "glype_allow_cookies": "Cookie-lərə icazə ver",
+        "glype_remove_page_titles": "Səhifə başlıqlarını sil",
+        "glype_remove_scripts": "Skriptləri sil",
+        "glype_remove_objects": "Obyektləri sil",
+    },
+    "uz": {
+        "msg_geo_updated": "Firebase-da Geo yangilandi",
+        "err_geo_update_failed": "Geo yangilash muvaffaqiyatsiz",
+        "err_invalid_proxy_data": "Noto'g'ri proxy ma'lumoti",
+        "msg_firebase_updated": "Firebase yangilandi: %1$s",
+        "err_firebase_update_failed": "Firebase yangilash muvaffaqiyatsiz",
+        "debug_state_enabled": "yoqilgan",
+        "debug_state_disabled": "o'chirilgan",
+        "err_failed_get_url": "URL olinmadi. %1$s",
+        "err_database_empty": "Ma'lumotlar bazasi bo'sh, ilovani qayta o'rnating",
+        "err_load_category": "loadCategory: %1$s",
+        "label_copy": "Nusxalash",
+        "app_update_downloaded": "Yangilanish yuklab olindi.",
+        "action_restart": "QAYTA ISHGA TUSHIRISH",
+        "glype_enter_url_title": "Ko'rish uchun URL kiriting",
+        "glype_enter_url_hint": "URL kiriting",
+        "glype_action_go": "O'tish",
+        "glype_options": "sozlamalar",
+        "glype_encrypt_url": "URL shifrlash",
+        "glype_encrypt_page": "Sahifani shifrlash",
+        "glype_allow_cookies": "Cookie-larga ruxsat",
+        "glype_remove_page_titles": "Sahifa sarlavhalarini olib tashlash",
+        "glype_remove_scripts": "Skriptlarni olib tashlash",
+        "glype_remove_objects": "Ob'ektlarni olib tashlash",
+    },
+}
+
+# Menu / UI strings per locale (merged when missing in mtproto locale file).
+# hint / validation strings per locale (only in base English in mtproto).
+HINT_LOCALE: dict[str, dict[str, str]] = {
+    "ru": {
+        "hint_server": "Сервер",
+        "hint_port": "Порт",
+        "hint_secret": "Секрет",
+        "error_empty_field": "Пустое поле",
+        "status": "Статус: %1$s",
+    },
+    "uk": {
+        "hint_server": "Сервер",
+        "hint_port": "Порт",
+        "hint_secret": "Секрет",
+        "error_empty_field": "Порожнє поле",
+        "status": "Статус: %1$s",
+    },
+    "es": {
+        "hint_server": "Servidor",
+        "hint_port": "Puerto",
+        "hint_secret": "Secreto",
+        "error_empty_field": "Campo vacío",
+        "status": "Estado: %1$s",
+    },
+    "fr": {
+        "hint_server": "Serveur",
+        "hint_port": "Port",
+        "hint_secret": "Secret",
+        "error_empty_field": "Champ vide",
+        "status": "Statut : %1$s",
+    },
+    "de": {
+        "hint_server": "Server",
+        "hint_port": "Port",
+        "hint_secret": "Geheimnis",
+        "error_empty_field": "Leeres Feld",
+        "status": "Status: %1$s",
+    },
+    "it": {
+        "hint_server": "Server",
+        "hint_port": "Porta",
+        "hint_secret": "Segreto",
+        "error_empty_field": "Campo vuoto",
+        "status": "Stato: %1$s",
+    },
+    "pt": {
+        "hint_server": "Servidor",
+        "hint_port": "Porta",
+        "hint_secret": "Segredo",
+        "error_empty_field": "Campo vazio",
+        "status": "Status: %1$s",
+    },
+    "el": {
+        "hint_server": "Διακομιστής",
+        "hint_port": "Θύρα",
+        "hint_secret": "Μυστικό",
+        "error_empty_field": "Κενό πεδίο",
+        "status": "Κατάσταση: %1$s",
+    },
+    "ja": {
+        "hint_server": "サーバー",
+        "hint_port": "ポート",
+        "hint_secret": "シークレット",
+        "error_empty_field": "空のフィールド",
+        "status": "ステータス: %1$s",
+    },
+    "zh-rCN": {
+        "hint_server": "服务器",
+        "hint_port": "端口",
+        "hint_secret": "密钥",
+        "error_empty_field": "字段为空",
+        "status": "状态：%1$s",
+    },
+    "zh-rTW": {
+        "hint_server": "伺服器",
+        "hint_port": "連接埠",
+        "hint_secret": "密鑰",
+        "error_empty_field": "欄位為空",
+        "status": "狀態：%1$s",
+    },
+    "ko": {
+        "hint_server": "서버",
+        "hint_port": "포트",
+        "hint_secret": "비밀키",
+        "error_empty_field": "빈 필드",
+        "status": "상태: %1$s",
+    },
+    "ar": {
+        "hint_server": "الخادم",
+        "hint_port": "المنفذ",
+        "hint_secret": "السر",
+        "error_empty_field": "حقل فارغ",
+        "status": "الحالة: %1$s",
+    },
+    "vi": {
+        "hint_server": "Máy chủ",
+        "hint_port": "Cổng",
+        "hint_secret": "Mật khẩu",
+        "error_empty_field": "Trường trống",
+        "status": "Trạng thái: %1$s",
+    },
+    "az": {
+        "hint_server": "Server",
+        "hint_port": "Port",
+        "hint_secret": "Sirr",
+        "error_empty_field": "Boş sahə",
+        "status": "Status: %1$s",
+    },
+    "uz": {
+        "hint_server": "Server",
+        "hint_port": "Port",
+        "hint_secret": "Sir",
+        "error_empty_field": "Bo'sh maydon",
+        "status": "Holat: %1$s",
+    },
+}
+
+LOCALE_UI: dict[str, dict[str, str]] = {
+    "ru": {
+        "action_settings": "Настройки",
+        "action_share_app": "Поделиться приложением",
+        "action_rate_app": "Оставить отзыв",
+        "action_discover_more_app": "Другие приложения",
+        "action_about": "О программе",
+        "action_privacy_policy": "Политика конфиденциальности",
+        "action_exit": "Выход",
+        "pref_title_contributors": "Участники",
+        "pref_title_night_mode": "Ночной режим",
+        "dialog_proxy_title": "ПРОКСИ %1$s",
+        "dialog_webproxy_title": "WEB-PROXY %1$s",
+        "webview_title": "WebProxy (%1$s)",
+        "action_disable": "ОТКЛЮЧИТЬ",
+        "action_enable": "ВКЛЮЧИТЬ",
+        "action_update_geo": "ОБНОВИТЬ GEO",
+        "err_maps_not_installed": "Google Maps не установлен",
+        "action_glype_connect": "Перейти к прокси",
+        "wv_menu_clear_cookies": "Очистить cookies",
+        "wwPageUpdated": "Страница обновлена",
+    },
+    "uk": {
+        "action_settings": "Налаштування",
+        "action_share_app": "Надіслати другу",
+        "action_rate_app": "Залишити відгук",
+        "action_discover_more_app": "Ще додатків…",
+        "action_about": "Про додаток",
+        "action_privacy_policy": "Політика конфіденційності",
+        "action_exit": "Вихід",
+        "pref_title_contributors": "Учасники",
+        "pref_title_night_mode": "Нічний режим",
+        "dialog_proxy_title": "ПРОКСІ %1$s",
+        "dialog_webproxy_title": "WEB-PROXY %1$s",
+        "webview_title": "WebProxy (%1$s)",
+        "action_disable": "ВИМКНУТИ",
+        "action_enable": "УВІМКНУТИ",
+        "action_update_geo": "ОНОВИТИ GEO",
+        "err_maps_not_installed": "Google Maps не встановлено",
+        "action_glype_connect": "Перейти до проксі",
+        "wv_menu_clear_cookies": "Очистити cookies",
+        "wwPageUpdated": "Сторінку оновлено",
+    },
+    "es": {
+        "action_settings": "Ajustes",
+        "action_share_app": "Compartir aplicación",
+        "action_rate_app": "Valorar aplicación",
+        "action_discover_more_app": "Descubrir más apps",
+        "action_about": "Acerca de",
+        "action_privacy_policy": "Política de privacidad",
+        "action_exit": "Salir",
+        "pref_title_contributors": "Colaboradores",
+        "pref_title_night_mode": "Modo nocturno",
+        "dialog_proxy_title": "PROXY %1$s",
+        "dialog_webproxy_title": "WEB-PROXY %1$s",
+        "webview_title": "WebProxy (%1$s)",
+        "action_disable": "DESACTIVAR",
+        "action_enable": "ACTIVAR",
+        "action_update_geo": "ACTUALIZAR GEO",
+        "err_maps_not_installed": "Google Maps no está instalado",
+        "action_glype_connect": "Ir al proxy",
+        "wv_menu_clear_cookies": "Borrar cookies",
+        "wwPageUpdated": "Página actualizada",
+    },
+    "fr": {
+        "action_settings": "Paramètres",
+        "action_share_app": "Partager l'application",
+        "action_rate_app": "Noter l'application",
+        "action_discover_more_app": "Plus d'applications",
+        "action_about": "À propos",
+        "action_privacy_policy": "Politique de confidentialité",
+        "action_exit": "Quitter",
+        "pref_title_contributors": "Contributeurs",
+        "pref_title_night_mode": "Mode nuit",
+        "dialog_proxy_title": "PROXY %1$s",
+        "dialog_webproxy_title": "WEB-PROXY %1$s",
+        "webview_title": "WebProxy (%1$s)",
+        "action_disable": "DÉSACTIVER",
+        "action_enable": "ACTIVER",
+        "action_update_geo": "METTRE À JOUR GEO",
+        "err_maps_not_installed": "Google Maps n'est pas installé",
+        "action_glype_connect": "Aller au proxy",
+        "wv_menu_clear_cookies": "Effacer les cookies",
+        "wwPageUpdated": "Page mise à jour",
+    },
+    "de": {
+        "action_settings": "Einstellungen",
+        "action_share_app": "App teilen",
+        "action_rate_app": "App bewerten",
+        "action_discover_more_app": "Weitere Apps",
+        "action_about": "Über",
+        "action_privacy_policy": "Datenschutzrichtlinie",
+        "action_exit": "Beenden",
+        "pref_title_contributors": "Mitwirkende",
+        "pref_title_night_mode": "Nachtmodus",
+        "dialog_proxy_title": "PROXY %1$s",
+        "dialog_webproxy_title": "WEB-PROXY %1$s",
+        "webview_title": "WebProxy (%1$s)",
+        "action_disable": "DEAKTIVIEREN",
+        "action_enable": "AKTIVIEREN",
+        "action_update_geo": "GEO AKTUALISIEREN",
+        "err_maps_not_installed": "Google Maps ist nicht installiert",
+        "action_glype_connect": "Zum Proxy gehen",
+        "wv_menu_clear_cookies": "Cookies löschen",
+        "wwPageUpdated": "Seite aktualisiert",
+    },
+    "it": {
+        "action_settings": "Impostazioni",
+        "action_share_app": "Condividi app",
+        "action_rate_app": "Valuta app",
+        "action_discover_more_app": "Altre app",
+        "action_about": "Informazioni",
+        "action_privacy_policy": "Informativa sulla privacy",
+        "action_exit": "Esci",
+        "pref_title_contributors": "Collaboratori",
+        "pref_title_night_mode": "Modalità notturna",
+        "dialog_proxy_title": "PROXY %1$s",
+        "dialog_webproxy_title": "WEB-PROXY %1$s",
+        "webview_title": "WebProxy (%1$s)",
+        "action_disable": "DISABILITA",
+        "action_enable": "ABILITA",
+        "action_update_geo": "AGGIORNA GEO",
+        "err_maps_not_installed": "Google Maps non installato",
+        "action_glype_connect": "Vai al proxy",
+        "wv_menu_clear_cookies": "Cancella cookie",
+        "wwPageUpdated": "Pagina aggiornata",
+    },
+    "pt": {
+        "action_settings": "Configurações",
+        "action_share_app": "Compartilhar app",
+        "action_rate_app": "Avaliar app",
+        "action_discover_more_app": "Mais apps",
+        "action_about": "Sobre",
+        "action_privacy_policy": "Política de privacidade",
+        "action_exit": "Sair",
+        "pref_title_contributors": "Contribuidores",
+        "pref_title_night_mode": "Modo noturno",
+        "dialog_proxy_title": "PROXY %1$s",
+        "dialog_webproxy_title": "WEB-PROXY %1$s",
+        "webview_title": "WebProxy (%1$s)",
+        "action_disable": "DESATIVAR",
+        "action_enable": "ATIVAR",
+        "action_update_geo": "ATUALIZAR GEO",
+        "err_maps_not_installed": "Google Maps não instalado",
+        "action_glype_connect": "Ir para o proxy",
+        "wv_menu_clear_cookies": "Limpar cookies",
+        "wwPageUpdated": "Página atualizada",
+    },
+    "el": {
+        "action_settings": "Ρυθμίσεις",
+        "action_share_app": "Κοινοποίηση εφαρμογής",
+        "action_rate_app": "Αξιολόγηση",
+        "action_discover_more_app": "Περισσότερες εφαρμογές",
+        "action_about": "Σχετικά",
+        "action_privacy_policy": "Πολιτική απορρήτου",
+        "action_exit": "Έξοδος",
+        "pref_title_contributors": "Συντελεστές",
+        "pref_title_night_mode": "Νυχτερινή λειτουργία",
+        "dialog_proxy_title": "PROXY %1$s",
+        "dialog_webproxy_title": "WEB-PROXY %1$s",
+        "webview_title": "WebProxy (%1$s)",
+        "action_disable": "ΑΠΕΝΕΡΓΟΠΟΙΗΣΗ",
+        "action_enable": "ΕΝΕΡΓΟΠΟΙΗΣΗ",
+        "action_update_geo": "ΕΝΗΜΕΡΩΣΗ GEO",
+        "err_maps_not_installed": "Το Google Maps δεν είναι εγκατεστημένο",
+        "action_glype_connect": "Μετάβαση στο proxy",
+        "wv_menu_clear_cookies": "Διαγραφή cookies",
+        "wwPageUpdated": "Η σελίδα ενημερώθηκε",
+    },
+    "ja": {
+        "action_settings": "設定",
+        "action_share_app": "アプリを共有",
+        "action_rate_app": "アプリを評価",
+        "action_discover_more_app": "他のアプリ",
+        "action_about": "アプリについて",
+        "action_privacy_policy": "プライバシーポリシー",
+        "action_exit": "終了",
+        "pref_title_contributors": "貢献者",
+        "pref_title_night_mode": "ナイトモード",
+        "dialog_proxy_title": "PROXY %1$s",
+        "dialog_webproxy_title": "WEB-PROXY %1$s",
+        "webview_title": "WebProxy (%1$s)",
+        "action_disable": "無効",
+        "action_enable": "有効",
+        "action_update_geo": "GEO更新",
+        "err_maps_not_installed": "Google Mapsがインストールされていません",
+        "action_glype_connect": "プロキシへ移動",
+        "wv_menu_clear_cookies": "Cookieを消去",
+        "wwPageUpdated": "ページを更新しました",
+    },
+    "zh-rCN": {
+        "action_settings": "设置",
+        "action_share_app": "分享应用",
+        "action_rate_app": "评价应用",
+        "action_discover_more_app": "发现更多应用",
+        "action_about": "关于",
+        "action_privacy_policy": "隐私政策",
+        "action_exit": "退出",
+        "pref_title_contributors": "贡献者",
+        "pref_title_night_mode": "夜间模式",
+        "dialog_proxy_title": "代理 %1$s",
+        "dialog_webproxy_title": "WEB-PROXY %1$s",
+        "webview_title": "WebProxy (%1$s)",
+        "action_disable": "禁用",
+        "action_enable": "启用",
+        "action_update_geo": "更新 GEO",
+        "err_maps_not_installed": "未安装 Google 地图",
+        "action_glype_connect": "打开代理",
+        "wv_menu_clear_cookies": "清除 Cookie",
+        "wwPageUpdated": "页面已更新",
+    },
+    "zh-rTW": {
+        "action_settings": "設定",
+        "action_share_app": "分享應用程式",
+        "action_rate_app": "評價應用程式",
+        "action_discover_more_app": "探索更多應用程式",
+        "action_about": "關於",
+        "action_privacy_policy": "隱私權政策",
+        "action_exit": "退出",
+        "pref_title_contributors": "貢獻者",
+        "pref_title_night_mode": "夜間模式",
+        "dialog_proxy_title": "PROXY %1$s",
+        "dialog_webproxy_title": "WEB-PROXY %1$s",
+        "webview_title": "WebProxy (%1$s)",
+        "action_disable": "停用",
+        "action_enable": "啟用",
+        "action_update_geo": "更新 GEO",
+        "err_maps_not_installed": "未安裝 Google 地圖",
+        "action_glype_connect": "前往代理",
+        "wv_menu_clear_cookies": "清除 Cookie",
+        "wwPageUpdated": "頁面已更新",
+    },
+    "ko": {
+        "action_settings": "설정",
+        "action_share_app": "앱 공유",
+        "action_rate_app": "앱 평가",
+        "action_discover_more_app": "더 많은 앱",
+        "action_about": "정보",
+        "action_privacy_policy": "개인정보 처리방침",
+        "action_exit": "종료",
+        "pref_title_contributors": "기여자",
+        "pref_title_night_mode": "야간 모드",
+        "dialog_proxy_title": "PROXY %1$s",
+        "dialog_webproxy_title": "WEB-PROXY %1$s",
+        "webview_title": "WebProxy (%1$s)",
+        "action_disable": "비활성화",
+        "action_enable": "활성화",
+        "action_update_geo": "GEO 업데이트",
+        "err_maps_not_installed": "Google 지도가 설치되어 있지 않습니다",
+        "action_glype_connect": "프록시로 이동",
+        "wv_menu_clear_cookies": "쿠키 삭제",
+        "wwPageUpdated": "페이지가 업데이트되었습니다",
+    },
+    "ar": {
+        "action_settings": "الإعدادات",
+        "action_share_app": "مشاركة التطبيق",
+        "action_rate_app": "قيّم التطبيق",
+        "action_discover_more_app": "اكتشف المزيد",
+        "action_about": "حول",
+        "action_privacy_policy": "سياسة الخصوصية",
+        "action_exit": "خروج",
+        "pref_title_contributors": "المساهمون",
+        "pref_title_night_mode": "الوضع الليلي",
+        "dialog_proxy_title": "PROXY %1$s",
+        "dialog_webproxy_title": "WEB-PROXY %1$s",
+        "webview_title": "WebProxy (%1$s)",
+        "action_disable": "تعطيل",
+        "action_enable": "تفعيل",
+        "action_update_geo": "تحديث GEO",
+        "err_maps_not_installed": "Google Maps غير مثبت",
+        "action_glype_connect": "انتقل إلى البروكسي",
+        "wv_menu_clear_cookies": "مسح ملفات تعريف الارتباط",
+        "wwPageUpdated": "تم تحديث الصفحة",
+    },
+    "vi": {
+        "action_settings": "Cài đặt",
+        "action_share_app": "Chia sẻ ứng dụng",
+        "action_rate_app": "Đánh giá ứng dụng",
+        "action_discover_more_app": "Khám phá thêm",
+        "action_about": "Giới thiệu",
+        "action_privacy_policy": "Chính sách quyền riêng tư",
+        "action_exit": "Thoát",
+        "pref_title_contributors": "Cộng tác viên",
+        "pref_title_night_mode": "Chế độ ban đêm",
+        "dialog_proxy_title": "PROXY %1$s",
+        "dialog_webproxy_title": "WEB-PROXY %1$s",
+        "webview_title": "WebProxy (%1$s)",
+        "action_disable": "TẮT",
+        "action_enable": "BẬT",
+        "action_update_geo": "CẬP NHẬT GEO",
+        "err_maps_not_installed": "Chưa cài Google Maps",
+        "action_glype_connect": "Mở proxy",
+        "wv_menu_clear_cookies": "Xóa cookie",
+        "wwPageUpdated": "Đã cập nhật trang",
+    },
+    "az": {
+        "action_settings": "Parametrlər",
+        "action_share_app": "Tətbiqi paylaş",
+        "action_rate_app": "Tətbiqi qiymətləndir",
+        "action_discover_more_app": "Daha çox tətbiq",
+        "action_about": "Haqqında",
+        "action_privacy_policy": "Məxfilik siyasəti",
+        "action_exit": "Çıxış",
+        "pref_title_contributors": "Töhfəverənlər",
+        "pref_title_night_mode": "Gecə rejimi",
+        "dialog_proxy_title": "PROXY %1$s",
+        "dialog_webproxy_title": "WEB-PROXY %1$s",
+        "webview_title": "WebProxy (%1$s)",
+        "action_disable": "DEAKTIV ET",
+        "action_enable": "AKTIV ET",
+        "action_update_geo": "GEO YENİLƏ",
+        "err_maps_not_installed": "Google Maps quraşdırılmayıb",
+        "action_glype_connect": "Proxya keç",
+        "wv_menu_clear_cookies": "Cookie-ləri sil",
+        "wwPageUpdated": "Səhifə yeniləndi",
+    },
+    "uz": {
+        "action_settings": "Sozlamalar",
+        "action_share_app": "Ilovani ulashish",
+        "action_rate_app": "Ilovani baholash",
+        "action_discover_more_app": "Boshqa ilovalar",
+        "action_about": "Haqida",
+        "action_privacy_policy": "Maxfiylik siyosati",
+        "action_exit": "Chiqish",
+        "pref_title_contributors": "Hissa qo\'shganlar",
+        "pref_title_night_mode": "Tungi rejim",
+        "dialog_proxy_title": "PROXY %1$s",
+        "dialog_webproxy_title": "WEB-PROXY %1$s",
+        "webview_title": "WebProxy (%1$s)",
+        "action_disable": "O\'CHIRISH",
+        "action_enable": "YOQISH",
+        "action_update_geo": "GEO YANGILASH",
+        "err_maps_not_installed": "Google Maps o\'rnatilmagan",
+        "action_glype_connect": "Proxyga o\'tish",
+        "wv_menu_clear_cookies": "Cookie-larni tozalash",
+        "wwPageUpdated": "Sahifa yangilandi",
+    },
+}
+
+
+def parse_strings(path: Path) -> dict[str, tuple[str, bool]]:
+    if not path.exists():
+        return {}
+    text = path.read_text(encoding="utf-8")
+    result: dict[str, tuple[str, bool]] = {}
+    for match in re.finditer(r'<string\s+([^>]*?)>(.*?)</string>', text, re.DOTALL):
+        attrs, body = match.group(1), match.group(2)
+        name_match = re.search(r'name="([^"]+)"', attrs)
+        if not name_match:
+            continue
+        name = name_match.group(1)
+        translatable = 'translatable="false"' not in attrs
+        value = body.strip()
+        result[name] = (value, translatable)
+    return result
+
+
+def escape_android_string(value: str) -> str:
+    value = value.replace("\\'", "'")
+    out: list[str] = []
+    for ch in value:
+        if ch == "'":
+            out.append("\\'")
+        elif ch == "&":
+            out.append("&amp;")
+        elif ch == "<":
+            out.append("&lt;")
+        elif ch == ">":
+            out.append("&gt;")
+        else:
+            out.append(ch)
+    return "".join(out)
+
+
+def write_strings(path: Path, items: dict[str, tuple[str, bool]]) -> None:
+    path.parent.mkdir(parents=True, exist_ok=True)
+    lines = ['<?xml version="1.0" encoding="utf-8"?>', "<resources>"]
+    for name in sorted(items.keys()):
+        value, translatable = items[name]
+        escaped = escape_android_string(value)
+        if not translatable:
+            lines.append(f'    <string name="{name}" translatable="false">{escaped}</string>')
+        else:
+            lines.append(f'    <string name="{name}">{escaped}</string>')
+    lines.append("</resources>")
+    lines.append("")
+    path.write_text("\n".join(lines), encoding="utf-8")
+
+
+def locale_dir(locale: str) -> str:
+    return "values" if locale == "en" else f"values-{locale}"
+
+
+def main() -> None:
+    base = parse_strings(MTPROTO_RES / "values" / "strings.xml")
+    compose_path = COMPOSE_SOURCE if COMPOSE_SOURCE.exists() else COMPOSE_RES / "values" / "strings.xml"
+    compose = parse_strings(compose_path)
+
+    default: dict[str, tuple[str, bool]] = {}
+    for key, (value, translatable) in base.items():
+        if key in APP_ONLY_KEYS:
+            continue
+        default[key] = (value, translatable)
+    for key, (value, translatable) in compose.items():
+        if key in APP_ONLY_KEYS:
+            continue
+        default.setdefault(key, (value, translatable))
+    for key, value in EXTRA_DEFAULT.items():
+        default.setdefault(key, (value, key not in {"tab_mtproto", "tab_webproxy", "pref_summary_contributors"}))
+    for key, value in EXTRA_STRINGS.items():
+        default.setdefault(key, (value, key != "label_ad"))
+    default["label_ad"] = ("Ad", False)
+
+    default["tab_mtproto"] = ("MTProto", False)
+    default["tab_webproxy"] = ("WebProxy", False)
+    default["pref_summary_contributors"] = (EXTRA_DEFAULT["pref_summary_contributors"], False)
+    if "msg_no_notes2" in compose:
+        default["msg_no_notes2"] = compose["msg_no_notes2"]
+
+    write_strings(SHARED_RES / "values" / "strings.xml", default)
+
+    arrays_src = COMPOSE_RES / "values" / "arrays.xml"
+    if not arrays_src.exists():
+        arrays_src = ROOT / "tools" / "strings_source" / "compose_arrays.xml"
+    if arrays_src.exists():
+        (SHARED_RES / "values" / "arrays.xml").write_text(
+            arrays_src.read_text(encoding="utf-8"), encoding="utf-8"
+        )
+
+    for locale in LOCALES:
+        folder = locale_dir(locale)
+        merged = dict(default)
+        mtproto_locale = parse_strings(MTPROTO_RES / folder / "strings.xml")
+        walhalla_locale = parse_strings(WALHALLA_SHARED / folder / "strings.xml")
+        extra = LOCALE_UI.get(locale, {})
+        hints = HINT_LOCALE.get(locale, {})
+        extra_strings = EXTRA_STRINGS_LOCALE.get(locale, {})
+
+        for key in list(merged.keys()):
+            if key in mtproto_locale:
+                merged[key] = mtproto_locale[key]
+                continue
+            if not merged[key][1]:
+                continue
+            if key in walhalla_locale and walhalla_locale[key][1]:
+                merged[key] = (walhalla_locale[key][0], True)
+            elif key in extra:
+                merged[key] = (extra[key], True)
+            elif key in hints:
+                merged[key] = (hints[key], True)
+            elif key in extra_strings:
+                merged[key] = (extra_strings[key], True)
+
+        if locale == "en":
+            continue
+        else:
+            write_strings(SHARED_RES / folder / "strings.xml", merged)
+
+    print(f"Wrote shared strings to {SHARED_RES}")
+
+
+if __name__ == "__main__":
+    main()

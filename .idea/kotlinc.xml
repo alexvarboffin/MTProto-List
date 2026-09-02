@@ -1,7 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
+<<<<<<< HEAD
   <component name="KotlinJpsPluginSettings">
     <option name="externalSystemId" value="Gradle" />
     <option name="version" value="2.2.10" />
+=======
+  <component name="Kotlin2JvmCompilerArguments">
+    <option name="jvmTarget" value="1.8" />
+>>>>>>> 2650c16f923a34a04151cfebe9d29e2875f91a04
   </component>
 </project>

@@ -51,6 +51,7 @@ import com.walhalla.mtprotolist.utils.TelegramUtils
 import com.walhalla.mtprotolist.webproxy.ProxyInfo
 import com.walhalla.ui.DLog
 import com.walhalla.ui.SharedPref
+import com.walhalla.ui.plugins.DialogAbout.aboutDialog
 import com.walhalla.ui.plugins.Launcher
 import com.walhalla.ui.plugins.Module_U
 import es.dmoral.toasty.Toasty
@@ -178,13 +179,13 @@ class VPager : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListe
             if (Config.BuildConfigDEBUG) {
                 makeInstaller()
             } else {
-                Module_U.aboutDialog(this)
+                aboutDialog(this)
             }
         }
 
         //main Fragment
-        binding.tabLayout.addTab(binding.tabLayout.newTab().setText("MTProto"))
-        binding.tabLayout.addTab(binding.tabLayout.newTab().setText("WebProxy"))
+        binding.tabLayout.addTab(binding.tabLayout.newTab().setText(R.string.tab_mtproto))
+        binding.tabLayout.addTab(binding.tabLayout.newTab().setText(R.string.tab_webproxy))
 
 
         binding.tabLayout.tabGravity = TabLayout.GRAVITY_FILL
@@ -293,9 +294,9 @@ class VPager : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListe
         DLog.d("===============")
 
         Snackbar.make(
-            binding.coordinator, "An update has just been downloaded.", Snackbar.LENGTH_INDEFINITE
+            binding.coordinator, R.string.app_update_downloaded, Snackbar.LENGTH_INDEFINITE
         ).apply {
-            setAction("RESTART") {
+            setAction(R.string.action_restart) {
                 appUpdateManager.unregisterListener(flexibleListener)
                 appUpdateManager.completeUpdate()
 
@@ -327,7 +328,7 @@ class VPager : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListe
             startActivity(intent)
             true
         } else if (item.itemId == R.id.action_about) {
-            Module_U.aboutDialog(this)
+            aboutDialog(this)
             true
         } else if (item.itemId == R.id.action_privacy_policy) {
             Launcher.openBrowser(this, Config.URL_PRIVACY_POLICY)
@@ -419,7 +420,7 @@ class VPager : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListe
     private fun isFirstPage(): Boolean {
 //        Fragment currentFragment = getSupportFragmentManager().findFragmentById(R.id.viewPagerContainer);
 //        return (currentFragment instanceof Fragment1);
-        val currentPosition: Int = binding.viewPager.getCurrentItem()
+        val currentPosition: Int = binding.viewPager.currentItem
         return currentPosition == 0
     }
 

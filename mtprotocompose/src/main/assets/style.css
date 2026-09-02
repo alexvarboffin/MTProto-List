@@ -1,0 +1,35 @@
+#wrapper {
+   width: 90%;
+   margin: 0 auto 0 auto;
+   text-align: left;
+}
+#wrapper input#input{
+   width: 90%;
+   margin: 0 auto 0 auto;
+   text-align: left;
+   size: 30
+}
+#address_box
+{
+width: 90%;
+}
+
+input.textbox { width: 50px; font: 120% arial, verdana, sans-serif; }
+/*php-proxy*/
+#container input[name="url"]
+{
+width: 90% !important;
+}
+#frm
+{
+width: 90%;
+}
+#container
+ {
+width: 90%;
+ }
+
+.hidemeproxy__slideout {
+   position: fixed;
+   top: -1000%;
+}

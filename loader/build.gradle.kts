@@ -72,9 +72,14 @@ android {
         sourceCompatibility = JavaVersion.VERSION_17
         targetCompatibility = JavaVersion.VERSION_17
     }
+
+    kotlinOptions {
+        jvmTarget = "17"
+    }
 }
 
 dependencies {
+    implementation(project(":kmp:mtprotoshared"))
     implementation(fileTree(mapOf("dir" to "libs", "include" to listOf("*.jar"))))
     
     implementation(libs.androidx.appcompat)

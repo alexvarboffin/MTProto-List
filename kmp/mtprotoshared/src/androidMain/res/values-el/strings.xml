@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="action_about">Σχετικά</string>
+    <string name="action_disable">ΑΠΕΝΕΡΓΟΠΟΙΗΣΗ</string>
+    <string name="action_discover_more_app">Περισσότερες εφαρμογές</string>
+    <string name="action_enable">ΕΝΕΡΓΟΠΟΙΗΣΗ</string>
+    <string name="action_exit">Έξοδος</string>
+    <string name="action_glype_connect">Μετάβαση στο proxy</string>
+    <string name="action_mirror">Καθρέφτης Ιστότοπου Προκυρηγμένου</string>
+    <string name="action_privacy_policy">Πολιτική απορρήτου</string>
+    <string name="action_proxy_connect">Κάντε κλικ για σύνδεση μέσω προκείμενου</string>
+    <string name="action_rate_app">Αξιολόγηση</string>
+    <string name="action_restart">ΕΠΑΝΕΚΚΙΝΗΣΗ</string>
+    <string name="action_settings">Ρυθμίσεις</string>
+    <string name="action_share_app">Κοινοποίηση εφαρμογής</string>
+    <string name="action_update_geo">ΕΝΗΜΕΡΩΣΗ GEO</string>
+    <string name="app_update_downloaded">Μόλις λήφθηκε μια ενημέρωση.</string>
+    <string name="as_info">AS Information: %1$s</string>
+    <string name="button_agree" translatable="false">Agree</string>
+    <string name="city">City: %1$s</string>
+    <string name="copied_to_clipboard">Αντιγράφηκε στο πρόχειρο</string>
+    <string name="country">Country: %1$s</string>
+    <string name="country_code">Country Code: %1$s</string>
+    <string name="data_successfully_updated">Τα δεδομένα ενημερώθηκαν με επιτυχία</string>
+    <string name="debug_state_disabled">ανενεργό</string>
+    <string name="debug_state_enabled">ενεργό</string>
+    <string name="dialog_proxy_title">PROXY %1$s</string>
+    <string name="dialog_webproxy_title">WEB-PROXY %1$s</string>
+    <string name="disclaimer_message" translatable="false">This service is provided as is, without warranty of any kind. Use of this service is entirely at your own risk. We cannot take responsibility for any direct or indirect damages resulting from the use of this service.\n
+            The service allows indirect browsing of external, third-party websites. We are not responsible for the content on any external websites that may be accessible through our service. A website viewed through our service is in no way owned by or associated with this website.\n
+            The term \"indirect browsing\" refers to the server which you connect to. During \"direct\" browsing, you connect to the server which provides the resource you are requesting. During \"indirect\" browsing, you connect to our server. Our script downloads the requested resource and forwards it to you.\n
+            Any resource (such as web pages, images, files) downloaded through our service may be modified. This may include, but is not limited to, editing URLs so that any resources referenced by the target resource are also downloaded indirectly. The accuracy and reliablity of this process is not guaranteed. The resource which you receive may not be an accurate representation of the resource requested.\n
+            A side-effect of indirect browsing may be anonymity. By connecting to our server instead of the target server, the target server does not see your IP address. However, we do not guarantee our service will be truly anonymous. The downloaded resource may reference other resources which your browser may automatically download. The service attempts to reroute all such requests through our server but may not be entirely successful. A single direct request will compromise your anonymity.\n
+            This service may download a resource over a secure connection but this may be sent back to you over an unsecure connection. Do not enter confidential information unless you are on a secure connection to our server.</string>
+    <string name="disclaimer_title" translatable="false">Disclaimer</string>
+    <string name="err_database_empty">Η βάση δεδομένων είναι κενή, επανεγκαταστήστε την εφαρμογή</string>
+    <string name="err_failed_get_url">Αποτυχία λήψης URL. %1$s</string>
+    <string name="err_firebase_update_failed">Αποτυχία ενημέρωσης Firebase</string>
+    <string name="err_geo_update_failed">Αποτυχία ενημέρωσης Geo</string>
+    <string name="err_invalid_proxy_data">Μη έγκυρα δεδομένα proxy</string>
+    <string name="err_load_category">loadCategory: %1$s</string>
+    <string name="err_maps_not_installed">Το Google Maps δεν είναι εγκατεστημένο</string>
+    <string name="err_telegram_client_not_unstalled">Ο πελάτης Telegram δεν είναι εγκατεστημένος</string>
+    <string name="error_empty_field">Κενό πεδίο</string>
+    <string name="glype_action_go">Μετάβαση</string>
+    <string name="glype_allow_cookies">Να επιτρέπονται cookies</string>
+    <string name="glype_encrypt_page">Κρυπτογράφηση σελίδας</string>
+    <string name="glype_encrypt_url">Κρυπτογράφηση URL</string>
+    <string name="glype_enter_url_hint">Εισαγάγετε URL</string>
+    <string name="glype_enter_url_title">Εισαγάγετε URL για περιήγηση</string>
+    <string name="glype_options">επιλογές</string>
+    <string name="glype_remove_objects">Αφαίρεση αντικειμένων</string>
+    <string name="glype_remove_page_titles">Αφαίρεση τίτλων σελίδας</string>
+    <string name="glype_remove_scripts">Αφαίρεση scripts</string>
+    <string name="hint_port">Θύρα</string>
+    <string name="hint_secret">Μυστικό</string>
+    <string name="hint_server">Διακομιστής</string>
+    <string name="isp">Internet Service Provider: %1$s</string>
+    <string name="label_ad" translatable="false">Ad</string>
+    <string name="label_copy">Αντιγραφή</string>
+    <string name="lat_lon">Latitude and Longitude: %1$f, %2$f</string>
+    <string name="msg_firebase_updated">Το Firebase ενημερώθηκε: %1$s</string>
+    <string name="msg_geo_updated">Το Geo ενημερώθηκε στο Firebase</string>
+    <string name="msg_no_notes1">Τα δεδομένα είναι κενά\nΕλέγξτε\nτις ρυθμίσεις δικτύου,\nDataUsageSummary
+        \nκαι</string>
+    <string name="msg_no_notes2" translatable="false">Please Update Google Play Service</string>
+    <string name="org">Organization: %1$s</string>
+    <string name="part1">Ρυθμίσεις δικτύου</string>
+    <string name="part2" translatable="false">DataUsageSummary</string>
+    <string name="pref_category_lang">Τοπικοποίηση</string>
+    <string name="pref_category_other">Επιπλέον</string>
+    <string name="pref_summary_contributors" translatable="false">WhD, Abuzer Rafey, Siddiqov Mukhriddin</string>
+    <string name="pref_summary_copyright" translatable="false">Created by Walhalla %1$d Dynamics. \nAll right reserved</string>
+    <string name="pref_title_contributors">Συντελεστές</string>
+    <string name="pref_title_copyright">Πνευματικά δικαιώματα</string>
+    <string name="pref_title_dev_name">Αναπτύχθηκε από</string>
+    <string name="pref_title_lang">Επιλογή γλώσσας</string>
+    <string name="pref_title_more">Άλλες εφαρμογές</string>
+    <string name="pref_title_night_mode">Νυχτερινή λειτουργία</string>
+    <string name="proxy_port">Θύρα:</string>
+    <string name="proxy_type_label">Type:</string>
+    <string name="region">Region: %1$s</string>
+    <string name="region_name">Region Name: %1$s</string>
+    <string name="share_proxy_data">Κοινοποίηση προκυρηγμένου</string>
+    <string name="share_qr_code" translatable="false">Share QRcode</string>
+    <string name="status">Κατάσταση: %1$s</string>
+    <string name="tab_mtproto" translatable="false">MTProto</string>
+    <string name="tab_webproxy" translatable="false">WebProxy</string>
+    <string name="timezone">Timezone: %1$s</string>
+    <string name="webview_title">WebProxy (%1$s)</string>
+    <string name="wv_menu_clear_cookies">Διαγραφή cookies</string>
+    <string name="wv_menu_copy_url">Copy current URL to Buffer</string>
+    <string name="wv_menu_home">Home</string>
+    <string name="wwPageUpdated">Η σελίδα ενημερώθηκε</string>
+    <string name="zip">ZIP Code: %1$s</string>
+</resources>

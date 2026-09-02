@@ -3,56 +3,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
-
-    <RelativeLayout
-        android:id="@+id/rel"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
-
-        <com.walhalla.mtprotolist.activity.web.UWView
-            android:id="@+id/inner00"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_above="@id/glypeCtrl" />
-
-        <!--        <LinearLayout-->
-        <!--            android:id="@+id/control_panel"-->
-        <!--            android:layout_width="match_parent"-->
-        <!--            android:layout_height="wrap_content"-->
-        <!--            android:layout_alignParentBottom="true">-->
-
-        <!--            &lt;!&ndash; Добавьте здесь кнопку или другие элементы управления &ndash;&gt;-->
-
-        <!--            <Button-->
-        <!--                android:id="@+id/button_menu"-->
-        <!--                android:layout_width="wrap_content"-->
-        <!--                android:layout_height="wrap_content"-->
-        <!--                android:text="Menu"/>-->
-        <!--        </LinearLayout>-->
-
-        <com.walhalla.mtprotolist.GlypeControlView
-            android:id="@+id/glypeCtrl"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:visibility="gone" />
-    </RelativeLayout>
-
-    <!--   bottom |right|end-->
-    <!--    "center|left|start"
-    center|bottom-->
-
-    <!--    <com.google.android.material.floatingactionbutton.FloatingActionButton-->
-    <!--        android:id="@+id/fab"-->
-    <!--        android:layout_width="wrap_content"-->
-    <!--        android:layout_height="wrap_content"-->
-    <!--        app:layout_anchor="@id/inner00"-->
-    <!--        app:layout_anchorGravity="left|start|top"-->
-    <!--        android:layout_marginEnd="16dp"-->
-    <!--        android:layout_marginBottom="8dp"-->
-    <!--        android:src="@drawable/ic_menu"-->
-    <!--        android:contentDescription="@string/wv_menu" />-->
+    android:layout_height="match_parent"
+    android:fitsSystemWindows="true">
 
     <LinearLayout
         android:id="@+id/control_panel"
@@ -73,4 +25,53 @@
             tools:ignore="ContentDescription" />
 
     </LinearLayout>
+
+    <!--   bottom |right|end-->
+    <!--    "center|left|start"
+    center|bottom-->
+
+    <!--    <com.google.android.material.floatingactionbutton.FloatingActionButton-->
+    <!--        android:id="@+id/fab"-->
+    <!--        android:layout_width="wrap_content"-->
+    <!--        android:layout_height="wrap_content"-->
+    <!--        app:layout_anchor="@id/inner00"-->
+    <!--        app:layout_anchorGravity="left|start|top"-->
+    <!--        android:layout_marginEnd="16dp"-->
+    <!--        android:layout_marginBottom="8dp"-->
+    <!--        android:src="@drawable/ic_menu"-->
+    <!--        android:contentDescription="@string/wv_menu" />-->
+
+    <RelativeLayout
+        android:id="@+id/rel"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <com.walhalla.mtprotolist.GlypeControlView
+            android:id="@+id/glypeCtrl"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:visibility="gone" />
+
+        <!--        <LinearLayout-->
+        <!--            android:id="@+id/control_panel"-->
+        <!--            android:layout_width="match_parent"-->
+        <!--            android:layout_height="wrap_content"-->
+        <!--            android:layout_alignParentBottom="true">-->
+
+        <!--            &lt;!&ndash; Добавьте здесь кнопку или другие элементы управления &ndash;&gt;-->
+
+        <!--            <Button-->
+        <!--                android:id="@+id/button_menu"-->
+        <!--                android:layout_width="wrap_content"-->
+        <!--                android:layout_height="wrap_content"-->
+        <!--                android:text="Menu"/>-->
+        <!--        </LinearLayout>-->
+
+        <com.walhalla.mtprotolist.activity.web.UWView
+            android:id="@+id/inner00"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_above="@id/glypeCtrl" />
+    </RelativeLayout>
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

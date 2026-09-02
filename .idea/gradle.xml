@@ -9,7 +9,13 @@
         <option name="gradleJvm" value="#GRADLE_LOCAL_JAVA_HOME" />
         <option name="modules">
           <set>
+            <option value="$PROJECT_DIR$/../../../../SYNCED/multithreader/threader" />
+            <option value="$PROJECT_DIR$/../../../../Synced/WalhallaUI/features/ui" />
+            <option value="$PROJECT_DIR$/../../../../Synced/WalhallaUI/features/wads" />
+            <option value="$PROJECT_DIR$/../../../../Synced/WalhallaUI/features/webview" />
+            <option value="$PROJECT_DIR$/../../../../Synced/WalhallaUI/shared" />
             <option value="$PROJECT_DIR$" />
+<<<<<<< HEAD
             <option value="$PROJECT_DIR$/LoaderNew" />
             <option value="$PROJECT_DIR$/loader" />
             <option value="$PROJECT_DIR$/mtproto" />
@@ -19,6 +25,13 @@
             <option value="$PROJECT_DIR$/../../../../../src/Synced/WalhallaUI/features/webview" />
             <option value="$PROJECT_DIR$/../../../../../src/Synced/WalhallaUI/shared" />
             <option value="G:/source/walhalla/sdk/android/multithreader/threader" />
+=======
+            <option value="$PROJECT_DIR$/kmp" />
+            <option value="$PROJECT_DIR$/kmp/mtprotoshared" />
+            <option value="$PROJECT_DIR$/loader" />
+            <option value="$PROJECT_DIR$/mtproto" />
+            <option value="$PROJECT_DIR$/mtprotocompose" />
+>>>>>>> 2650c16f923a34a04151cfebe9d29e2875f91a04
           </set>
         </option>
       </GradleProjectSettings>

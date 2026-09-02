@@ -45,10 +45,11 @@ public class ActivitySetting extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        // Display the fragment as the main content.
+        setContentView(R.layout.activity_settings);
+        setSupportActionBar(findViewById(R.id.toolbar));
+        initToolbar();
         getSupportFragmentManager().beginTransaction()
-                .replace(android.R.id.content, new SettingsFragment())
+                .replace(R.id.settings_container, new SettingsFragment())
                 .commit();
     }
 
@@ -295,7 +296,6 @@ public class ActivitySetting extends AppCompatActivity {
 
     @Override
     protected void onResume() {
-        initToolbar();
         super.onResume();
         ActivityRecreationHelper.onResume(this);
 //        currentLocale.setText(Locale.getDefault().toString());

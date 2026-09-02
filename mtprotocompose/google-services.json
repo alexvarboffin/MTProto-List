@@ -1,0 +1,49 @@
+{
+  "project_info": {
+    "project_number": "345936193250",
+    "firebase_url": "https://mtprotolist.firebaseio.com",
+    "project_id": "mtprotolist",
+    "storage_bucket": "mtprotolist.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:345936193250:android:00f6cd970b3d1653",
+        "android_client_info": {
+          "package_name": "com.walhalla.mtprotolist"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "345936193250-n0k9equi13os7r4n46n9bmpirelr9cg0.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.walhalla.mtprotolist",
+            "certificate_hash": "bc2388bfe19be7212211b95e2d2b7abbf0a735e8"
+          }
+        },
+        {
+          "client_id": "345936193250-nmsm2uhovanr24a8n6m6af2qv8na7511.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDeVrKFRw7XbL-NBX1kYg8PYIrUkUp7EEs"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "345936193250-nmsm2uhovanr24a8n6m6af2qv8na7511.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      },
+      "admob_app_id": "ca-app-pub-5111357348858303~7242622740"
+    }
+  ],
+  "configuration_version": "1"
+}
