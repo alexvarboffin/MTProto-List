@@ -6,7 +6,6 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
@@ -32,6 +31,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringArrayResource
 import androidx.compose.ui.res.stringResource
@@ -48,6 +48,7 @@ import com.walhalla.shared.R as SharedR
 import com.walhalla.ui.plugins.DialogAbout.aboutDialog
 import com.walhalla.ui.plugins.Launcher
 import com.walhalla.ui.plugins.Module_U
+import android.content.res.Configuration
 import android.os.Build
 import java.util.Calendar
 import java.util.Locale
@@ -58,21 +59,15 @@ fun SettingsScreen(
     onBack: () -> Unit,
 ) {
     val context = LocalContext.current
+    val configuration = LocalConfiguration.current
     val activity = LocalActivity.current as? MainActivity
     val app = context.mtprotoApp()
     var nightMode by remember { mutableStateOf(app.settingsRepository.isNightMode()) }
     val langEntries = stringArrayResource(R.array.lang_entries)
     val langValues = stringArrayResource(R.array.lang_values)
-    val localeKey = context.resources.configuration.let { config ->
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-            config.locales[0].toLanguageTag()
-        } else {
-            @Suppress("DEPRECATION")
-            config.locale.toLanguageTag()
-        }
-    }
+    val localeKey = configurationLocaleKey(configuration)
     var selectedLangIndex by remember(localeKey, langValues) {
-        mutableIntStateOf(currentLanguageIndex(context, langValues))
+        mutableIntStateOf(currentLanguageIndex(context, langValues, configuration))
     }
     var showLangDialog by remember { mutableStateOf(false) }
     val currentYear = Calendar.getInstance().get(Calendar.YEAR)
@@ -96,7 +91,6 @@ fun SettingsScreen(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(padding)
-                .navigationBarsPadding()
                 .verticalScroll(rememberScrollState()),
         ) {
             Text(
@@ -306,20 +300,31 @@ private fun persistLanguage(context: android.content.Context, code: String) {
         .apply()
 }
 
-private fun currentLanguageIndex(context: android.content.Context, langValues: Array<String>): Int {
+private fun configurationLocaleKey(configuration: Configuration): String {
+    return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+        configuration.locales[0].toLanguageTag()
+    } else {
+        @Suppress("DEPRECATION")
+        configuration.locale.toLanguageTag()
+    }
+}
+
+private fun currentLanguageIndex(
+    context: android.content.Context,
+    langValues: Array<String>,
+    configuration: Configuration,
+): Int {
     val prefs = PreferenceManager.getDefaultSharedPreferences(context.applicationContext)
     prefs.getString(LocalePersistor.KEY_LANGUAGE, null)?.let { stored ->
         langValues.indexOfFirst { stored.equals(it, ignoreCase = true) }
             .takeIf { it >= 0 }
             ?.let { return it }
     }
-    val locale = context.resources.configuration.let { config ->
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-            config.locales[0]
-        } else {
-            @Suppress("DEPRECATION")
-            config.locale
-        }
+    val locale = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+        configuration.locales[0]
+    } else {
+        @Suppress("DEPRECATION")
+        configuration.locale
     }
     return langValues.indexOfFirst { value -> localeMatchesValue(locale, value) }
         .takeIf { it >= 0 } ?: 0
