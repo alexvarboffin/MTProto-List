@@ -6,6 +6,7 @@ plugins {
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
     alias(libs.plugins.google.services)
+    alias(libs.plugins.firebase.crashlytics)
 }
 
 fun versionCodeDate(): Int {
@@ -43,7 +44,8 @@ android {
             versionNameSuffix = "-DEMO"
         }
         release {
-            isMinifyEnabled = false
+            isMinifyEnabled = true
+            isShrinkResources = false
             signingConfig = signingConfigs.getByName("x0")
             versionNameSuffix = ".release"
             proguardFiles(
@@ -86,6 +88,9 @@ dependencies {
         exclude(group = "com.android.support")
     }
     implementation(libs.play.services.ads)
+    implementation(libs.firebase.core)
+    implementation(libs.firebase.crashlytics)
+    implementation(libs.firebase.analytics)
     implementation(libs.firebase.database)
     implementation(libs.localechanger)
     implementation(libs.androidx.preference.ktx)
