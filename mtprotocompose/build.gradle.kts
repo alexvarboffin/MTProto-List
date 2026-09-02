@@ -95,6 +95,8 @@ dependencies {
     implementation(libs.onesignal)
     implementation(libs.pulsator4droid)
 
+    implementation(libs.compose.shimmer)
+
     implementation(platform(libs.androidx.compose.bom))
     implementation(libs.androidx.compose.ui)
     implementation("androidx.compose.foundation:foundation")

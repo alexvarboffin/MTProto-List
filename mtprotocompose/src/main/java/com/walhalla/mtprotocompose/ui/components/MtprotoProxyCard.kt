@@ -41,6 +41,7 @@ fun MtprotoProxyCard(
     onCopyPort: () -> Unit,
     onCopySecret: () -> Unit,
     onLockClick: () -> Unit,
+    isShimmering: Boolean = false,
     modifier: Modifier = Modifier,
 ) {
     Card(
@@ -52,6 +53,7 @@ fun MtprotoProxyCard(
         Row(
             modifier = Modifier
                 .fillMaxWidth()
+                .proxyCardShimmer(isShimmering)
                 .padding(8.dp),
             verticalAlignment = Alignment.CenterVertically,
         ) {

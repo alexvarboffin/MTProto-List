@@ -35,6 +35,7 @@ fun WebProxyCard(
     onCopyIp: () -> Unit = {},
     onCopyUrl: () -> Unit = {},
     onCopyType: () -> Unit = {},
+    isShimmering: Boolean = false,
     modifier: Modifier = Modifier,
 ) {
     Card(
@@ -46,6 +47,7 @@ fun WebProxyCard(
         Row(
             modifier = Modifier
                 .fillMaxWidth()
+                .proxyCardShimmer(isShimmering)
                 .padding(8.dp),
             verticalAlignment = Alignment.CenterVertically,
         ) {

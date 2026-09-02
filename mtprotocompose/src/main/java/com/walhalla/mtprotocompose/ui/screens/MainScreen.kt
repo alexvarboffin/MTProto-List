@@ -4,6 +4,8 @@ package com.walhalla.mtprotocompose.ui.screens
 
 import android.app.Activity
 
+import android.widget.Toast
+
 import androidx.activity.compose.BackHandler
 
 import androidx.compose.foundation.clickable
@@ -109,11 +111,15 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 
 import androidx.lifecycle.viewmodel.compose.viewModel
 
+import com.google.android.gms.ads.AdListener
+
 import com.google.android.gms.ads.AdRequest
 
 import com.google.android.gms.ads.AdSize
 
 import com.google.android.gms.ads.AdView
+
+import com.google.android.gms.ads.LoadAdError
 
 import com.walhalla.mtproto.shared.config.AppConfig
 
@@ -691,6 +697,17 @@ private fun BannerAd(modifier: Modifier = Modifier) {
             AdView(ctx).apply {
                 setAdSize(AdSize.BANNER)
                 adUnitId = ctx.getString(R.string.b1)
+                adListener = object : AdListener() {
+                    override fun onAdFailedToLoad(error: LoadAdError) {
+                        if (BuildConfig.DEBUG) {
+                            Toast.makeText(
+                                ctx,
+                                "Banner ad: ${error.code} ${error.message}",
+                                Toast.LENGTH_LONG,
+                            ).show()
+                        }
+                    }
+                }
                 loadAd(AdRequest.Builder().build())
                 adViewHolder = this
             }

@@ -48,6 +48,7 @@ import com.walhalla.mtprotolist.entity.MtprotoProxy
 import com.walhalla.utils.AManagerI.RewardManagerCallback
 import com.walhalla.utils.RewardManager
 import com.walhalla.library.R as WadsR
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -68,6 +69,20 @@ fun MtprotoListTab(
     var viewContent by remember { mutableStateOf<Pair<String, String>?>(null) }
     var unlockPosition by remember { mutableIntStateOf(-1) }
     var pendingConnect by remember { mutableStateOf<MtprotoProxy?>(null) }
+    var shimmeringIndex by remember { mutableIntStateOf(-1) }
+
+    fun clearConnectShimmer() {
+        shimmeringIndex = -1
+    }
+
+    fun finishConnectShimmer(index: Int) {
+        scope.launch {
+            delay(1200)
+            if (shimmeringIndex == index) {
+                shimmeringIndex = -1
+            }
+        }
+    }
 
     val rewardCallback = remember {
         object : RewardManagerCallback {
@@ -81,9 +96,11 @@ fun MtprotoListTab(
                     }
                 }
                 pendingConnect = null
+                clearConnectShimmer()
             }
 
             override fun errorShowAds(position: Int) {
+                clearConnectShimmer()
                 Toast.makeText(
                     context,
                     context.getString(WadsR.string.ad_not_loaded_try_another_time),
@@ -128,7 +145,9 @@ fun MtprotoListTab(
                             proxy = proxy,
                             position = index,
                             isLocked = locked,
+                            isShimmering = shimmeringIndex == index,
                             onConnect = {
+                                shimmeringIndex = index
                                 if (locked) {
                                     unlockPosition = index
                                     pendingConnect = proxy
@@ -136,6 +155,7 @@ fun MtprotoListTab(
                                     openTelegramProxy(context, proxy) {
                                         showTelegramInstallerDialog(context)
                                     }
+                                    finishConnectShimmer(index)
                                 }
                             },
                             onInfo = { infoTarget = proxy },
@@ -211,6 +231,7 @@ fun MtprotoListTab(
             onDismiss = {
                 unlockPosition = -1
                 pendingConnect = null
+                clearConnectShimmer()
             },
         )
     }

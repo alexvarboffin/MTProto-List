@@ -39,6 +39,7 @@ import com.walhalla.mtprotocompose.util.copyToClipboard
 import com.walhalla.mtprotocompose.util.shareText
 import com.walhalla.mtprotocompose.viewmodel.WebProxyListViewModel
 import com.walhalla.mtprotolist.webproxy.ProxyInfo
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -57,12 +58,32 @@ fun WebProxyListTab(
     var viewContent by remember { mutableStateOf<Pair<String, String>?>(null) }
     var pendingProxy by remember { mutableStateOf<ProxyInfo?>(null) }
     var showDisclaimer by remember { mutableStateOf(false) }
+    var shimmeringProxyKey by remember { mutableStateOf<String?>(null) }
+
+    fun proxyKey(proxy: ProxyInfo): String = proxy.proxyUrl.orEmpty().ifBlank { proxy.ip.orEmpty() }
+
+    fun clearConnectShimmer() {
+        shimmeringProxyKey = null
+    }
+
+    fun finishConnectShimmer(key: String) {
+        scope.launch {
+            delay(1200)
+            if (shimmeringProxyKey == key) {
+                shimmeringProxyKey = null
+            }
+        }
+    }
 
     fun openProxy(proxy: ProxyInfo) {
         val url = proxy.proxyUrl.orEmpty()
-        if (url.isBlank()) return
+        if (url.isBlank()) {
+            clearConnectShimmer()
+            return
+        }
         if (app.disclaimerStore.isAgreed()) {
             onOpenWebView(url, proxy.type.orEmpty())
+            finishConnectShimmer(proxyKey(proxy))
         } else {
             pendingProxy = proxy
             showDisclaimer = true
@@ -98,7 +119,11 @@ fun WebProxyListTab(
                     items(uiState.items) { proxy ->
                         WebProxyCard(
                             proxy = proxy,
-                            onConnect = { openProxy(proxy) },
+                            isShimmering = shimmeringProxyKey == proxyKey(proxy),
+                            onConnect = {
+                                shimmeringProxyKey = proxyKey(proxy)
+                                openProxy(proxy)
+                            },
                             onInfo = { infoTarget = proxy },
                             onView = {
                                 viewContent = proxy.ip.orEmpty() to proxy.proxyUrl.orEmpty()
@@ -172,6 +197,7 @@ fun WebProxyListTab(
             onDismiss = {
                 showDisclaimer = false
                 pendingProxy = null
+                clearConnectShimmer()
             },
         )
     }
