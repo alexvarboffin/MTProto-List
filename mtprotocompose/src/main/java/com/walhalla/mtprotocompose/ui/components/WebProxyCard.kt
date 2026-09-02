@@ -11,7 +11,6 @@ import androidx.compose.material.icons.filled.Info
 import androidx.compose.material.icons.filled.QrCode
 import androidx.compose.material.icons.filled.Share
 import androidx.compose.material.icons.filled.Visibility
-import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.MaterialTheme
@@ -67,7 +66,7 @@ fun WebProxyCard(
                         .clickable(onClick = onCopyType),
                 )
             }
-            Column(modifier = Modifier.weight(1f)) {
+            Column(modifier = Modifier.weight(1f).padding(start = 8.dp)) {
                 Text(
                     text = proxy.ip.orEmpty(),
                     style = MaterialTheme.typography.titleMedium,
@@ -80,15 +79,14 @@ fun WebProxyCard(
                     style = MaterialTheme.typography.bodySmall,
                     maxLines = 2,
                     overflow = TextOverflow.Ellipsis,
-                    modifier = Modifier
-                        .padding(bottom = 8.dp)
-                        .clickable(onClick = onCopyUrl),
+                    modifier = Modifier.clickable(onClick = onCopyUrl),
                 )
-                Button(onClick = onConnect, modifier = Modifier.fillMaxWidth()) {
-                    Text(stringResource(R.string.action_glype_connect))
-                }
+                ProxyConnectButton(
+                    text = stringResource(R.string.action_glype_connect),
+                    onClick = onConnect,
+                )
             }
-            Column {
+            Column(modifier = Modifier.padding(start = 8.dp)) {
                 ProxyCardActionButton(
                     icon = Icons.Default.Info,
                     tint = ProxyCardActionColors.info,

@@ -12,7 +12,6 @@ import androidx.compose.material.icons.filled.Lock
 import androidx.compose.material.icons.filled.QrCode
 import androidx.compose.material.icons.filled.Share
 import androidx.compose.material.icons.filled.Visibility
-import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
@@ -73,7 +72,7 @@ fun MtprotoProxyCard(
                         .clickable(onClick = onCopyPort),
                 )
             }
-            Column(modifier = Modifier.weight(1f)) {
+            Column(modifier = Modifier.weight(1f).padding(start = 8.dp)) {
                 Row(
                     modifier = Modifier.fillMaxWidth(),
                     horizontalArrangement = Arrangement.SpaceBetween,
@@ -100,15 +99,14 @@ fun MtprotoProxyCard(
                     style = MaterialTheme.typography.bodySmall,
                     maxLines = 1,
                     overflow = TextOverflow.Ellipsis,
-                    modifier = Modifier
-                        .padding(bottom = 8.dp)
-                        .clickable(onClick = onCopySecret),
+                    modifier = Modifier.clickable(onClick = onCopySecret),
                 )
-                Button(onClick = onConnect, modifier = Modifier.fillMaxWidth()) {
-                    Text(stringResource(R.string.action_proxy_connect))
-                }
+                ProxyConnectButton(
+                    text = stringResource(R.string.action_proxy_connect),
+                    onClick = onConnect,
+                )
             }
-            Column {
+            Column(modifier = Modifier.padding(start = 8.dp)) {
                 ProxyCardActionButton(
                     icon = Icons.Default.Info,
                     tint = ProxyCardActionColors.info,
