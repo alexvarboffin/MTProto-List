@@ -1,13 +1,14 @@
 [versions]
-agp = "8.13.2"
+agp = "8.9.3"
 kotlin = "2.0.0"
 googleServices = "4.4.2"
 crashlyticsPlugin = "3.0.2"
 
 # Android SDK
-minSdk = "21"
-targetSdk = "35"
-compileSdk = "35"
+android-minSdk = "21"
+android-targetSdk = "36"
+android-compileSdk = "36"
+android-buildTools="36.0.0"
 
 # Libraries
 appcompat = "1.7.0"
@@ -37,11 +38,24 @@ junit = "4.13.2"
 runner = "1.0.2"
 espressoCore = "3.0.2"
 appcompatV7 = "28.0.0"
+
 jetbrainsKotlinJvm = "2.2.10"
 
+jsoup = "1.22.1"
+#appUpdate = "2.1.0"
+review = "2.0.2"
+android-core = "1.15.0"
+
 [libraries]
+review = { module = "com.google.android.play:review", version.ref = "review" }
+review-ktx = { module = "com.google.android.play:review-ktx", version.ref = "review" }
+jsoup = { module = "org.jsoup:jsoup", version.ref = "jsoup" }
+
+androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "android-core" }
+androidx-core = { module = "androidx.core:core", version.ref = "android-core" }
+
 androidx-appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "appcompat" }
-google-material = { group = "com.google.android.material", name = "material", version.ref = "material" }
+material = { group = "com.google.android.material", name = "material", version.ref = "material" }
 androidx-constraintlayout = { group = "androidx.constraintlayout", name = "constraintlayout", version.ref = "constraintlayout" }
 gson = { group = "com.google.code.gson", name = "gson", version.ref = "gson" }
 picasso = { group = "com.squareup.picasso", name = "picasso", version.ref = "picasso" }
@@ -60,7 +74,7 @@ androidx-lifecycle-viewmodel = { group = "androidx.lifecycle", name = "lifecycle
 androidx-lifecycle-viewmodel-ktx = { group = "androidx.lifecycle", name = "lifecycle-viewmodel-ktx", version.ref = "lifecycle" }
 onesignal = { group = "com.onesignal", name = "OneSignal", version.ref = "onesignal" }
 localechanger = { group = "com.github.franmontiel", name = "LocaleChanger", version.ref = "localeChanger" }
-androidx-preference = { group = "androidx.preference", name = "preference", version.ref = "preference" }
+androidx-preference-ktx = { group = "androidx.preference.ktx", name = "preference", version.ref = "preference" }
 pulsator4droid = { group = "pl.bclogic", name = "pulsator4droid", version.ref = "pulsator" }
 androidbrowserhelper = { group = "com.google.androidbrowserhelper", name = "androidbrowserhelper", version.ref = "androidBrowserHelper" }
 play-app-update = { group = "com.google.android.play", name = "app-update", version.ref = "appUpdate" }

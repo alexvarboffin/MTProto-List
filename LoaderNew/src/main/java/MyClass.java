@@ -13,9 +13,10 @@ public class MyClass {
     private static final String FIREBASE_URL = "https://mtprotolist.firebaseio.com/a";
     private static final String IP_API_BATCH = "http://ip-api.com/batch";
     private static final String PROXY_FILE = "proxies.txt";
+    private static final int REQUEST_DELAY_MS = 1500; // Задержка 1.5 сек для обхода 429 Error (max 45 req/min)
 
     public static void main(String[] args) {
-        System.out.println("--- MTProto Desktop Loader ---");
+        System.out.println("--- MTProto Desktop Loader (with Rate Limiting) ---");
         List<ProxyData> proxies = readProxiesFromFile(PROXY_FILE);
 
         if (proxies.isEmpty()) {
@@ -24,6 +25,7 @@ public class MyClass {
         }
 
         System.out.println("Найдено прокси в файле: " + proxies.size());
+        System.out.println("Примерное время выполнения: " + (proxies.size() * REQUEST_DELAY_MS / 1000) + " секунд.");
         fetchGeoAndPushToFirebase(proxies);
     }
 
@@ -31,7 +33,6 @@ public class MyClass {
         List<ProxyData> list = new ArrayList<>();
         File file = new File(fileName);
         if (!file.exists()) {
-            // Пытаемся найти в корне проекта, если запуск не из корня
             file = new File("../../" + fileName); 
             if (!file.exists()) return list;
         }
@@ -53,38 +54,38 @@ public class MyClass {
     }
 
     private static void fetchGeoAndPushToFirebase(List<ProxyData> proxies) {
-        try {
-            // Формируем JSON массив для ip-api batch
-            StringBuilder batchJson = new StringBuilder("[");
-            for (int i = 0; i < proxies.size(); i++) {
-                batchJson.append("\"").append(proxies.get(i).host).append("\"");
-                if (i < proxies.size() - 1) batchJson.append(",");
-            }
-            batchJson.append("]");
-
-            System.out.println("Получение геолокации для " + proxies.size() + " серверов...");
-            String response = sendPostRequest(IP_API_BATCH, batchJson.toString());
-            
-            // Здесь нужен парсинг JSON. Так как мы не используем библиотеки, 
-            // для надежности пройдемся по каждому прокси отдельно или предположим структуру.
-            // Но лучше для десктоп-скрипта использовать цикл по одному для простоты без GSON.
-            
-            for (ProxyData p : proxies) {
-                // Получаем гео для конкретного IP (для простоты в цикле, если batch сложен без парсера)
+        for (int i = 0; i < proxies.size(); i++) {
+            ProxyData p = proxies.get(i);
+            try {
+                System.out.print("[" + (i + 1) + "/" + proxies.size() + "] Обработка " + p.host + "... ");
+                
+                // 1. Получаем гео
                 String geoJson = sendGetRequest("http://ip-api.com/json/" + p.host + "?fields=status,country,countryCode,region,regionName,city,zip,lat,lon,timezone,isp,org,as");
                 
                 if (geoJson.contains("\"status\":\"success\"")) {
-                    System.out.println("Гео получено для: " + p.host);
-                    System.out.println("Не удалось получить гео для: " + p + geoJson);
-                    //pushToFirebase(p, geoJson);
+                    // 2. Пушим в Firebase
+                    pushToFirebase(p, geoJson);
+                } else if (geoJson.contains("fail") && geoJson.contains("reserved range")) {
+                    System.out.println("Пропуск (локальный IP или зарезервирован)");
                 } else {
-                    System.out.println("Не удалось получить гео для: " + p.host);
+                    System.out.println("Ошибка гео: " + geoJson);
+                }
+
+                // 3. Таймаут между запросами
+                if (i < proxies.size() - 1) {
+                    Thread.sleep(REQUEST_DELAY_MS);
+                }
+
+            } catch (Exception e) {
+                if (e.getMessage().contains("429")) {
+                    System.err.println("\nОШИБКА 429: Слишком много запросов. Увеличиваю паузу...");
+                    try { Thread.sleep(10000); } catch (InterruptedException ignored) {} // Пауза 10 сек при ошибке
+                } else {
+                    System.err.println("\nОшибка при обработке " + p.host + ": " + e.getMessage());
                 }
             }
-
-        } catch (Exception e) {
-            e.printStackTrace();
         }
+        System.out.println("\nГотово! Все прокси обработаны.");
     }
 
     private static void pushToFirebase(ProxyData p, String geoJson) {
@@ -92,8 +93,6 @@ public class MyClass {
             String fullUrl = String.format("https://t.me/proxy?server=%s&port=%s&secret=%s", p.host, p.port, p.secret);
             String key = md5(fullUrl);
             
-            // Формируем финальный JSON объект вручную (имитируем структуру MtprotoProxy)
-            // Достаем данные из geoJson регулярками (чтобы не тянуть тяжелые парсеры)
             String city = extract(geoJson, "city");
             String country = extract(geoJson, "country");
             String countryCode = extract(geoJson, "countryCode");
@@ -109,9 +108,9 @@ public class MyClass {
 
             String putUrl = FIREBASE_URL + "/" + key + ".json";
             sendPutRequest(putUrl, firebaseJson);
-            System.out.println("Успешно пушнули в Firebase: " + p.host + " (Key: " + key + ")");
+            System.out.println("OK (Firebase Key: " + key + ")");
         } catch (Exception e) {
-            System.err.println("Ошибка при отправке в Firebase: " + e.getMessage());
+            System.err.println("Ошибка Firebase: " + e.getMessage());
         }
     }
 
@@ -123,31 +122,29 @@ public class MyClass {
         return m.find() ? m.group(1) : "";
     }
 
-    private static String sendPostRequest(String urlStr, String json) throws IOException {
-        URL url = new URL(urlStr);
-        HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-        conn.setRequestMethod("POST");
-        conn.setDoOutput(true);
-        try (OutputStream os = conn.getOutputStream()) {
-            os.write(json.getBytes(StandardCharsets.UTF_8));
-        }
-        return readStream(conn.getInputStream());
-    }
-
     private static String sendPutRequest(String urlStr, String json) throws IOException {
         URL url = new URL(urlStr);
         HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-        conn.setRequestMethod("PUT"); // REST API Firebase использует PUT для записи по ключу
+        conn.setRequestMethod("PUT");
         conn.setDoOutput(true);
+        conn.setConnectTimeout(5000);
         try (OutputStream os = conn.getOutputStream()) {
             os.write(json.getBytes(StandardCharsets.UTF_8));
         }
+        int code = conn.getResponseCode();
+        if (code >= 400) throw new IOException("HTTP error: " + code);
         return readStream(conn.getInputStream());
     }
 
     private static String sendGetRequest(String urlStr) throws IOException {
         URL url = new URL(urlStr);
-        return readStream(url.openStream());
+        HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+        conn.setRequestMethod("GET");
+        conn.setConnectTimeout(5000);
+        int code = conn.getResponseCode();
+        if (code == 429) throw new IOException("HTTP 429");
+        if (code >= 400) throw new IOException("HTTP error: " + code);
+        return readStream(conn.getInputStream());
     }
 
     private static String readStream(InputStream is) throws IOException {

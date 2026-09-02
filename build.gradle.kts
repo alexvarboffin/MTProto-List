@@ -8,15 +8,6 @@ plugins {
     alias(libs.plugins.jetbrains.kotlin.jvm) apply false
 }
 
-allprojects {
-    repositories {
-        google()
-        mavenLocal()
-        mavenCentral()
-        maven { url = uri("https://jitpack.io") }
-    }
-}
-
 tasks.register<Delete>("clean") {
     delete(layout.buildDirectory)
 }
