@@ -88,7 +88,7 @@ public class GlypeProxy extends CompatFragment {
             if (!TextUtils.isEmpty(text) && getActivity() != null) {
                 ClipboardManager clipboard = (ClipboardManager) getActivity()
                         .getSystemService(Context.CLIPBOARD_SERVICE);
-                ClipData clip = ClipData.newPlainText("Copy", text);
+                ClipData clip = ClipData.newPlainText(getString(R.string.label_copy), text);
                 if (clipboard != null) {
                     clipboard.setPrimaryClip(clip);
                     Toast.makeText(getActivity(),
@@ -419,7 +419,7 @@ public class GlypeProxy extends CompatFragment {
                                         //DLog.d("@@@@" + category.proxyUrl);
                                     } catch (Exception e) {
                                         DLog.handleException(e);
-                                        onRetrievalFailed("Failed to getUrl value." + e.getLocalizedMessage());
+                                        onRetrievalFailed(getString(R.string.err_failed_get_url, e.localizedMessage));
                                     }
                                 }
 
@@ -427,7 +427,7 @@ public class GlypeProxy extends CompatFragment {
                                     Collections.reverse(tmp);
                                     onMessageRetrieved(tmp);
                                 } else {
-                                    onRetrievalFailed("Database is empty, reinstall the Application");
+                                    onRetrievalFailed(getString(R.string.err_database_empty));
                                 }
                             }
 
@@ -443,7 +443,7 @@ public class GlypeProxy extends CompatFragment {
             }
         } catch (Exception e) {
             DLog.handleException(e);
-            onRetrievalFailed("loadCategory: " + e.getLocalizedMessage());
+            onRetrievalFailed(getString(R.string.err_load_category, e.getLocalizedMessage()));
         }
 
 //        if (Config.ENABLE_NATIVE_ADS) {

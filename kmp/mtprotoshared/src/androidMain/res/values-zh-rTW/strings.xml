@@ -10,9 +10,11 @@
     <string name="action_privacy_policy">隱私權政策</string>
     <string name="action_proxy_connect">點擊以代理方式連接</string>
     <string name="action_rate_app">評價應用程式</string>
+    <string name="action_restart">重新啟動</string>
     <string name="action_settings">設定</string>
     <string name="action_share_app">分享應用程式</string>
     <string name="action_update_geo">更新 GEO</string>
+    <string name="app_update_downloaded">更新已下載。</string>
     <string name="as_info">AS Information: %1$s</string>
     <string name="button_agree" translatable="false">Agree</string>
     <string name="city">City: %1$s</string>
@@ -20,6 +22,8 @@
     <string name="country">Country: %1$s</string>
     <string name="country_code">Country Code: %1$s</string>
     <string name="data_successfully_updated">數據已成功更新</string>
+    <string name="debug_state_disabled">已停用</string>
+    <string name="debug_state_enabled">已啟用</string>
     <string name="dialog_proxy_title">PROXY %1$s</string>
     <string name="dialog_webproxy_title">WEB-PROXY %1$s</string>
     <string name="disclaimer_message" translatable="false">This service is provided as is, without warranty of any kind. Use of this service is entirely at your own risk. We cannot take responsibility for any direct or indirect damages resulting from the use of this service.\n
@@ -29,14 +33,34 @@
             A side-effect of indirect browsing may be anonymity. By connecting to our server instead of the target server, the target server does not see your IP address. However, we do not guarantee our service will be truly anonymous. The downloaded resource may reference other resources which your browser may automatically download. The service attempts to reroute all such requests through our server but may not be entirely successful. A single direct request will compromise your anonymity.\n
             This service may download a resource over a secure connection but this may be sent back to you over an unsecure connection. Do not enter confidential information unless you are on a secure connection to our server.</string>
     <string name="disclaimer_title" translatable="false">Disclaimer</string>
+    <string name="err_database_empty">資料庫為空，請重新安裝應用程式</string>
+    <string name="err_failed_get_url">取得 URL 失敗。%1$s</string>
+    <string name="err_firebase_update_failed">Firebase 更新失敗</string>
+    <string name="err_geo_update_failed">Geo 更新失敗</string>
+    <string name="err_invalid_proxy_data">代理資料無效</string>
+    <string name="err_load_category">loadCategory: %1$s</string>
     <string name="err_maps_not_installed">未安裝 Google 地圖</string>
     <string name="err_telegram_client_not_unstalled">Telegram 客戶端未安裝</string>
     <string name="error_empty_field">欄位為空</string>
+    <string name="glype_action_go">前往</string>
+    <string name="glype_allow_cookies">允許 Cookie</string>
+    <string name="glype_encrypt_page">加密頁面</string>
+    <string name="glype_encrypt_url">加密 URL</string>
+    <string name="glype_enter_url_hint">輸入 URL</string>
+    <string name="glype_enter_url_title">輸入要瀏覽的 URL</string>
+    <string name="glype_options">選項</string>
+    <string name="glype_remove_objects">移除物件</string>
+    <string name="glype_remove_page_titles">移除頁面標題</string>
+    <string name="glype_remove_scripts">移除腳本</string>
     <string name="hint_port">連接埠</string>
     <string name="hint_secret">密鑰</string>
     <string name="hint_server">伺服器</string>
     <string name="isp">Internet Service Provider: %1$s</string>
+    <string name="label_ad" translatable="false">Ad</string>
+    <string name="label_copy">複製</string>
     <string name="lat_lon">Latitude and Longitude: %1$f, %2$f</string>
+    <string name="msg_firebase_updated">Firebase 已更新：%1$s</string>
+    <string name="msg_geo_updated">已在 Firebase 中更新 Geo</string>
     <string name="msg_no_notes1">數據為空\n檢查\n網絡設置，\nDataUsageSummary\n以及</string>
     <string name="msg_no_notes2" translatable="false">Please Update Google Play Service</string>
     <string name="org">Organization: %1$s</string>

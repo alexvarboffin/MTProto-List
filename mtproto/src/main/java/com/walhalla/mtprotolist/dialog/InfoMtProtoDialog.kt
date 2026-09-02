@@ -109,14 +109,14 @@ class InfoMtProtoDialog : DialogFragment() {
                 if (!isAdded) return@updateMtprotoGeo
                 bindServerInfo(updated)
                 binding.updateGeo.isEnabled = true
-                Toast.makeText(requireContext(), "Geo updated in Firebase", Toast.LENGTH_SHORT).show()
+                Toast.makeText(requireContext(), getString(R.string.msg_geo_updated), Toast.LENGTH_SHORT).show()
             },
             onError = { error ->
                 if (!isAdded) return@updateMtprotoGeo
                 binding.updateGeo.isEnabled = true
                 Toast.makeText(
                     requireContext(),
-                    error ?: "Geo update failed",
+                    error ?: getString(R.string.err_geo_update_failed),
                     Toast.LENGTH_LONG,
                 ).show()
             },
@@ -128,7 +128,7 @@ class InfoMtProtoDialog : DialogFragment() {
         val port = server.port?.trim().orEmpty()
         val secret = server.secret?.trim().orEmpty()
         if (host.isEmpty() || port.isEmpty() || secret.isEmpty()) {
-            Toast.makeText(requireContext(), "Invalid proxy data", Toast.LENGTH_SHORT).show()
+            Toast.makeText(requireContext(), getString(R.string.err_invalid_proxy_data), Toast.LENGTH_SHORT).show()
             return
         }
 
@@ -144,8 +144,14 @@ class InfoMtProtoDialog : DialogFragment() {
             .addOnSuccessListener {
                 binding.disable.isEnabled = true
                 updateDisableButtonLabel(server)
-                val state = if (server.enabled == true) "enabled" else "disabled"
-                Toast.makeText(requireContext(), "Firebase updated: $state", Toast.LENGTH_SHORT).show()
+                val state = getString(
+                    if (server.enabled == true) R.string.debug_state_enabled else R.string.debug_state_disabled,
+                )
+                Toast.makeText(
+                    requireContext(),
+                    getString(R.string.msg_firebase_updated, state),
+                    Toast.LENGTH_SHORT,
+                ).show()
             }
             .addOnFailureListener { error ->
                 binding.disable.isEnabled = true
@@ -153,7 +159,7 @@ class InfoMtProtoDialog : DialogFragment() {
                 updateDisableButtonLabel(server)
                 Toast.makeText(
                     requireContext(),
-                    error.message ?: "Firebase update failed",
+                    error.message ?: getString(R.string.err_firebase_update_failed),
                     Toast.LENGTH_LONG,
                 ).show()
             }

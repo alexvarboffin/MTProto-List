@@ -88,7 +88,7 @@ class f1 : CompatFragment(),
                 if (!TextUtils.isEmpty(text) && activity != null) {
                     val clipboard = requireActivity()
                         .getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager?
-                    val clip = ClipData.newPlainText("Copy", text)
+                    val clip = ClipData.newPlainText(getString(R.string.label_copy), text)
                     if (clipboard != null) {
                         clipboard.setPrimaryClip(clip)
                         Toast.makeText(
@@ -439,7 +439,7 @@ class f1 : CompatFragment(),
                                     tmp.add(category)
                                 } catch (e: Exception) {
                                     handleException(e)
-                                    onRetrievalFailed("Failed to getUrl value." + e.getLocalizedMessage())
+                                    onRetrievalFailed(getString(R.string.err_failed_get_url, e.localizedMessage))
                                 }
                             }
 
@@ -447,7 +447,7 @@ class f1 : CompatFragment(),
                                 Collections.reverse(tmp)
                                 onMessageRetrieved(tmp)
                             } else {
-                                onRetrievalFailed("Database is empty, reinstall the Application")
+                                onRetrievalFailed(getString(R.string.err_database_empty))
                             }
                         }
 
@@ -462,7 +462,7 @@ class f1 : CompatFragment(),
             }
         } catch (e: Exception) {
             handleException(e)
-            onRetrievalFailed("loadCategory: " + e.getLocalizedMessage())
+            onRetrievalFailed(getString(R.string.err_load_category, e.localizedMessage))
         }
 
         //        if (Config.ENABLE_NATIVE_ADS) {

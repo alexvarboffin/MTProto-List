@@ -35,16 +35,19 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringArrayResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import androidx.preference.PreferenceManager
 import com.franmontiel.localechanger.LocaleChanger
 import com.walhalla.mtproto.shared.config.AppConfig
 import com.walhalla.mtprotocompose.MainActivity
 import com.walhalla.mtprotocompose.R
+import com.walhalla.mtprotocompose.data.LocalePersistor
 import com.walhalla.mtprotocompose.mtprotoApp
 import com.walhalla.mtprotocompose.recreateForSettingsChange
 import com.walhalla.shared.R as SharedR
 import com.walhalla.ui.plugins.DialogAbout.aboutDialog
 import com.walhalla.ui.plugins.Launcher
 import com.walhalla.ui.plugins.Module_U
+import android.os.Build
 import java.util.Calendar
 import java.util.Locale
 
@@ -59,8 +62,16 @@ fun SettingsScreen(
     var nightMode by remember { mutableStateOf(app.settingsRepository.isNightMode()) }
     val langEntries = stringArrayResource(R.array.lang_entries)
     val langValues = stringArrayResource(R.array.lang_values)
-    var selectedLangIndex by remember(langValues) {
-        mutableIntStateOf(currentLanguageIndex(langValues))
+    val localeKey = context.resources.configuration.let { config ->
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            config.locales[0].toLanguageTag()
+        } else {
+            @Suppress("DEPRECATION")
+            config.locale.toLanguageTag()
+        }
+    }
+    var selectedLangIndex by remember(localeKey, langValues) {
+        mutableIntStateOf(currentLanguageIndex(context, langValues))
     }
     var showLangDialog by remember { mutableStateOf(false) }
     val currentYear = Calendar.getInstance().get(Calendar.YEAR)
@@ -209,6 +220,7 @@ fun SettingsScreen(
                                 .clickable {
                                     selectedLangIndex = index
                                     val code = langValues.getOrNull(index) ?: return@clickable
+                                    persistLanguage(context, code)
                                     LocaleChanger.setLocale(localeFromValue(code))
                                     showLangDialog = false
                                     activity?.recreateForSettingsChange()
@@ -221,6 +233,7 @@ fun SettingsScreen(
                                 onClick = {
                                     selectedLangIndex = index
                                     val code = langValues.getOrNull(index) ?: return@RadioButton
+                                    persistLanguage(context, code)
                                     LocaleChanger.setLocale(localeFromValue(code))
                                     showLangDialog = false
                                     activity?.recreateForSettingsChange()
@@ -284,8 +297,28 @@ private fun RowWithSwitch(
     }
 }
 
-private fun currentLanguageIndex(langValues: Array<String>): Int {
-    val locale = Locale.getDefault()
+private fun persistLanguage(context: android.content.Context, code: String) {
+    PreferenceManager.getDefaultSharedPreferences(context.applicationContext)
+        .edit()
+        .putString(LocalePersistor.KEY_LANGUAGE, code)
+        .apply()
+}
+
+private fun currentLanguageIndex(context: android.content.Context, langValues: Array<String>): Int {
+    val prefs = PreferenceManager.getDefaultSharedPreferences(context.applicationContext)
+    prefs.getString(LocalePersistor.KEY_LANGUAGE, null)?.let { stored ->
+        langValues.indexOfFirst { stored.equals(it, ignoreCase = true) }
+            .takeIf { it >= 0 }
+            ?.let { return it }
+    }
+    val locale = context.resources.configuration.let { config ->
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            config.locales[0]
+        } else {
+            @Suppress("DEPRECATION")
+            config.locale
+        }
+    }
     return langValues.indexOfFirst { value -> localeMatchesValue(locale, value) }
         .takeIf { it >= 0 } ?: 0
 }

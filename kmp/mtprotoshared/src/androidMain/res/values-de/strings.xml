@@ -10,9 +10,11 @@
     <string name="action_privacy_policy">Datenschutzrichtlinie</string>
     <string name="action_proxy_connect">Klicken Sie hier, um über einen Proxy zu verbinden</string>
     <string name="action_rate_app">App bewerten</string>
+    <string name="action_restart">NEUSTART</string>
     <string name="action_settings">Einstellungen</string>
     <string name="action_share_app">App teilen</string>
     <string name="action_update_geo">GEO AKTUALISIEREN</string>
+    <string name="app_update_downloaded">Ein Update wurde gerade heruntergeladen.</string>
     <string name="as_info">AS Information: %1$s</string>
     <string name="button_agree" translatable="false">Agree</string>
     <string name="city">City: %1$s</string>
@@ -20,6 +22,8 @@
     <string name="country">Country: %1$s</string>
     <string name="country_code">Country Code: %1$s</string>
     <string name="data_successfully_updated">Daten erfolgreich aktualisiert</string>
+    <string name="debug_state_disabled">deaktiviert</string>
+    <string name="debug_state_enabled">aktiviert</string>
     <string name="dialog_proxy_title">PROXY %1$s</string>
     <string name="dialog_webproxy_title">WEB-PROXY %1$s</string>
     <string name="disclaimer_message" translatable="false">This service is provided as is, without warranty of any kind. Use of this service is entirely at your own risk. We cannot take responsibility for any direct or indirect damages resulting from the use of this service.\n
@@ -29,14 +33,34 @@
             A side-effect of indirect browsing may be anonymity. By connecting to our server instead of the target server, the target server does not see your IP address. However, we do not guarantee our service will be truly anonymous. The downloaded resource may reference other resources which your browser may automatically download. The service attempts to reroute all such requests through our server but may not be entirely successful. A single direct request will compromise your anonymity.\n
             This service may download a resource over a secure connection but this may be sent back to you over an unsecure connection. Do not enter confidential information unless you are on a secure connection to our server.</string>
     <string name="disclaimer_title" translatable="false">Disclaimer</string>
+    <string name="err_database_empty">Datenbank ist leer, App neu installieren</string>
+    <string name="err_failed_get_url">URL konnte nicht abgerufen werden. %1$s</string>
+    <string name="err_firebase_update_failed">Firebase-Aktualisierung fehlgeschlagen</string>
+    <string name="err_geo_update_failed">Geo-Aktualisierung fehlgeschlagen</string>
+    <string name="err_invalid_proxy_data">Ungültige Proxy-Daten</string>
+    <string name="err_load_category">loadCategory: %1$s</string>
     <string name="err_maps_not_installed">Google Maps ist nicht installiert</string>
     <string name="err_telegram_client_not_unstalled">Telegramm-Client nicht installiert</string>
     <string name="error_empty_field">Leeres Feld</string>
+    <string name="glype_action_go">Los</string>
+    <string name="glype_allow_cookies">Cookies erlauben</string>
+    <string name="glype_encrypt_page">Seite verschlüsseln</string>
+    <string name="glype_encrypt_url">URL verschlüsseln</string>
+    <string name="glype_enter_url_hint">URL eingeben</string>
+    <string name="glype_enter_url_title">URL zum Surfen eingeben</string>
+    <string name="glype_options">Optionen</string>
+    <string name="glype_remove_objects">Objekte entfernen</string>
+    <string name="glype_remove_page_titles">Seitentitel entfernen</string>
+    <string name="glype_remove_scripts">Skripte entfernen</string>
     <string name="hint_port">Port</string>
     <string name="hint_secret">Geheimnis</string>
     <string name="hint_server">Server</string>
     <string name="isp">Internet Service Provider: %1$s</string>
+    <string name="label_ad" translatable="false">Ad</string>
+    <string name="label_copy">Kopieren</string>
     <string name="lat_lon">Latitude and Longitude: %1$f, %2$f</string>
+    <string name="msg_firebase_updated">Firebase aktualisiert: %1$s</string>
+    <string name="msg_geo_updated">Geo in Firebase aktualisiert</string>
     <string name="msg_no_notes1">Daten sind leer\nÜberprüfen\nNetzwerkeinstellungen,\nDataUsageSummary
         \nund</string>
     <string name="msg_no_notes2" translatable="false">Please Update Google Play Service</string>

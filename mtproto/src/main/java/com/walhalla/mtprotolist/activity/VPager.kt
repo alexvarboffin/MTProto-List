@@ -184,8 +184,8 @@ class VPager : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListe
         }
 
         //main Fragment
-        binding.tabLayout.addTab(binding.tabLayout.newTab().setText("MTProto"))
-        binding.tabLayout.addTab(binding.tabLayout.newTab().setText("WebProxy"))
+        binding.tabLayout.addTab(binding.tabLayout.newTab().setText(R.string.tab_mtproto))
+        binding.tabLayout.addTab(binding.tabLayout.newTab().setText(R.string.tab_webproxy))
 
 
         binding.tabLayout.tabGravity = TabLayout.GRAVITY_FILL
@@ -294,9 +294,9 @@ class VPager : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListe
         DLog.d("===============")
 
         Snackbar.make(
-            binding.coordinator, "An update has just been downloaded.", Snackbar.LENGTH_INDEFINITE
+            binding.coordinator, R.string.app_update_downloaded, Snackbar.LENGTH_INDEFINITE
         ).apply {
-            setAction("RESTART") {
+            setAction(R.string.action_restart) {
                 appUpdateManager.unregisterListener(flexibleListener)
                 appUpdateManager.completeUpdate()
 

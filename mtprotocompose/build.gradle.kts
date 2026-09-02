@@ -1,3 +1,6 @@
+import java.text.SimpleDateFormat
+import java.util.Date
+
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
@@ -5,23 +8,44 @@ plugins {
     alias(libs.plugins.google.services)
 }
 
+fun versionCodeDate(): Int {
+    return SimpleDateFormat("yyMMdd").format(Date()).toInt()
+}
+
 android {
     namespace = "com.walhalla.mtprotocompose"
     compileSdk = libs.versions.android.compileSdk.get().toInt()
 
     defaultConfig {
-        applicationId = "com.walhalla.mtprotocompose"
+        applicationId = "com.walhalla.mtprotolist"
         minSdk = 24
         targetSdk = libs.versions.android.targetSdk.get().toInt()
-        versionCode = 1
-        versionName = "1.0"
+        val code = versionCodeDate()
+        versionCode = code
+        versionName = "1.1.$code"
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         multiDexEnabled = true
     }
 
+    signingConfigs {
+        create("x0") {
+            keyAlias = "release"
+            keyPassword = "release"
+            storeFile = file("../mtproto/keystore/keystore.jks")
+            storePassword = "release"
+        }
+    }
+
     buildTypes {
+        debug {
+            isMinifyEnabled = false
+            signingConfig = signingConfigs.getByName("x0")
+            versionNameSuffix = "-DEMO"
+        }
         release {
             isMinifyEnabled = false
+            signingConfig = signingConfigs.getByName("x0")
+            versionNameSuffix = ".release"
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro",
@@ -69,6 +93,7 @@ dependencies {
     implementation(libs.androidx.lifecycle.process)
     implementation(libs.konfetti.xml)
     implementation(libs.onesignal)
+    implementation(libs.pulsator4droid)
 
     implementation(platform(libs.androidx.compose.bom))
     implementation(libs.androidx.compose.ui)

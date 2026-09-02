@@ -28,7 +28,7 @@
                 android:layout_gravity="left"
                 android:textColor="#FFFFFF"
                 android:textSize="12sp"
-                android:text="Ad"
+                android:text="@string/label_ad"
                 android:background="#FFCC66"
                 android:width="15dp"
                 android:height="15dp"/>

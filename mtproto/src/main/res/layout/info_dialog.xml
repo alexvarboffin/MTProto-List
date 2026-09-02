@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:orientation="vertical"
@@ -15,77 +16,79 @@
         android:id="@+id/countryTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Country: " />
+        tools:text="@string/country" />
 
     <TextView
         android:id="@+id/countryCodeTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Country Code: " />
+        tools:text="@string/country_code" />
 
     <TextView
         android:id="@+id/regionTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Region: " />
+        tools:text="@string/region" />
 
     <TextView
         android:id="@+id/regionNameTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Region Name: " />
+        tools:text="@string/region_name" />
 
     <TextView
         android:id="@+id/cityTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="City: " />
+        tools:text="@string/city" />
 
     <TextView
         android:id="@+id/zipTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="ZIP: " />
+        tools:text="@string/zip" />
 
     <TextView
         android:id="@+id/latLonTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Lat/Lon: " />
+        tools:text="@string/lat_lon" />
 
     <TextView
         android:id="@+id/timezoneTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Timezone: " />
+        tools:text="@string/timezone" />
 
     <TextView
         android:id="@+id/ispTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="ISP: " />
+        tools:text="@string/isp" />
 
     <TextView
         android:id="@+id/orgTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Org: " />
+        tools:text="@string/org" />
 
     <TextView
         android:id="@+id/asTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="AS: " />
+        tools:text="@string/as_info" />
 
     <Button
         android:visibility="gone"
         android:id="@+id/disable"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" android:text="@string/action_disable"/>
+        android:layout_height="wrap_content"
+        android:text="@string/action_disable"/>
 
     <Button
         android:visibility="gone"
         android:id="@+id/updateGeo"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" android:text="@string/action_update_geo"/>
+        android:layout_height="wrap_content"
+        android:text="@string/action_update_geo"/>
 </LinearLayout>
