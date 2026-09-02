@@ -109,18 +109,26 @@ fun MtprotoProxyCard(
                 }
             }
             Column {
-                IconButton(onClick = onInfo) {
-                    Icon(Icons.Default.Info, contentDescription = null)
-                }
-                IconButton(onClick = onView) {
-                    Icon(Icons.Default.Visibility, contentDescription = null)
-                }
-                IconButton(onClick = onShare) {
-                    Icon(Icons.Default.Share, contentDescription = null)
-                }
-                IconButton(onClick = onQr) {
-                    Icon(Icons.Default.QrCode, contentDescription = null)
-                }
+                ProxyCardActionButton(
+                    icon = Icons.Default.Info,
+                    tint = ProxyCardActionColors.info,
+                    onClick = onInfo,
+                )
+                ProxyCardActionButton(
+                    icon = Icons.Default.Visibility,
+                    tint = ProxyCardActionColors.view,
+                    onClick = onView,
+                )
+                ProxyCardActionButton(
+                    icon = Icons.Default.Share,
+                    tint = ProxyCardActionColors.share,
+                    onClick = onShare,
+                )
+                ProxyCardActionButton(
+                    icon = Icons.Default.QrCode,
+                    tint = ProxyCardActionColors.qr,
+                    onClick = onQr,
+                )
             }
         }
     }

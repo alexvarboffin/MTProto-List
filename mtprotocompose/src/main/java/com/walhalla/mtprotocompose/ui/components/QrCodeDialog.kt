@@ -5,23 +5,30 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.asImageBitmap
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.walhalla.mtprotocompose.R
 import net.glxn.qrgen.android.QRCode
+
+private val QrDialogSize = 250.dp
 
 @Composable
 fun QrCodeDialog(
     content: String,
     onDismiss: () -> Unit,
 ) {
-    val bitmap = QRCode.from(content).bitmap().asImageBitmap()
+    val bitmap = remember(content) {
+        QRCode.from(content).withSize(512, 512).bitmap().asImageBitmap()
+    }
     AlertDialog(
         onDismissRequest = onDismiss,
         title = { Text(stringResource(R.string.share_qr_code)) },
@@ -33,7 +40,10 @@ fun QrCodeDialog(
                 Image(
                     bitmap = bitmap,
                     contentDescription = stringResource(R.string.share_qr_code),
-                    modifier = Modifier.padding(8.dp),
+                    contentScale = ContentScale.Fit,
+                    modifier = Modifier
+                        .padding(8.dp)
+                        .size(QrDialogSize),
                 )
             }
         },

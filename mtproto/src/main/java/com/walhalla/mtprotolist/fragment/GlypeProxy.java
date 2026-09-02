@@ -419,7 +419,7 @@ public class GlypeProxy extends CompatFragment {
                                         //DLog.d("@@@@" + category.proxyUrl);
                                     } catch (Exception e) {
                                         DLog.handleException(e);
-                                        onRetrievalFailed(getString(R.string.err_failed_get_url, e.localizedMessage));
+                                        onRetrievalFailed(getString(R.string.err_failed_get_url, e.getLocalizedMessage()));
                                     }
                                 }
 
