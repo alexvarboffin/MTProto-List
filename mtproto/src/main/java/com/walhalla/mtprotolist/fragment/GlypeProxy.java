@@ -22,7 +22,7 @@ import androidx.core.content.ContextCompat;
 import androidx.fragment.app.DialogFragment;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.DividerItemDecoration;
-import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.GridLayoutManager;
 
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -40,6 +40,7 @@ import com.walhalla.mtprotolist.databinding.ProxylistrssBinding;
 import com.walhalla.mtprotolist.dialog.InfoGlypeDialog;
 
 import com.walhalla.mtprotolist.webproxy.ProxyInfo;
+import com.walhalla.ui.BetweenSpacesItemDecoration;
 import com.walhalla.ui.DLog;
 
 import java.util.ArrayList;
@@ -267,23 +268,15 @@ public class GlypeProxy extends CompatFragment {
         if (adapter == null) {
             adapter = new GlypeProxyAdapter(getActivity(), callback, new ArrayList<>(), false);
         }
-        LinearLayoutManager manager = new LinearLayoutManager(getActivity());
-        binding.recyclerView.setLayoutManager(manager);
+        int spanCount = getResources().getInteger(R.integer.proxy_list_span_count);
+        binding.recyclerView.setLayoutManager(new GridLayoutManager(getActivity(), spanCount));
 
-        //add ItemDecoration
-        //recyclerView.addItemDecoration(new VerticalSpaceItemDecoration(VERTICAL_ITEM_SPACE));
-        //or
-        //recyclerView.addItemDecoration(new DividerItemDecoration(getActivity()));
-        //or
-//        recyclerView.addItemDecoration(
-//                new DividerItemDecoration(
-//                //        getActivity(), manager.getOrientation()
-//                        getActivity(), R.drawable.divider
-//                ));
-
-//        recyclerView.addItemDecoration(new DividerItemDecoration(getContext(), VERTICAL));
-
-        setDecorator(getActivity());
+        if (spanCount == 1) {
+            setDecorator(getActivity());
+        } else {
+            // Gaps between grid cells so card edges stay readable on tablet.
+            binding.recyclerView.addItemDecoration(new BetweenSpacesItemDecoration(8, 8));
+        }
         binding.recyclerView.setItemAnimator(new DefaultItemAnimator());
         binding.recyclerView.setAdapter(adapter);
         binding.swipe.setOnRefreshListener(this::loadCategory);
