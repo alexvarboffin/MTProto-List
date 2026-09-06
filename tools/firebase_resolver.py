@@ -13,6 +13,9 @@ from urllib.parse import urlparse
 IP_API_BATCH_URL = "http://ip-api.com/batch"
 HTTP_TIMEOUT_SEC = 20
 PROXY_BODY_LIMIT = 512_000
+# Official free batch limits: https://ip-api.com/docs/api:batch
+IP_API_BATCH_MAX = 100  # IPs per POST
+IP_API_BATCH_RPM = 15  # requests per minute from one IP
 
 
 def _is_ip(value: str) -> bool:
@@ -58,8 +61,22 @@ def build_geo_query(ip: str) -> dict[str, str]:
 
 
 def fetch_geo_batch(queries: list[dict[str, str]]) -> list[dict[str, Any]]:
+    data, _headers = fetch_geo_batch_with_headers(queries)
+    return data
+
+
+def fetch_geo_batch_with_headers(
+    queries: list[dict[str, str]],
+) -> tuple[list[dict[str, Any]], dict[str, str]]:
+    """
+    POST http://ip-api.com/batch — up to 100 queries.
+    Free tier: 15 batch requests / minute.
+    Response headers: X-Rl (remaining), X-Ttl (seconds until reset).
+    """
     if not queries:
-        return []
+        return [], {}
+    if len(queries) > IP_API_BATCH_MAX:
+        raise ValueError(f"ip-api batch max is {IP_API_BATCH_MAX}, got {len(queries)}")
     payload = json.dumps(queries).encode("utf-8")
     request = urllib.request.Request(
         IP_API_BATCH_URL,
@@ -69,10 +86,14 @@ def fetch_geo_batch(queries: list[dict[str, str]]) -> list[dict[str, Any]]:
     )
     with urllib.request.urlopen(request, timeout=HTTP_TIMEOUT_SEC) as response:
         body = response.read().decode("utf-8")
+        headers = {
+            "X-Rl": response.headers.get("X-Rl") or response.headers.get("x-rl") or "",
+            "X-Ttl": response.headers.get("X-Ttl") or response.headers.get("x-ttl") or "",
+        }
     data = json.loads(body)
     if not isinstance(data, list):
         raise ValueError("ip-api batch response must be a list")
-    return data
+    return data, headers
 
 
 def apply_geo_mtproto(row: dict[str, Any], ip_info: dict[str, Any]) -> None:
@@ -135,11 +156,12 @@ def detect_proxy_type(proxy_url: str | None) -> str:
     return "Other"
 
 
-def resolve_geo_for_rows(rows: list[dict[str, Any]], kind: str, chunk_size: int = 100) -> tuple[int, int]:
-    """Returns (success_count, error_count)."""
+def resolve_geo_for_rows(rows: list[dict[str, Any]], kind: str, chunk_size: int = IP_API_BATCH_MAX) -> tuple[int, int]:
+    """Returns (success_count, error_count). Respects ip-api batch size ≤100."""
     if not rows:
         return 0, 0
 
+    chunk_size = min(max(1, chunk_size), IP_API_BATCH_MAX)
     success = 0
     errors = 0
 
@@ -166,7 +188,17 @@ def resolve_geo_for_rows(rows: list[dict[str, Any]], kind: str, chunk_size: int 
             continue
 
         try:
-            geo_results = fetch_geo_batch(queries)
+            geo_results, headers = fetch_geo_batch_with_headers(queries)
+            rl = headers.get("X-Rl") or "?"
+            ttl = headers.get("X-Ttl") or "?"
+            # Pace: if no remaining requests, wait for window reset
+            try:
+                if int(rl) <= 0 and ttl.isdigit():
+                    import time as _time
+
+                    _time.sleep(int(ttl) + 1)
+            except ValueError:
+                pass
         except (OSError, urllib.error.URLError, ValueError, json.JSONDecodeError) as error:
             for row in chunk:
                 row["_geo_error"] = str(error)

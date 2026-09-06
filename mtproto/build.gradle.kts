@@ -27,6 +27,7 @@ android {
         val code = versionCodeDate()
         versionCode = code
         versionName = "1.1.$code"
+        setProperty("archivesBaseName", "com.walhalla.mtprotolist")
 
         resConfigs(
             "en",
@@ -149,6 +150,8 @@ dependencies {
     implementation(libs.sdp.android)
     implementation(libs.konfetti.xml)
     implementation(libs.onesignal)
+    implementation(libs.firebase.messaging)
+    implementation(libs.androidx.browser)
 }
 
 tasks.register<Copy>("copyAabToBuildFolder") {

@@ -1,42 +1,92 @@
 /**
- * Скрипт для извлечения MTProto-прокси из веб-версии Telegram (t.me/s/ProxyMTProto)
- * Инструкция:
- * 1. Открой https://t.me/s/ProxyMTProto в браузере.
- * 2. Прокрути страницу вверх, чтобы подгрузить больше постов.
- * 3. Открой консоль разработчика (F12 -> Console).
- * 4. Скопируй и вставь этот код.
+ * Извлечение MTProto-прокси со страницы t.me/s/ProxyMTProto.
+ *
+ * Порядок DOM: сверху вниз = старше → свежее (низ страницы = самые новые).
+ * Возвращаем в обратном порядке: свежие первыми → верх списка в Firebase
+ * (приложение сортирует по update_at desc).
+ *
+ * window.extractMtprotoProxies() — для консоли и для fetch_proxies.py (Selenium).
+ *
+ * Консоль:
+ * 1. Открой https://t.me/s/ProxyMTProto
+ * 2. Прокрути ВВЕРХ, чтобы подгрузить больше постов
+ * 3. F12 → Console → вставь этот файл
  */
+window.extractMtprotoProxies = function extractMtprotoProxies() {
+    const seen = {};
+    const olderToNewer = [];
 
-(function() {
+    Array.from(document.querySelectorAll('a[href*="/proxy?"]')).forEach(function (a) {
+        let url = a.href || "";
+        if (url.indexOf("t.me/proxy") !== -1) {
+            url = url.replace(/https?:\/\/t\.me\/proxy\?/i, "tg://proxy?");
+        }
+        if (typeof url !== "string" || url.indexOf("tg://proxy?") !== 0) {
+            return;
+        }
+        if (seen[url]) {
+            return;
+        }
+        seen[url] = true;
+        olderToNewer.push(url);
+    });
+
+    // Низ сайта (свежие) → начало массива (верх Firebase)
+    return olderToNewer.slice().reverse();
+};
+
+window.MTPROTO_MIN_PROXIES = 20;
+
+// Автозапуск только в DevTools (не когда Selenium выставил флаг).
+(function () {
+    if (typeof window !== "undefined" && window.__MTPROTO_EXTRACT_NO_AUTO__) {
+        return;
+    }
+    if (typeof document === "undefined") {
+        return;
+    }
+
     console.log("%cНачинаю поиск прокси-ссылок...", "color: orange; font-weight: bold;");
+    const proxyLinks = extractMtprotoProxies();
+    const minCount = window.MTPROTO_MIN_PROXIES || 20;
 
-    // Ищем все ссылки, содержащие "/proxy?" (подходит для t.me/proxy и tg://proxy)
-    const proxyLinks = Array.from(document.querySelectorAll('a[href*="/proxy?"]'))
-        .map(a => {
-            let url = a.href;
-            // Преобразуем https://t.me/proxy?... в tg://proxy?...
-            if (url.includes('t.me/proxy')) {
-                url = url.replace(/https?:\/\/t\.me\/proxy\?/, 'tg://proxy?');
-            }
-            return url;
-        })
-        // Оставляем только уникальные ссылки
-        .filter((value, index, self) => self.indexOf(value) === index);
+    if (proxyLinks.length < minCount) {
+        console.warn(
+            "Мало прокси: " +
+                proxyLinks.length +
+                " < " +
+                minCount +
+                ". Не копирую / не пушить в Firebase. Прокрути ВВЕРХ и повтори."
+        );
+        return;
+    }
 
     if (proxyLinks.length > 0) {
-        const result = proxyLinks.join('\n');
-        
-        console.log(`%cУспех! Найдено уникальных прокси: ${proxyLinks.length}`, "color: green; font-weight: bold; font-size: 14px;");
+        const result = proxyLinks.join("\n");
+        console.log(
+            "%cУспех! Найдено уникальных прокси: " +
+                proxyLinks.length +
+                " (свежие первыми)",
+            "color: green; font-weight: bold; font-size: 14px;"
+        );
         console.log(result);
-        
-        // Попытка скопировать в буфер обмена (работает в большинстве современных браузеров в консоли)
         try {
-            copy(result);
-            console.log("%cСписок прокси автоматически скопирован в буфер обмена!", "color: blue; font-style: italic;");
+            if (typeof copy === "function") {
+                copy(result);
+                console.log(
+                    "%cСписок прокси скопирован (newest-first).",
+                    "color: blue; font-style: italic;"
+                );
+            }
         } catch (e) {
-            console.log("%cНе удалось автоматически скопировать. Выделите список выше и нажмите Ctrl+C.", "color: red;");
+            console.log(
+                "%cНе удалось скопировать. Выделите список выше и Ctrl+C.",
+                "color: red;"
+            );
         }
     } else {
-        console.warn("Прокси-ссылки не найдены. Попробуйте прокрутить страницу, чтобы загрузить посты.");
+        console.warn(
+            "Прокси не найдены. Прокрутите страницу ВВЕРХ, чтобы загрузить посты."
+        );
     }
 })();

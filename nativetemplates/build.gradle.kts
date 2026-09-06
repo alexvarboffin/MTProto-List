@@ -1,27 +1,25 @@
 plugins {
-    id("com.android.library")
+    alias(libs.plugins.android.library)
 }
 
 android {
-    compileSdk = 35
-    buildToolsVersion = "35.0.0"
+    namespace = "com.google.android.ads.nativetemplates"
+    compileSdk = libs.versions.android.compileSdk.get().toInt()
+    buildToolsVersion = libs.versions.android.buildTools.get()
 
     defaultConfig {
-        minSdkVersion(libs.versions.android.minSdk.get().toInt())
-        targetSdkVersion(libs.versions.android.targetSdk.get().toInt())
+        minSdk = libs.versions.android.minSdk.get().toInt()
     }
 
     buildTypes {
-        debug {
-
+        getByName("debug") {
         }
-        release {
+        getByName("release") {
             isMinifyEnabled = false
             proguardFiles(getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro")
             consumerProguardFiles("proguard-rules.pro")
         }
     }
-    namespace = "com.google.android.ads.nativetemplates"
 
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_17
@@ -31,10 +29,10 @@ android {
 
 dependencies {
     implementation(fileTree(mapOf("dir" to "libs", "include" to listOf("*.jar"))))
-    implementation("androidx.appcompat:appcompat:${rootProject.extra["compatVersion"]}")
-    implementation("com.google.android.material:material:${rootProject.extra["materialVersion"]}")
+    implementation(libs.androidx.appcompat)
+    implementation(libs.material)
     implementation("androidx.cardview:cardview:1.0.0")
-    implementation("com.google.android.gms:play-services-ads:23.1.0")
-    implementation("androidx.constraintlayout:constraintlayout:2.1.4")
+    implementation(libs.play.services.ads)
+    implementation(libs.androidx.constraintlayout)
     implementation("androidx.recyclerview:recyclerview:1.3.2")
 }

@@ -2,6 +2,6 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.walhalla.mtproto.shared" >
 
-    <uses-sdk android:minSdkVersion="21" />
+    <uses-sdk android:minSdkVersion="23" />
 
 </manifest>

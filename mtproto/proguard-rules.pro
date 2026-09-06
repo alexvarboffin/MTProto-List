@@ -234,3 +234,5 @@
 
 -keepattributes *Annotation*
 -repackageclasses 'com'
+
+-dontwarn org.slf4j.impl.StaticLoggerBinder
