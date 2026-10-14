@@ -397,6 +397,7 @@ public class GlypeProxy extends CompatFragment {
                         .addValueEventListener(new ValueEventListener() {
                             @Override
                             public void onDataChange(@NonNull DataSnapshot snapshot) {
+                                if (!isAdded()) return;
                                 //showLoader();
                                 if (mainCallback != null) {
                                     mainCallback.hideLoader();
@@ -412,21 +413,25 @@ public class GlypeProxy extends CompatFragment {
                                         //DLog.d("@@@@" + category.proxyUrl);
                                     } catch (Exception e) {
                                         DLog.handleException(e);
-                                        onRetrievalFailed(getString(R.string.err_failed_get_url, e.getLocalizedMessage()));
+                                        if (isAdded()) {
+                                            onRetrievalFailed(getString(R.string.err_failed_get_url, e.getLocalizedMessage()));
+                                        }
                                     }
                                 }
 
                                 if (!tmp.isEmpty()) {
                                     Collections.reverse(tmp);
                                     onMessageRetrieved(tmp);
-                                } else {
+                                } else if (isAdded()) {
                                     onRetrievalFailed(getString(R.string.err_database_empty));
                                 }
                             }
 
                             @Override
                             public void onCancelled(@NonNull DatabaseError error) {
-                                onRetrievalFailed(error.getMessage());
+                                if (isAdded()) {
+                                    onRetrievalFailed(error.getMessage());
+                                }
                             }
                         });
 

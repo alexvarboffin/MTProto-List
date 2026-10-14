@@ -47,13 +47,13 @@
 #-allowaccessmodification
 
 #-obfuscationdictionary D:\android\GitHub\facebook\proguard\examples\dictionaries\keywords.txt
--obfuscationdictionary "D:\android\GitHub\exe.txt"
+-obfuscationdictionary "dictionaries/exe.txt"
 
 #D:\android\GitHub\facebook\proguard\examples\dictionaries\keywords.txt
 
 
--classobfuscationdictionary "D:\android\GitHub\facebook\proguard\examples\dictionaries\compact.txt"
--packageobfuscationdictionary "D:\android\GitHub\facebook\proguard\examples\dictionaries\windows.txt"
+-classobfuscationdictionary "dictionaries/compact.txt"
+-packageobfuscationdictionary "dictionaries/windows.txt"
 
 #-classobfuscationdictionary D:\android\GitHub\exe.txt
 #-packageobfuscationdictionary D:\android\GitHub\exe.txt

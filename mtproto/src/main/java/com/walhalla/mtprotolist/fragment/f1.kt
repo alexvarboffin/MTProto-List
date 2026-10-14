@@ -422,6 +422,7 @@ class f1 : CompatFragment(),
                     .orderByChild("update_at")
                     .addValueEventListener(object : ValueEventListener {
                         override fun onDataChange(snapshot: DataSnapshot) {
+                            if (!isAdded) return
                             //showLoader();
                             if (mainCallback != null) {
                                 mainCallback.hideLoader()
@@ -434,20 +435,24 @@ class f1 : CompatFragment(),
                                     tmp.add(category)
                                 } catch (e: Exception) {
                                     handleException(e)
-                                    onRetrievalFailed(getString(R.string.err_failed_get_url, e.localizedMessage))
+                                    if (isAdded) {
+                                        onRetrievalFailed(getString(R.string.err_failed_get_url, e.localizedMessage))
+                                    }
                                 }
                             }
 
                             if (!tmp.isEmpty()) {
                                 Collections.reverse(tmp)
                                 onMessageRetrieved(tmp)
-                            } else {
+                            } else if (isAdded) {
                                 onRetrievalFailed(getString(R.string.err_database_empty))
                             }
                         }
 
                         override fun onCancelled(error: DatabaseError) {
-                            onRetrievalFailed(error.getMessage())
+                            if (isAdded) {
+                                onRetrievalFailed(error.getMessage())
+                            }
                         }
                     })
 

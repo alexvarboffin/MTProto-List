@@ -30,3 +30,12 @@
 
 -keep public class com.google.android.gms.ads.** { public *; }
 -keep public class com.google.ads.** { public *; }
+
+# Firebase Realtime Database POJO reflection (field names must match JSON keys)
+-keepattributes Signature
+-keepattributes *Annotation*
+-keepclassmembers class * {
+    @com.google.firebase.database.PropertyName <fields>;
+}
+-keep class com.walhalla.mtprotolist.entity.** { *; }
+-keep class com.walhalla.mtprotolist.webproxy.** { *; }
