@@ -32,13 +32,13 @@ include(":mtproto")
 include(":loader")
 
 include(":ui")
-project(":ui").projectDir = File("C:\\src\\Synced\\WalhallaUI\\features\\ui")
+project(":ui").projectDir = File("C:\\Synced\\WalhallaUI\\features\\ui")
 
 include(":wads")
-project(":wads").projectDir = File("C:\\src\\Synced\\WalhallaUI\\features\\wads")
+project(":wads").projectDir = File("C:\\Synced\\WalhallaUI\\features\\wads")
 
 include(":shared")
-project(":shared").projectDir = File("C:\\src\\Synced\\WalhallaUI\\shared")
+project(":shared").projectDir = File("C:\\Synced\\WalhallaUI\\shared")
 
 //include(":threader")
 //project(":threader").projectDir = File("D:\\dev\\android\\Compatibility\\threader")
@@ -46,7 +46,7 @@ project(":shared").projectDir = File("C:\\src\\Synced\\WalhallaUI\\shared")
 include(":nativetemplates")
 
 include(":webview")
-project(":webview").projectDir = File("C:\\src\\Synced\\WalhallaUI\\features\\webview")
+project(":webview").projectDir = File("C:\\Synced\\WalhallaUI\\features\\webview")
 
 include(":LoaderNew")
 include(":mtprotocompose")
