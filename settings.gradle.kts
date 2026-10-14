@@ -40,8 +40,8 @@ project(":wads").projectDir = File("C:\\src\\Synced\\WalhallaUI\\features\\wads"
 include(":shared")
 project(":shared").projectDir = File("C:\\src\\Synced\\WalhallaUI\\shared")
 
-include(":threader")
-project(":threader").projectDir = File("D:\\dev\\android\\Compatibility\\threader")
+//include(":threader")
+//project(":threader").projectDir = File("D:\\dev\\android\\Compatibility\\threader")
 
 include(":nativetemplates")
 
