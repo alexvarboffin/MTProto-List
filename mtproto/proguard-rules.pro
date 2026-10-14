@@ -204,8 +204,9 @@
     <init>(...);
 }
 
-# Firebase pojo Objects
--keep class com.walhalla.mtprotolist.a.** { *; }
+# Firebase Realtime Database POJOs (was com.walhalla.mtprotolist.a.** — obsolete)
+-keep class com.walhalla.mtprotolist.entity.** { *; }
+-keep class com.walhalla.mtprotolist.webproxy.** { *; }
 
 #AndroidX
 -keep class com.google.android.material.** { *; }
