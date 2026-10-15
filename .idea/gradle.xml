@@ -7,6 +7,23 @@
         <option name="testRunner" value="CHOOSE_PER_TEST" />
         <option name="externalProjectPath" value="$PROJECT_DIR$" />
         <option name="gradleJvm" value="jbr-21 (2)" />
+        <option name="modules">
+          <set>
+            <option value="$PROJECT_DIR$" />
+            <option value="$PROJECT_DIR$/LoaderNew" />
+            <option value="$PROJECT_DIR$/kmp" />
+            <option value="$PROJECT_DIR$/kmp/mtprotoshared" />
+            <option value="$PROJECT_DIR$/loader" />
+            <option value="$PROJECT_DIR$/mtproto" />
+            <option value="$PROJECT_DIR$/mtprotocompose" />
+            <option value="$PROJECT_DIR$/nativetemplates" />
+            <option value="$PROJECT_DIR$/../WalhallaUI/features/ui" />
+            <option value="$PROJECT_DIR$/../WalhallaUI/features/wads" />
+            <option value="$PROJECT_DIR$/../WalhallaUI/features/webview" />
+            <option value="$PROJECT_DIR$/../WalhallaUI/shared" />
+            <option value="$PROJECT_DIR$/../multithreader/threader" />
+          </set>
+        </option>
       </GradleProjectSettings>
     </option>
   </component>
