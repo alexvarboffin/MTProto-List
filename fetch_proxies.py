@@ -16,6 +16,7 @@ import time
 import urllib.error
 import urllib.parse
 import urllib.request
+from concurrent.futures import ThreadPoolExecutor, as_completed
 from pathlib import Path
 from typing import Any
 from urllib.parse import parse_qs
@@ -54,6 +55,9 @@ GEO_CHUNK = IP_API_BATCH_MAX  # 100 max per official docs
 PUSH_DELAY_SEC = 0.05  # unused (single-shot PUT)
 HTTP_TIMEOUT = 60
 DNS_SERVERS = ("1.1.1.1", "8.8.8.8", "9.9.9.9")
+DNS_UDP_TIMEOUT = 1.2  # was 3s × 3 servers = 9s before DoH even ran
+DNS_DOH_TIMEOUT = 4.0
+DNS_WORKERS = 12  # parallel host resolve
 
 
 def load_extract_script() -> str:
@@ -102,7 +106,11 @@ def _is_public_ipv4(ip: str) -> bool:
     return True
 
 
-def _dns_query_a_udp(hostname: str, server: str, timeout: float = 3.0) -> str | None:
+def _dns_query_a_udp(
+    hostname: str,
+    server: str,
+    timeout: float = DNS_UDP_TIMEOUT,
+) -> str | None:
     """Minimal DNS A lookup against a public resolver (bypass broken system DNS)."""
     name = hostname.strip().rstrip(".").lower()
     if not name:
@@ -163,7 +171,20 @@ def _dns_query_a_udp(hostname: str, server: str, timeout: float = 3.0) -> str | 
     return None
 
 
-def _dns_query_a_doh(hostname: str, timeout: float = 8.0) -> str | None:
+def _dns_answers_a(data: dict[str, Any]) -> str | None:
+    for ans in data.get("Answer") or []:
+        if ans.get("type") == 1:
+            ip = str(ans.get("data") or "")
+            if _is_public_ipv4(ip):
+                return ip
+    return None
+
+
+def _dns_query_a_doh(
+    hostname: str,
+    timeout: float = DNS_DOH_TIMEOUT,
+) -> str | None:
+    """Cloudflare DNS-over-HTTPS (works when UDP/53 is blocked)."""
     name = hostname.strip().rstrip(".").lower()
     q = urllib.parse.urlencode({"name": name, "type": "A"})
     req = urllib.request.Request(
@@ -176,27 +197,51 @@ def _dns_query_a_doh(hostname: str, timeout: float = 8.0) -> str | None:
             data = json.loads(resp.read().decode("utf-8"))
     except (OSError, urllib.error.URLError, json.JSONDecodeError, ValueError):
         return None
-    for ans in data.get("Answer") or []:
-        if ans.get("type") == 1:
-            ip = str(ans.get("data") or "")
-            if _is_public_ipv4(ip):
-                return ip
-    return None
+    return _dns_answers_a(data)
+
+
+def _dns_query_a_doh_google(
+    hostname: str,
+    timeout: float = DNS_DOH_TIMEOUT,
+) -> str | None:
+    name = hostname.strip().rstrip(".").lower()
+    q = urllib.parse.urlencode({"name": name, "type": "A"})
+    req = urllib.request.Request(
+        f"https://dns.google/resolve?{q}",
+        headers={"Accept": "application/json"},
+        method="GET",
+    )
+    try:
+        with urllib.request.urlopen(req, timeout=timeout) as resp:
+            data = json.loads(resp.read().decode("utf-8"))
+    except (OSError, urllib.error.URLError, json.JSONDecodeError, ValueError):
+        return None
+    return _dns_answers_a(data)
 
 
 def resolve_public_ip(host: str) -> str | None:
-    """Resolve host to a public IPv4 via public DNS (not system sinkhole)."""
+    """Resolve host → public IPv4 (needed for ip-api.com/batch).
+
+    Prefer DoH first: UDP/53 is often filtered and used to burn ~9s per host
+    before HTTPS was even tried. System DNS is skipped (sinkholes → 127.x).
+    """
     host = (host or "").strip().rstrip(".")
     if not host:
         return None
     if _is_ipv4(host):
         return host if _is_public_ipv4(host) else None
 
+    ip = _dns_query_a_doh(host)
+    if ip:
+        return ip
+    ip = _dns_query_a_doh_google(host)
+    if ip:
+        return ip
     for server in DNS_SERVERS:
-        ip = _dns_query_a_udp(host, server)
+        ip = _dns_query_a_udp(host, server, timeout=DNS_UDP_TIMEOUT)
         if ip:
             return ip
-    return _dns_query_a_doh(host)
+    return None
 
 
 def parse_tg_proxy(link: str) -> dict[str, str] | None:
@@ -384,32 +429,72 @@ def resolve_geo(records: list[dict[str, Any]], chunk_size: int = GEO_CHUNK) -> t
     ok = 0
     err = 0
     total = len(records)
+    t0 = time.monotonic()
     for offset in range(0, total, chunk_size):
         chunk = records[offset : offset + chunk_size]
         queries: list[dict[str, str]] = []
         index_map: list[int] = []
-        for idx, row in enumerate(chunk):
+        chunk_n = len(chunk)
+        print(
+            f"  DNS resolve {chunk_n} hosts "
+            f"(chunk {offset + 1}-{offset + chunk_n}/{total}, "
+            f"workers={DNS_WORKERS}, DoH→UDP)…",
+            flush=True,
+        )
+        dns_t0 = time.monotonic()
+
+        def _one(idx: int) -> tuple[int, str, str | None]:
+            row = chunk[idx]
             host = str(row.get("host") or "").strip().rstrip(".")
-            ip = resolve_public_ip(host)
-            if not ip:
-                row["_geo_error"] = "cannot resolve public IP"
-                err += 1
-                continue
-            row["_resolved_ip"] = ip
-            queries.append(build_geo_query(ip))
-            index_map.append(idx)
+            return idx, host, resolve_public_ip(host)
+
+        done = 0
+        with ThreadPoolExecutor(max_workers=DNS_WORKERS) as pool:
+            futures = [pool.submit(_one, idx) for idx in range(chunk_n)]
+            for fut in as_completed(futures):
+                idx, host, ip = fut.result()
+                done += 1
+                n = offset + idx + 1
+                elapsed = time.monotonic() - dns_t0
+                if not ip:
+                    chunk[idx]["_geo_error"] = "cannot resolve public IP"
+                    err += 1
+                    print(
+                        f"  DNS {done}/{chunk_n} (#{n})  {host}  → FAIL  "
+                        f"({elapsed:.1f}s)",
+                        flush=True,
+                    )
+                    continue
+                chunk[idx]["_resolved_ip"] = ip
+                queries.append(build_geo_query(ip))
+                index_map.append(idx)
+                print(
+                    f"  DNS {done}/{chunk_n} (#{n})  {host}  → {ip}  "
+                    f"({elapsed:.1f}s)",
+                    flush=True,
+                )
+        print(
+            f"  DNS done: {len(queries)} ok, "
+            f"{chunk_n - len(queries)} fail in {time.monotonic() - dns_t0:.1f}s",
+            flush=True,
+        )
         if not queries:
             continue
         print(
             f"  geo BATCH {offset + 1}-{offset + len(chunk)}/{total} "
-            f"→ POST {len(queries)} IPs in one request...",
+            f"→ POST {len(queries)} IPs to ip-api.com/batch …",
             flush=True,
         )
+        http_t0 = time.monotonic()
         try:
             geos, headers = fetch_geo_batch_with_headers(queries)
             rl = headers.get("X-Rl") or "?"
             ttl = headers.get("X-Ttl") or "?"
-            print(f"  rate-limit X-Rl={rl} X-Ttl={ttl}s", flush=True)
+            print(
+                f"  batch OK in {time.monotonic() - http_t0:.1f}s  "
+                f"X-Rl={rl} X-Ttl={ttl}s",
+                flush=True,
+            )
             try:
                 if int(rl) <= 0 and str(ttl).isdigit():
                     wait = int(ttl) + 1
@@ -434,14 +519,17 @@ def resolve_geo(records: list[dict[str, Any]], chunk_size: int = GEO_CHUNK) -> t
                 for i in index_map:
                     chunk[i]["_geo_error"] = f"HTTP {e.code}"
                 err += len(index_map)
+                print(f"  batch HTTP {e.code} after {time.monotonic() - http_t0:.1f}s", flush=True)
                 continue
         except (OSError, urllib.error.URLError, ValueError, json.JSONDecodeError) as e:
             for i in index_map:
                 chunk[i]["_geo_error"] = str(e)
             err += len(index_map)
+            print(f"  batch error after {time.monotonic() - http_t0:.1f}s: {e}", flush=True)
             time.sleep(2.0)
             continue
 
+        applied_ok = 0
         for chunk_idx, geo in zip(index_map, geos):
             row = chunk[chunk_idx]
             apply_geo_mtproto(row, geo)
@@ -449,12 +537,18 @@ def resolve_geo(records: list[dict[str, Any]], chunk_size: int = GEO_CHUNK) -> t
                 err += 1
             else:
                 ok += 1
+                applied_ok += 1
+        print(
+            f"  applied geo: {applied_ok}/{len(index_map)}  "
+            f"(total elapsed {time.monotonic() - t0:.1f}s)",
+            flush=True,
+        )
 
         # Soft pace between batches: 15 req/min → ≥4s apart
         if offset + chunk_size < total:
+            print("  pause 4.1s before next batch (rate limit)…", flush=True)
             time.sleep(4.1)
     return ok, err
-
 
 def record_payload(row: dict[str, Any]) -> dict[str, Any]:
     """JSON body for Firebase (no private _ fields)."""

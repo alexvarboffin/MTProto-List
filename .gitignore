@@ -13,3 +13,10 @@
 .externalNativeBuild
 kmp/mtprotoshared/build/
 *.log
+# Local agent/debug one-shots in repo root (never commit)
+/crash-dump.txt
+/dependencies.txt
+/ui_dump.xml
+/build-*.log
+/*.png
+!/ic_launcher-web.png
