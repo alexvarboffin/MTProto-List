@@ -53,39 +53,39 @@ fun InfoBottomSheet(
             when (target) {
                 is InfoTarget.Mtproto -> {
                     val p = target.proxy
-                    InfoLine(stringResource(R.string.country, p.country.orEmpty().ifBlank { "-" }))
-                    InfoLine(stringResource(R.string.country_code, p.code.orEmpty().ifBlank { "-" }))
-                    InfoLine(stringResource(R.string.region, p.region.orEmpty().ifBlank { "-" }))
-                    InfoLine(stringResource(R.string.region_name, p.regionName.orEmpty().ifBlank { "-" }))
-                    InfoLine(stringResource(R.string.city, p.city.orEmpty().ifBlank { "-" }))
-                    InfoLine(stringResource(R.string.zip, p.zip.orEmpty().ifBlank { "-" }))
+                    InfoLine(stringResource(R.string.country, p.country.safeHolder()))
+                    InfoLine(stringResource(R.string.country_code, p.code.safeHolder()))
+                    InfoLine(stringResource(R.string.region, p.region.safeHolder()))
+                    InfoLine(stringResource(R.string.region_name, p.regionName.safeHolder()))
+                    InfoLine(stringResource(R.string.city, p.city.safeHolder()))
+                    InfoLine(stringResource(R.string.zip, p.zip.safeHolder()))
                     Text(
                         text = stringResource(R.string.lat_lon, p.lat, p.lon),
                         style = MaterialTheme.typography.bodyMedium.copy(textDecoration = TextDecoration.Underline),
                         modifier = Modifier.clickable { openMaps(context, p.lat, p.lon) },
                     )
-                    InfoLine(stringResource(R.string.timezone, p.timezone.orEmpty().ifBlank { "-" }))
-                    InfoLine(stringResource(R.string.isp, p.isp.orEmpty().ifBlank { "-" }))
-                    InfoLine(stringResource(R.string.org, p.org.orEmpty().ifBlank { "-" }))
-                    InfoLine(stringResource(R.string.as_info, p.`as`.orEmpty().ifBlank { "-" }))
+                    InfoLine(stringResource(R.string.timezone, p.timezone.safeHolder()))
+                    InfoLine(stringResource(R.string.isp, p.isp.safeHolder()))
+                    InfoLine(stringResource(R.string.org, p.org.safeHolder()))
+                    InfoLine(stringResource(R.string.as_info, p.`as`.safeHolder()))
                 }
                 is InfoTarget.Web -> {
                     val p = target.proxy
-                    InfoLine(stringResource(R.string.country, p.country.orEmpty().ifBlank { "-" }))
+                    InfoLine(stringResource(R.string.country, p.country.safeHolder()))
                     InfoLine(stringResource(R.string.country_code, p.code.ifBlank { "-" }))
-                    InfoLine(stringResource(R.string.region, p.region.orEmpty().ifBlank { "-" }))
-                    InfoLine(stringResource(R.string.region_name, p.regionName.orEmpty().ifBlank { "-" }))
-                    InfoLine(stringResource(R.string.city, p.city.orEmpty().ifBlank { "-" }))
-                    InfoLine(stringResource(R.string.zip, p.zip.orEmpty().ifBlank { "-" }))
+                    InfoLine(stringResource(R.string.region, p.region.safeHolder()))
+                    InfoLine(stringResource(R.string.region_name, p.regionName.safeHolder()))
+                    InfoLine(stringResource(R.string.city, p.city.safeHolder()))
+                    InfoLine(stringResource(R.string.zip, p.zip.safeHolder()))
                     Text(
                         text = stringResource(R.string.lat_lon, p.lat, p.lon),
                         style = MaterialTheme.typography.bodyMedium.copy(textDecoration = TextDecoration.Underline),
                         modifier = Modifier.clickable { openMaps(context, p.lat, p.lon) },
                     )
-                    InfoLine(stringResource(R.string.timezone, p.timezone.orEmpty().ifBlank { "-" }))
-                    InfoLine(stringResource(R.string.isp, p.isp.orEmpty().ifBlank { "-" }))
-                    InfoLine(stringResource(R.string.org, p.org.orEmpty().ifBlank { "-" }))
-                    InfoLine(stringResource(R.string.as_info, p.`as`.orEmpty().ifBlank { "-" }))
+                    InfoLine(stringResource(R.string.timezone, p.timezone.safeHolder()))
+                    InfoLine(stringResource(R.string.isp, p.isp.safeHolder()))
+                    InfoLine(stringResource(R.string.org, p.org.safeHolder()))
+                    InfoLine(stringResource(R.string.as_info, p.`as`.safeHolder()))
                 }
             }
             if (BuildConfig.DEBUG && onToggleEnabled != null && onUpdateGeo != null) {
@@ -113,6 +113,12 @@ fun InfoBottomSheet(
             }
         }
     }
+}
+
+
+private fun String?.safeHolder(): String {
+    if(equals("null") || isNullOrEmpty() || isBlank()) return "-"
+    return this
 }
 
 @Composable
