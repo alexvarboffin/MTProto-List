@@ -10,7 +10,8 @@ class DisclaimerStore(context: Context) {
     fun isAgreed(): Boolean = prefs.getBoolean(KEY_AGREE, false)
 
     fun setAgreed(agreed: Boolean) {
-        prefs.edit { putBoolean(KEY_AGREE, agreed) }
+        // commit: openProxy reads immediately after Agree
+        prefs.edit(commit = true) { putBoolean(KEY_AGREE, agreed) }
     }
 
     companion object {

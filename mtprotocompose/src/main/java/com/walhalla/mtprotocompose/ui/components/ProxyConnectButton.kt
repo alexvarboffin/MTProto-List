@@ -12,6 +12,7 @@ import com.slapps.cupertino.CupertinoButton
 import com.slapps.cupertino.CupertinoButtonDefaults
 import com.slapps.cupertino.CupertinoText
 import com.slapps.cupertino.ExperimentalCupertinoApi
+import com.slapps.cupertino.theme.CupertinoTheme
 
 @OptIn(ExperimentalCupertinoApi::class)
 @Composable
@@ -24,15 +25,16 @@ fun ProxyConnectButton(
         onClick = onClick,
         modifier = modifier
             .fillMaxWidth()
-            .padding(start = 8.dp, end = 8.dp, top = 8.dp, bottom = 8.dp),
+            .padding(top = 4.dp, bottom = 2.dp),
         colors = CupertinoButtonDefaults.filledButtonColors(),
-        contentPadding = PaddingValues(horizontal = 4.dp, vertical = 8.dp),
+        contentPadding = PaddingValues(horizontal = 10.dp, vertical = 8.dp),
     ) {
         CupertinoText(
             text = text,
-            modifier = Modifier.fillMaxWidth(),
+            style = CupertinoTheme.typography.headline,
             textAlign = TextAlign.Center,
-            maxLines = 2,
+            maxLines = 1,
+            softWrap = false,
             overflow = TextOverflow.Ellipsis,
         )
     }

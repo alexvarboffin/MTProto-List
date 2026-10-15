@@ -6,4 +6,7 @@
     <string name="ad_unit_id" translatable="false">ca-app-pub-5111357348858303/8762163170</string>
     <string name="run1" translatable="false">ca-app-pub-5111357348858303/7192025232</string>
     <string name="rewardedId" translatable="false">ca-app-pub-5111357348858303/3854002291</string>
+    <!-- Short CTAs: long shared copy was truncated on Cupertino buttons -->
+    <string name="action_proxy_connect">Connect</string>
+    <string name="action_glype_connect">Open proxy</string>
 </resources>

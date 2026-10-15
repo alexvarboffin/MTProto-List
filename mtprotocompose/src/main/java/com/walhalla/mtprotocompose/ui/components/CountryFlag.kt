@@ -11,9 +11,9 @@ import com.squareup.picasso.Picasso
 private const val FLAG_ASSET = "file:///android_asset/flag/%s.png"
 
 @Composable
-fun CountryFlag(code: String?, modifier: Modifier = Modifier) {
+fun CountryFlag(code: String?, modifier: Modifier = Modifier.size(64.dp)) {
     AndroidView(
-        modifier = modifier.size(64.dp),
+        modifier = modifier,
         factory = { ctx ->
             ImageView(ctx).apply {
                 scaleType = ImageView.ScaleType.CENTER_CROP

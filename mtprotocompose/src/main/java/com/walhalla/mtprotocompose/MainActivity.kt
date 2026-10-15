@@ -8,7 +8,6 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.appcompat.app.LocaleChangerAppCompatDelegate
 import com.franmontiel.localechanger.LocaleChanger
-import com.franmontiel.localechanger.utils.ActivityRecreationHelper
 import com.walhalla.mtprotocompose.ui.MtprotoApp
 
 class MainActivity : AppCompatActivity() {
@@ -21,16 +20,6 @@ class MainActivity : AppCompatActivity() {
         setContent {
             MtprotoApp()
         }
-    }
-
-    override fun onResume() {
-        super.onResume()
-        ActivityRecreationHelper.onResume(this)
-    }
-
-    override fun onDestroy() {
-        ActivityRecreationHelper.onDestroy(this)
-        super.onDestroy()
     }
 
     override fun attachBaseContext(newBase: Context) {
@@ -50,9 +39,4 @@ class MainActivity : AppCompatActivity() {
             if (nightMode) AppCompatDelegate.MODE_NIGHT_YES else AppCompatDelegate.MODE_NIGHT_NO,
         )
     }
-}
-
-fun MainActivity.recreateForSettingsChange() {
-    applyNightMode()
-    ActivityRecreationHelper.recreate(this, true)
 }

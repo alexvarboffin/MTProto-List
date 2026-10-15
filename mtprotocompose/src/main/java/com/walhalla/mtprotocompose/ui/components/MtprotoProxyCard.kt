@@ -3,7 +3,6 @@ package com.walhalla.mtprotocompose.ui.components
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -20,10 +19,6 @@ import com.slapps.cupertino.CupertinoText
 import com.slapps.cupertino.ExperimentalCupertinoApi
 import com.slapps.cupertino.icons.CupertinoIcons
 import com.slapps.cupertino.icons.filled.Lock
-import com.slapps.cupertino.icons.filled.InfoCircle
-import com.slapps.cupertino.icons.filled.SquareAndArrowUp
-import com.slapps.cupertino.icons.outlined.Eye
-import com.slapps.cupertino.icons.outlined.Qrcode
 import com.slapps.cupertino.theme.CupertinoTheme
 import com.walhalla.mtprotolist.entity.MtprotoProxy
 import com.walhalla.mtprotocompose.R
@@ -49,21 +44,24 @@ fun MtprotoProxyCard(
     CupertinoSurface(
         modifier = modifier
             .fillMaxWidth()
-            .padding(horizontal = 8.dp, vertical = 4.dp),
+            .padding(horizontal = 8.dp, vertical = 2.dp),
         color = CupertinoTheme.colorScheme.secondarySystemBackground,
     ) {
         Row(
             modifier = Modifier
                 .fillMaxWidth()
                 .proxyCardShimmer(isShimmering)
-                .padding(8.dp),
+                .padding(horizontal = 8.dp, vertical = 6.dp),
             verticalAlignment = Alignment.CenterVertically,
         ) {
             Column(
                 horizontalAlignment = Alignment.CenterHorizontally,
                 modifier = Modifier.padding(end = 8.dp),
             ) {
-                CountryFlag(code = proxy.code)
+                ProxyFlagInfoButton(
+                    code = proxy.code,
+                    onClick = onInfo,
+                )
                 CupertinoText(
                     text = stringResource(R.string.proxy_port),
                     style = CupertinoTheme.typography.caption2,
@@ -110,28 +108,12 @@ fun MtprotoProxyCard(
                     onClick = onConnect,
                 )
             }
-            Column(modifier = Modifier.padding(start = 8.dp)) {
-                ProxyCardActionButton(
-                    icon = CupertinoIcons.Filled.InfoCircle,
-                    tint = ProxyCardActionColors.info,
-                    onClick = onInfo,
-                )
-                ProxyCardActionButton(
-                    icon = CupertinoIcons.Default.Eye,
-                    tint = ProxyCardActionColors.view,
-                    onClick = onView,
-                )
-                ProxyCardActionButton(
-                    icon = CupertinoIcons.Filled.SquareAndArrowUp,
-                    tint = ProxyCardActionColors.share,
-                    onClick = onShare,
-                )
-                ProxyCardActionButton(
-                    icon = CupertinoIcons.Default.Qrcode,
-                    tint = ProxyCardActionColors.qr,
-                    onClick = onQr,
-                )
-            }
+            ProxyCardActionColumn(
+                onView = onView,
+                onShare = onShare,
+                onQr = onQr,
+                modifier = Modifier.padding(start = 6.dp),
+            )
         }
     }
 }

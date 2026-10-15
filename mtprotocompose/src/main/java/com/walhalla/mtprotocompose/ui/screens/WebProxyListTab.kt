@@ -196,8 +196,19 @@ fun WebProxyListTab(
             onAgree = {
                 app.disclaimerStore.setAgreed(true)
                 showDisclaimer = false
-                pendingProxy?.let { openProxy(it) }
+                val proxy = pendingProxy
                 pendingProxy = null
+                if (proxy != null) {
+                    val url = proxy.proxyUrl.orEmpty()
+                    if (url.isNotBlank()) {
+                        onOpenWebView(url, proxy.type.orEmpty())
+                        finishConnectShimmer(proxyKey(proxy))
+                    } else {
+                        clearConnectShimmer()
+                    }
+                } else {
+                    clearConnectShimmer()
+                }
             },
             onDismiss = {
                 showDisclaimer = false

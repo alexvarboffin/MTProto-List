@@ -2,15 +2,14 @@ package com.walhalla.mtprotocompose.ui.screens
 
 import android.content.res.Configuration
 import android.os.Build
-import androidx.activity.compose.LocalActivity
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -19,7 +18,6 @@ import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringArrayResource
 import androidx.compose.ui.res.stringResource
-import androidx.preference.PreferenceManager
 import com.franmontiel.localechanger.LocaleChanger
 import com.slapps.cupertino.CupertinoActionSheet
 import com.slapps.cupertino.CupertinoIcon
@@ -38,11 +36,10 @@ import com.slapps.cupertino.section.SectionItem
 import com.slapps.cupertino.section.SectionLink
 import com.slapps.cupertino.theme.CupertinoTheme
 import com.walhalla.mtproto.shared.config.AppConfig
-import com.walhalla.mtprotocompose.MainActivity
 import com.walhalla.mtprotocompose.R
-import com.walhalla.mtprotocompose.data.LocalePersistor
+import com.walhalla.mtprotocompose.data.localeFromLanguageCode
+import com.walhalla.mtprotocompose.data.localeMatchesLanguageCode
 import com.walhalla.mtprotocompose.mtprotoApp
-import com.walhalla.mtprotocompose.recreateForSettingsChange
 import com.walhalla.shared.R as SharedR
 import com.walhalla.ui.plugins.DialogAbout.aboutDialog
 import com.walhalla.ui.plugins.Launcher
@@ -57,14 +54,13 @@ fun SettingsScreen(
 ) {
     val context = LocalContext.current
     val configuration = LocalConfiguration.current
-    val activity = LocalActivity.current as? MainActivity
     val app = context.mtprotoApp()
-    var nightMode by remember { mutableStateOf(app.settingsRepository.isNightMode()) }
+    val nightMode by app.settingsRepository.nightMode.collectAsState()
+    val languageCode by app.settingsRepository.languageCode.collectAsState()
     val langEntries = stringArrayResource(R.array.lang_entries)
     val langValues = stringArrayResource(R.array.lang_values)
-    val localeKey = configurationLocaleKey(configuration)
-    var selectedLangIndex by remember(localeKey, langValues) {
-        mutableIntStateOf(currentLanguageIndex(context, langValues, configuration))
+    val selectedLangIndex = remember(languageCode, langValues, configuration) {
+        currentLanguageIndex(languageCode, langValues, configuration)
     }
     var showLangDialog by remember { mutableStateOf(false) }
     val currentYear = Calendar.getInstance().get(Calendar.YEAR)
@@ -158,9 +154,7 @@ fun SettingsScreen(
                         CupertinoSwitch(
                             checked = nightMode,
                             onCheckedChange = { enabled ->
-                                nightMode = enabled
                                 app.settingsRepository.setNightMode(enabled)
-                                activity?.recreateForSettingsChange()
                             },
                         )
                     },
@@ -178,12 +172,11 @@ fun SettingsScreen(
                 langEntries.forEachIndexed { index, entry ->
                     default(
                         onClick = {
-                            selectedLangIndex = index
                             val code = langValues.getOrNull(index) ?: return@default
-                            persistLanguage(context, code)
-                            LocaleChanger.setLocale(localeFromValue(code))
+                            val locale = localeFromLanguageCode(code)
+                            app.settingsRepository.setLanguageCode(code)
+                            LocaleChanger.setLocale(locale)
                             showLangDialog = false
-                            activity?.recreateForSettingsChange()
                         },
                     ) {
                         CupertinoText(
@@ -199,29 +192,12 @@ fun SettingsScreen(
     }
 }
 
-private fun persistLanguage(context: android.content.Context, code: String) {
-    PreferenceManager.getDefaultSharedPreferences(context.applicationContext)
-        .edit()
-        .putString(LocalePersistor.KEY_LANGUAGE, code)
-        .apply()
-}
-
-private fun configurationLocaleKey(configuration: Configuration): String {
-    return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-        configuration.locales[0].toLanguageTag()
-    } else {
-        @Suppress("DEPRECATION")
-        configuration.locale.toLanguageTag()
-    }
-}
-
 private fun currentLanguageIndex(
-    context: android.content.Context,
+    languageCode: String?,
     langValues: Array<String>,
     configuration: Configuration,
 ): Int {
-    val prefs = PreferenceManager.getDefaultSharedPreferences(context.applicationContext)
-    prefs.getString(LocalePersistor.KEY_LANGUAGE, null)?.let { stored ->
+    languageCode?.let { stored ->
         langValues.indexOfFirst { stored.equals(it, ignoreCase = true) }
             .takeIf { it >= 0 }
             ?.let { return it }
@@ -232,28 +208,6 @@ private fun currentLanguageIndex(
         @Suppress("DEPRECATION")
         configuration.locale
     }
-    return langValues.indexOfFirst { value -> localeMatchesValue(locale, value) }
+    return langValues.indexOfFirst { value -> localeMatchesLanguageCode(locale, value) }
         .takeIf { it >= 0 } ?: 0
-}
-
-private fun localeMatchesValue(locale: Locale, value: String): Boolean {
-    if (value.contains("-")) {
-        val language = value.substringBefore("-")
-        val region = value.substringAfter("-").removePrefix("r")
-        return locale.language.equals(language, ignoreCase = true) &&
-            locale.country.equals(region, ignoreCase = true)
-    }
-    return locale.language.equals(value, ignoreCase = true)
-}
-
-private fun localeFromValue(value: String): Locale = when (value) {
-    "zh-rCN" -> Locale.SIMPLIFIED_CHINESE
-    "zh-rTW" -> Locale.TRADITIONAL_CHINESE
-    else -> if (value.contains("-")) {
-        val language = value.substringBefore("-")
-        val region = value.substringAfter("-").removePrefix("r")
-        Locale(language, region)
-    } else {
-        Locale(value)
-    }
 }

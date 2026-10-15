@@ -19,10 +19,7 @@ fun openTelegramProxy(context: Context, proxy: MtprotoProxy, onMissingClient: ()
     val secret = proxy.secret?.trim().orEmpty()
     val uri = String.format(AppConfig.PROXY_HANDLER_TG, host, port, secret)
     try {
-        val intent = Intent(Intent.ACTION_VIEW, Uri.parse(uri)).apply {
-            addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-        }
-        context.startActivity(intent)
+        context.startActivitySafely(Intent(Intent.ACTION_VIEW, Uri.parse(uri)))
     } catch (_: ActivityNotFoundException) {
         Toast.makeText(context, R.string.err_telegram_client_not_unstalled, Toast.LENGTH_LONG).show()
         onMissingClient()
@@ -30,6 +27,7 @@ fun openTelegramProxy(context: Context, proxy: MtprotoProxy, onMissingClient: ()
 }
 
 fun showTelegramInstallerDialog(context: Context) {
+    val activity = context.findActivity() ?: return
     val apps = linkedMapOf(
         "Telegram" to "org.telegram.messenger",
         "Telegram X" to "org.thunderdog.challegram",
@@ -41,14 +39,14 @@ fun showTelegramInstallerDialog(context: Context) {
     )
     val names = apps.keys.toTypedArray()
     val packages = apps.values.toTypedArray()
-    AlertDialog.Builder(context)
+    AlertDialog.Builder(activity)
         .setTitle(R.string.err_telegram_client_not_unstalled)
         .setItems(names) { _, which ->
             val playUri = Uri.parse(UConst.GOOGLE_PLAY_CONSTANT + packages[which])
             try {
-                context.startActivity(Intent(Intent.ACTION_VIEW, playUri))
+                activity.startActivity(Intent(Intent.ACTION_VIEW, playUri))
             } catch (_: ActivityNotFoundException) {
-                context.startActivity(
+                activity.startActivity(
                     Intent(Intent.ACTION_VIEW, playUri).apply {
                         addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
                     },
@@ -65,7 +63,9 @@ fun shareText(context: Context, subject: String, text: String) {
         putExtra(Intent.EXTRA_SUBJECT, subject)
         putExtra(Intent.EXTRA_TEXT, text)
     }
-    context.startActivity(Intent.createChooser(intent, context.getString(R.string.share_proxy_data)))
+    context.startActivitySafely(
+        Intent.createChooser(intent, context.getString(R.string.share_proxy_data)),
+    )
 }
 
 fun copyToClipboard(context: Context, label: String, text: String) {
@@ -79,7 +79,7 @@ fun openMaps(context: Context, lat: Double, lon: Double) {
     val uri = Uri.parse("geo:$lat,$lon?z=15")
     val intent = Intent(Intent.ACTION_VIEW, uri)
     if (intent.resolveActivity(context.packageManager) != null) {
-        context.startActivity(intent)
+        context.startActivitySafely(intent)
     } else {
         Toast.makeText(context, context.getString(R.string.err_maps_not_installed), Toast.LENGTH_SHORT).show()
     }

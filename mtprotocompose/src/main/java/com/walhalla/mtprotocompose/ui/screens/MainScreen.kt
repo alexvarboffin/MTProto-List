@@ -36,7 +36,6 @@ import com.google.android.gms.ads.AdSize
 import com.google.android.gms.ads.AdView
 import com.google.android.gms.ads.LoadAdError
 import com.slapps.cupertino.CupertinoActionSheet
-import com.slapps.cupertino.CupertinoAlertDialog
 import com.slapps.cupertino.CupertinoIcon
 import com.slapps.cupertino.CupertinoIconButton
 import com.slapps.cupertino.CupertinoScaffold
@@ -80,7 +79,6 @@ fun MainScreen(
     var showDrawerMenu by remember { mutableStateOf(false) }
     var showOverflow by remember { mutableStateOf(false) }
     var showMirror by remember { mutableStateOf(false) }
-    var alertMessage by remember { mutableStateOf<String?>(null) }
     var confettiTrigger by remember { mutableIntStateOf(0) }
     var backPressStep by remember { mutableIntStateOf(0) }
 
@@ -94,21 +92,25 @@ fun MainScreen(
 
     LaunchedEffect(mtprotoState.successMessage) {
         mtprotoState.successMessage?.let {
-            alertMessage = dataUpdatedText
+            Toast.makeText(context, dataUpdatedText, Toast.LENGTH_SHORT).show()
             mtprotoViewModel.consumeSuccessMessage()
         }
     }
     LaunchedEffect(webProxyState.successMessage) {
         webProxyState.successMessage?.let {
-            alertMessage = dataUpdatedText
+            Toast.makeText(context, dataUpdatedText, Toast.LENGTH_SHORT).show()
             webProxyViewModel.consumeSuccessMessage()
         }
     }
     LaunchedEffect(mtprotoState.error) {
-        mtprotoState.error?.let { alertMessage = it }
+        mtprotoState.error?.let {
+            Toast.makeText(context, it, Toast.LENGTH_LONG).show()
+        }
     }
     LaunchedEffect(webProxyState.error) {
-        webProxyState.error?.let { alertMessage = it }
+        webProxyState.error?.let {
+            Toast.makeText(context, it, Toast.LENGTH_LONG).show()
+        }
     }
 
     BackHandler {
@@ -118,11 +120,10 @@ fun MainScreen(
             (context as? Activity)?.moveTaskToBack(true)
         } else {
             backPressStep = 1
-            alertMessage = pressAgainText
+            Toast.makeText(context, pressAgainText, Toast.LENGTH_SHORT).show()
             scope.launch {
                 delay(1200)
                 backPressStep = 0
-                if (alertMessage == pressAgainText) alertMessage = null
             }
         }
     }
@@ -303,19 +304,6 @@ fun MainScreen(
                 }
                 cancel(onClick = { showMirror = false }) {
                     CupertinoText(stringResource(android.R.string.cancel))
-                }
-            },
-        )
-    }
-
-    alertMessage?.let { message ->
-        CupertinoAlertDialog(
-            onDismissRequest = { alertMessage = null },
-            title = { CupertinoText(stringResource(R.string.app_name)) },
-            message = { CupertinoText(message) },
-            buttons = {
-                default(onClick = { alertMessage = null }) {
-                    CupertinoText(stringResource(android.R.string.ok))
                 }
             },
         )

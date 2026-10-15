@@ -12,6 +12,7 @@ import com.walhalla.mtprotocompose.ui.screens.SettingsScreen
 import com.walhalla.mtprotocompose.ui.screens.SplashScreen
 import com.walhalla.mtprotocompose.ui.screens.WebViewScreen
 import com.walhalla.mtprotocompose.ui.theme.MtprotoTheme
+import com.walhalla.mtprotocompose.ui.theme.ProvideAppLocale
 
 object Routes {
     const val SPLASH = "splash"
@@ -28,49 +29,51 @@ object Routes {
 
 @Composable
 fun MtprotoApp() {
-    MtprotoTheme {
-        val navController = rememberNavController()
-        NavHost(
-            navController = navController,
-            startDestination = Routes.SPLASH,
-        ) {
-            composable(Routes.SPLASH) {
-                SplashScreen(
-                    onFinished = {
-                        navController.navigate(Routes.MAIN) {
-                            popUpTo(Routes.SPLASH) { inclusive = true }
-                        }
-                    },
-                )
-            }
-            composable(Routes.MAIN) {
-                MainScreen(
-                    onNavigateSettings = { navController.navigate(Routes.SETTINGS) },
-                    onNavigateWebView = { url, title ->
-                        navController.navigate(Routes.webView(url, title))
-                    },
-                )
-            }
-            composable(Routes.SETTINGS) {
-                SettingsScreen(onBack = { navController.popBackStack() })
-            }
-            composable(
-                route = Routes.WEBVIEW,
-                arguments = listOf(
-                    navArgument("url") { type = NavType.StringType },
-                    navArgument("title") {
-                        type = NavType.StringType
-                        defaultValue = ""
-                    },
-                ),
-            ) { entry ->
-                val url = Uri.decode(entry.arguments?.getString("url").orEmpty())
-                val title = Uri.decode(entry.arguments?.getString("title").orEmpty())
-                WebViewScreen(
-                    url = url,
-                    title = title,
-                    onBack = { navController.popBackStack() },
-                )
+    ProvideAppLocale {
+        MtprotoTheme {
+            val navController = rememberNavController()
+            NavHost(
+                navController = navController,
+                startDestination = Routes.SPLASH,
+            ) {
+                composable(Routes.SPLASH) {
+                    SplashScreen(
+                        onFinished = {
+                            navController.navigate(Routes.MAIN) {
+                                popUpTo(Routes.SPLASH) { inclusive = true }
+                            }
+                        },
+                    )
+                }
+                composable(Routes.MAIN) {
+                    MainScreen(
+                        onNavigateSettings = { navController.navigate(Routes.SETTINGS) },
+                        onNavigateWebView = { url, title ->
+                            navController.navigate(Routes.webView(url, title))
+                        },
+                    )
+                }
+                composable(Routes.SETTINGS) {
+                    SettingsScreen(onBack = { navController.popBackStack() })
+                }
+                composable(
+                    route = Routes.WEBVIEW,
+                    arguments = listOf(
+                        navArgument("url") { type = NavType.StringType },
+                        navArgument("title") {
+                            type = NavType.StringType
+                            defaultValue = ""
+                        },
+                    ),
+                ) { entry ->
+                    val url = Uri.decode(entry.arguments?.getString("url").orEmpty())
+                    val title = Uri.decode(entry.arguments?.getString("title").orEmpty())
+                    WebViewScreen(
+                        url = url,
+                        title = title,
+                        onBack = { navController.popBackStack() },
+                    )
+                }
             }
         }
     }
