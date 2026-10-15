@@ -16,6 +16,27 @@
     <string name="action_update_geo">ОБНОВИТЬ GEO</string>
     <string name="app_update_downloaded">Обновление загружено.</string>
     <string name="as_info">AS Информация: %1$s</string>
+    <string name="asname">Имя AS: %1$s</string>
+    <string name="continent">Континент: %1$s</string>
+    <string name="continent_code">Код континента: %1$s</string>
+    <string name="currency">Валюта: %1$s</string>
+    <string name="district">Район: %1$s</string>
+    <string name="flag_hosting">Хостинг: %1$s</string>
+    <string name="flag_mobile">Мобильный: %1$s</string>
+    <string name="flag_proxy">Прокси: %1$s</string>
+    <string name="no">Нет</string>
+    <string name="ping_measuring">Пинг: …</string>
+    <string name="ping_ms">Пинг: %1$d мс</string>
+    <string name="ping_timeout">Пинг: таймаут</string>
+    <string name="proxy_ip">IP: %1$s</string>
+    <string name="proxy_meta_line">%1$s · %2$s</string>
+    <string name="secret_kind">Тип секрета: %1$s</string>
+    <string name="secret_kind_dd">dd (padding)</string>
+    <string name="secret_kind_ee">ee (TLS)</string>
+    <string name="secret_kind_plain">обычный</string>
+    <string name="timezone_offset">Смещение UTC: %1$s</string>
+    <string name="updated_at">Обновлено: %1$s</string>
+    <string name="yes">Да</string>
     <string name="button_agree" translatable="false">Agree</string>
     <string name="city">Город: %1$s</string>
     <string name="copied_to_clipboard">Скопировано в буфер обмена</string>

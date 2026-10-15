@@ -15,8 +15,11 @@ import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.JsonArray
 import kotlinx.serialization.json.JsonElement
 import kotlinx.serialization.json.JsonObject
+import kotlinx.serialization.json.JsonPrimitive
+import kotlinx.serialization.json.booleanOrNull
 import kotlinx.serialization.json.buildJsonArray
 import kotlinx.serialization.json.buildJsonObject
+import kotlinx.serialization.json.contentOrNull
 import kotlinx.serialization.json.jsonPrimitive
 import kotlinx.serialization.json.put
 
@@ -47,6 +50,7 @@ class GeoApi(
     }
 
     private fun applyGeo(proxy: MtprotoProxy, geo: GeoRecord) {
+        proxy.ip = geo.query.ifBlank { proxy.ip }
         proxy.city = geo.city
         proxy.regionName = geo.regionName
         proxy.lat = geo.lat
@@ -59,6 +63,15 @@ class GeoApi(
         proxy.isp = geo.isp
         proxy.org = geo.org
         proxy.`as` = geo.asn
+        proxy.asname = geo.asname
+        proxy.continent = geo.continent
+        proxy.continentCode = geo.continentCode
+        proxy.district = geo.district
+        proxy.offset = geo.offset
+        proxy.currency = geo.currency
+        proxy.mobile = geo.mobile
+        proxy.isProxy = geo.proxy
+        proxy.hosting = geo.hosting
     }
 
     private fun applyGeo(proxy: ProxyInfo, geo: GeoRecord) {
@@ -111,21 +124,38 @@ class GeoApi(
             error("Empty geo data")
         }
         return GeoRecord(
-            query = obj["query"]?.jsonPrimitive?.content.orEmpty(),
-            city = obj["city"]?.jsonPrimitive?.content,
-            regionName = obj["regionName"]?.jsonPrimitive?.content,
-            lat = obj["lat"]?.jsonPrimitive?.content?.toDoubleOrNull() ?: 0.0,
-            lon = obj["lon"]?.jsonPrimitive?.content?.toDoubleOrNull() ?: 0.0,
+            query = obj.optString("query").orEmpty(),
+            city = obj.optString("city"),
+            regionName = obj.optString("regionName"),
+            lat = obj.optString("lat")?.toDoubleOrNull() ?: 0.0,
+            lon = obj.optString("lon")?.toDoubleOrNull() ?: 0.0,
             countryCode = countryCode,
             country = country.ifBlank { null },
-            region = obj["region"]?.jsonPrimitive?.content,
-            zip = obj["zip"]?.jsonPrimitive?.content,
-            timezone = obj["timezone"]?.jsonPrimitive?.content,
-            isp = obj["isp"]?.jsonPrimitive?.content,
-            org = obj["org"]?.jsonPrimitive?.content,
-            asn = obj["as"]?.jsonPrimitive?.content,
+            region = obj.optString("region"),
+            zip = obj.optString("zip"),
+            timezone = obj.optString("timezone"),
+            isp = obj.optString("isp"),
+            org = obj.optString("org"),
+            asn = obj.optString("as"),
+            asname = obj.optString("asname"),
+            continent = obj.optString("continent"),
+            continentCode = obj.optString("continentCode"),
+            district = obj.optString("district"),
+            offset = obj.optString("offset")?.toIntOrNull(),
+            currency = obj.optString("currency"),
+            mobile = obj.optBool("mobile"),
+            proxy = obj.optBool("proxy"),
+            hosting = obj.optBool("hosting"),
         )
     }
+}
+
+private fun JsonObject.optString(key: String): String? =
+    (this[key] as? JsonPrimitive)?.contentOrNull
+
+private fun JsonObject.optBool(key: String): Boolean? {
+    val primitive = this[key] as? JsonPrimitive ?: return null
+    return primitive.booleanOrNull ?: primitive.contentOrNull?.toBooleanStrictOrNull()
 }
 
 @Serializable
@@ -145,4 +175,13 @@ private data class GeoRecord(
     val org: String? = null,
     @SerialName("as")
     val asn: String? = null,
+    val asname: String? = null,
+    val continent: String? = null,
+    val continentCode: String? = null,
+    val district: String? = null,
+    val offset: Int? = null,
+    val currency: String? = null,
+    val mobile: Boolean? = null,
+    val proxy: Boolean? = null,
+    val hosting: Boolean? = null,
 )

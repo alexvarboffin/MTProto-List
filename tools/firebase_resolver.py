@@ -10,7 +10,11 @@ import urllib.request
 from typing import Any
 from urllib.parse import urlparse
 
-IP_API_BATCH_URL = "http://ip-api.com/batch"
+IP_API_BATCH_URL = (
+    "http://ip-api.com/batch?fields=status,message,query,"
+    "continent,continentCode,country,countryCode,region,regionName,city,district,"
+    "zip,lat,lon,timezone,offset,currency,isp,org,as,asname,mobile,proxy,hosting"
+)
 HTTP_TIMEOUT_SEC = 20
 PROXY_BODY_LIMIT = 512_000
 # Official free batch limits: https://ip-api.com/docs/api:batch
@@ -101,6 +105,7 @@ def apply_geo_mtproto(row: dict[str, Any], ip_info: dict[str, Any]) -> None:
         row["_geo_error"] = ip_info.get("message", "geo lookup failed")
         return
     row.pop("_geo_error", None)
+    row["ip"] = ip_info.get("query") or row.get("_resolved_ip") or row.get("ip")
     row["city"] = ip_info.get("city")
     row["regionName"] = ip_info.get("regionName")
     row["lat"] = ip_info.get("lat")
@@ -113,6 +118,15 @@ def apply_geo_mtproto(row: dict[str, Any], ip_info: dict[str, Any]) -> None:
     row["isp"] = ip_info.get("isp")
     row["org"] = ip_info.get("org")
     row["as"] = ip_info.get("as")
+    row["asname"] = ip_info.get("asname")
+    row["continent"] = ip_info.get("continent")
+    row["continentCode"] = ip_info.get("continentCode")
+    row["district"] = ip_info.get("district")
+    row["offset"] = ip_info.get("offset")
+    row["currency"] = ip_info.get("currency")
+    row["mobile"] = ip_info.get("mobile")
+    row["proxy"] = ip_info.get("proxy")
+    row["hosting"] = ip_info.get("hosting")
 
 
 def apply_geo_webproxy(row: dict[str, Any], ip_info: dict[str, Any]) -> None:

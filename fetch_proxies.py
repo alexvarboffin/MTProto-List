@@ -561,6 +561,7 @@ def record_payload(row: dict[str, Any]) -> dict[str, Any]:
         "update_at": int(row.get("update_at") or 0),
     }
     for field in (
+        "ip",
         "city",
         "regionName",
         "country",
@@ -570,6 +571,11 @@ def record_payload(row: dict[str, Any]) -> dict[str, Any]:
         "isp",
         "org",
         "as",
+        "asname",
+        "continent",
+        "continentCode",
+        "district",
+        "currency",
     ):
         val = row.get(field)
         if val is not None and val != "":
@@ -583,6 +589,16 @@ def record_payload(row: dict[str, Any]) -> dict[str, Any]:
                 payload[field] = float(val)
             except (TypeError, ValueError):
                 payload[field] = 0
+    offset = row.get("offset")
+    if offset is not None and offset != "":
+        try:
+            payload["offset"] = int(offset)
+        except (TypeError, ValueError):
+            pass
+    for field in ("mobile", "proxy", "hosting"):
+        val = row.get(field)
+        if isinstance(val, bool):
+            payload[field] = val
     return payload
 
 

@@ -16,6 +16,27 @@
     <string name="action_update_geo">UPDATE GEO</string>
     <string name="app_update_downloaded">An update has just been downloaded.</string>
     <string name="as_info">AS Information: %1$s</string>
+    <string name="asname">AS Name: %1$s</string>
+    <string name="continent">Continent: %1$s</string>
+    <string name="continent_code">Continent Code: %1$s</string>
+    <string name="currency">Currency: %1$s</string>
+    <string name="district">District: %1$s</string>
+    <string name="flag_hosting">Hosting: %1$s</string>
+    <string name="flag_mobile">Mobile: %1$s</string>
+    <string name="flag_proxy">Proxy: %1$s</string>
+    <string name="no">No</string>
+    <string name="ping_measuring">Ping: …</string>
+    <string name="ping_ms">Ping: %1$d ms</string>
+    <string name="ping_timeout">Ping: timeout</string>
+    <string name="proxy_ip">IP: %1$s</string>
+    <string name="proxy_meta_line">%1$s · %2$s</string>
+    <string name="secret_kind">Secret type: %1$s</string>
+    <string name="secret_kind_dd">dd (padding)</string>
+    <string name="secret_kind_ee">ee (TLS)</string>
+    <string name="secret_kind_plain">plain</string>
+    <string name="timezone_offset">UTC offset: %1$s</string>
+    <string name="updated_at">Updated: %1$s</string>
+    <string name="yes">Yes</string>
     <string name="button_agree" translatable="false">Agree</string>
     <string name="city">City: %1$s</string>
     <string name="copied_to_clipboard">Copied to clipboard</string>

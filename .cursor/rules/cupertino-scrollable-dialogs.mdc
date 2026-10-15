@@ -1,0 +1,41 @@
+---
+description: Cupertino/Compose dialogs must constrain height before verticalScroll
+globs: mtprotocompose/**/*Dialog*.kt,mtprotocompose/**/*Sheet*.kt,mtprotocompose/**/ui/components/**/*.kt
+alwaysApply: false
+---
+
+# Cupertino dialogs + scroll
+
+Cupertino alerts/sheets **do not scroll by themselves**. Long content is clipped.
+
+## Choose the right surface
+
+- `CupertinoActionSheet` — short action menus only (few buttons). **Not** for long field lists.
+- `CupertinoAlertDialog` — info / confirm / long text. Prefer this for proxy geo info, disclaimers, view-URL.
+
+## Long content must be height-capped
+
+Compose `verticalScroll` only works when height is **bounded**. Without `heightIn(max=…)`, the column grows forever and nothing scrolls.
+
+```kotlin
+// ❌ BAD — ActionSheet + unbounded Column (clipped, no scroll)
+CupertinoActionSheet(content = {
+    Column { /* many InfoLines */ }
+})
+
+// ❌ BAD — scroll without max height
+CupertinoText(text, Modifier.verticalScroll(rememberScrollState()))
+
+// ✅ GOOD — cap height (~45–55% screen) then scroll
+val maxH = (LocalConfiguration.current.screenHeightDp * 0.55f).dp
+Column(
+    Modifier
+        .heightIn(max = maxH)
+        .verticalScroll(rememberScrollState()),
+) { /* … */ }
+```
+
+## Reuse project helper
+
+For plain text bodies use `ScrollableDialogMessage` (`mtprotocompose/.../ScrollableDialogMessage.kt`).
+For structured multi-line info (geo sheets) mirror `InfoBottomSheet`: `CupertinoAlertDialog` + `heightIn` + `verticalScroll` on the message `Column`.

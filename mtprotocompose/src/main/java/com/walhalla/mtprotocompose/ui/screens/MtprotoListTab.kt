@@ -36,6 +36,7 @@ import com.walhalla.mtprotocompose.ui.components.InfoTarget
 import com.walhalla.mtprotocompose.ui.components.MtprotoProxyCard
 import com.walhalla.mtprotocompose.ui.components.PlayServicesHint
 import com.walhalla.mtprotocompose.ui.components.QrCodeDialog
+import com.walhalla.mtprotocompose.ui.components.ScrollableDialogMessage
 import com.walhalla.mtprotocompose.ui.components.UnlockRewardDialog
 import com.walhalla.mtprotocompose.util.copyToClipboard
 import com.walhalla.mtprotocompose.util.openTelegramProxy
@@ -213,7 +214,7 @@ fun MtprotoListTab(
         CupertinoAlertDialog(
             onDismissRequest = { viewContent = null },
             title = { CupertinoText(stringResource(R.string.dialog_proxy_title, title)) },
-            message = { CupertinoText(content) },
+            message = { ScrollableDialogMessage(text = content) },
             buttons = {
                 default(onClick = { viewContent = null }) {
                     CupertinoText(stringResource(android.R.string.ok))

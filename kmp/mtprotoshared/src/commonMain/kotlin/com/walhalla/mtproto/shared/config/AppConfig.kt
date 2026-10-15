@@ -7,6 +7,9 @@ object AppConfig {
     const val PROXY_HANDLER = "https://t.me/proxy?server=%1\$s&port=%2\$s&secret=%3\$s"
     const val PROXY_HANDLER_TG = "tg://proxy?server=%1\$s&port=%2\$s&secret=%3\$s"
     const val URL_PRIVACY_POLICY = "https://mtprotolist.firebaseapp.com"
-    const val IP_API_BATCH_URL = "http://ip-api.com/batch"
+    const val IP_API_BATCH_URL =
+        "http://ip-api.com/batch?fields=status,message,query," +
+            "continent,continentCode,country,countryCode,region,regionName,city,district," +
+            "zip,lat,lon,timezone,offset,currency,isp,org,as,asname,mobile,proxy,hosting"
     const val LOCKED_MTPROTO_POSITIONS = "4,6,7,9"
 }

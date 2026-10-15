@@ -2,6 +2,7 @@ package com.walhalla.mtprotolist.entity
 
 import com.walhalla.mtproto.shared.config.AppConfig
 import com.walhalla.mtproto.shared.util.HashUtils
+import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
@@ -22,6 +23,9 @@ class MtprotoProxy {
 
     var enabled: Boolean? = null
 
+    /** Resolved public IPv4 from geo query. */
+    var ip: String? = null
+
     var city: String? = null
     var regionName: String? = null
     var lat: Double = 0.0
@@ -33,6 +37,18 @@ class MtprotoProxy {
     var isp: String? = null
     var org: String? = null
     var `as`: String? = null
+    var asname: String? = null
+    var continent: String? = null
+    var continentCode: String? = null
+    var district: String? = null
+    var offset: Int? = null
+    var currency: String? = null
+    var mobile: Boolean? = null
+
+    @SerialName("proxy")
+    var isProxy: Boolean? = null
+
+    var hosting: Boolean? = null
     var update_at: Long = 0L
 
     constructor()
@@ -50,4 +66,14 @@ class MtprotoProxy {
     fun telegramUrl(): String = String.format(AppConfig.PROXY_HANDLER_TG, host, port, secret)
 
     fun firebaseKey(): String = HashUtils.md5(shareUrl())
+
+    /** Telegram MTProto secret flavor: plain / dd (random padding) / ee (TLS fake). */
+    fun secretKind(): String {
+        val s = secret?.trim().orEmpty().lowercase()
+        return when {
+            s.startsWith("ee") -> "ee"
+            s.startsWith("dd") -> "dd"
+            else -> "plain"
+        }
+    }
 }
