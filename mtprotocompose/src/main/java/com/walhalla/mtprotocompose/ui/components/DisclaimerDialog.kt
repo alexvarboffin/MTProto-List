@@ -1,36 +1,30 @@
 package com.walhalla.mtprotocompose.ui.components
 
-import androidx.compose.material3.AlertDialog
-import androidx.compose.material3.Button
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.res.stringResource
+import com.slapps.cupertino.CupertinoAlertDialog
+import com.slapps.cupertino.CupertinoText
+import com.slapps.cupertino.ExperimentalCupertinoApi
+import com.slapps.cupertino.cancel
+import com.slapps.cupertino.default
 import com.walhalla.mtprotocompose.R
 
+@OptIn(ExperimentalCupertinoApi::class)
 @Composable
 fun DisclaimerDialog(
     onAgree: () -> Unit,
     onDismiss: () -> Unit,
 ) {
-    AlertDialog(
+    CupertinoAlertDialog(
         onDismissRequest = onDismiss,
-        title = { Text(stringResource(R.string.disclaimer_title)) },
-        text = {
-            Text(
-                text = stringResource(R.string.disclaimer_message),
-                style = MaterialTheme.typography.bodyMedium,
-            )
-        },
-        confirmButton = {
-            Button(onClick = onAgree) {
-                Text(stringResource(R.string.button_agree))
+        title = { CupertinoText(stringResource(R.string.disclaimer_title)) },
+        message = { CupertinoText(stringResource(R.string.disclaimer_message)) },
+        buttons = {
+            default(onClick = onAgree) {
+                CupertinoText(stringResource(R.string.button_agree))
             }
-        },
-        dismissButton = {
-            TextButton(onClick = onDismiss) {
-                Text(stringResource(android.R.string.cancel))
+            cancel(onClick = onDismiss) {
+                CupertinoText(stringResource(android.R.string.cancel))
             }
         },
     )

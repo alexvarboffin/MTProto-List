@@ -3,16 +3,10 @@ package com.walhalla.mtprotocompose.ui.screens
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.material3.AlertDialog
-import androidx.compose.material3.CircularProgressIndicator
-import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
-import androidx.compose.material3.pulltorefresh.PullToRefreshBox
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -26,13 +20,18 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.slapps.cupertino.CupertinoActivityIndicator
+import com.slapps.cupertino.CupertinoAlertDialog
+import com.slapps.cupertino.CupertinoText
+import com.slapps.cupertino.ExperimentalCupertinoApi
+import com.slapps.cupertino.default
 import com.walhalla.mtprotocompose.R
 import com.walhalla.mtprotocompose.mtprotoApp
 import com.walhalla.mtprotocompose.ui.components.DisclaimerDialog
 import com.walhalla.mtprotocompose.ui.components.EmptyListMessage
 import com.walhalla.mtprotocompose.ui.components.InfoBottomSheet
-import com.walhalla.mtprotocompose.ui.components.PlayServicesHint
 import com.walhalla.mtprotocompose.ui.components.InfoTarget
+import com.walhalla.mtprotocompose.ui.components.PlayServicesHint
 import com.walhalla.mtprotocompose.ui.components.QrCodeDialog
 import com.walhalla.mtprotocompose.ui.components.WebProxyCard
 import com.walhalla.mtprotocompose.util.copyToClipboard
@@ -42,7 +41,7 @@ import com.walhalla.mtprotolist.webproxy.ProxyInfo
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
-@OptIn(ExperimentalMaterial3Api::class)
+@OptIn(ExperimentalCupertinoApi::class)
 @Composable
 fun WebProxyListTab(
     onOpenWebView: (url: String, title: String) -> Unit,
@@ -90,20 +89,16 @@ fun WebProxyListTab(
         }
     }
 
-    PullToRefreshBox(
-        isRefreshing = uiState.isLoading,
-        onRefresh = { viewModel.refresh() },
-        modifier = Modifier.fillMaxSize(),
-    ) {
+    Box(modifier = Modifier.fillMaxSize()) {
         when {
             uiState.isLoading && uiState.items.isEmpty() -> {
                 Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-                    CircularProgressIndicator()
+                    CupertinoActivityIndicator()
                 }
             }
             uiState.error != null && uiState.items.isEmpty() -> {
                 Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-                    Text(uiState.error.orEmpty(), modifier = Modifier.padding(16.dp))
+                    CupertinoText(uiState.error.orEmpty(), modifier = Modifier.padding(16.dp))
                 }
             }
             uiState.items.isEmpty() -> {
@@ -144,6 +139,16 @@ fun WebProxyListTab(
                 }
             }
         }
+        if (uiState.isLoading && uiState.items.isNotEmpty()) {
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(8.dp),
+                contentAlignment = Alignment.TopCenter,
+            ) {
+                CupertinoActivityIndicator()
+            }
+        }
     }
 
     infoTarget?.let { proxy ->
@@ -174,13 +179,13 @@ fun WebProxyListTab(
     }
 
     viewContent?.let { (title, content) ->
-        AlertDialog(
+        CupertinoAlertDialog(
             onDismissRequest = { viewContent = null },
-            title = { Text(stringResource(R.string.dialog_webproxy_title, title)) },
-            text = { Text(content) },
-            confirmButton = {
-                TextButton(onClick = { viewContent = null }) {
-                    Text(stringResource(android.R.string.ok))
+            title = { CupertinoText(stringResource(R.string.dialog_webproxy_title, title)) },
+            message = { CupertinoText(content) },
+            buttons = {
+                default(onClick = { viewContent = null }) {
+                    CupertinoText(stringResource(android.R.string.ok))
                 }
             },
         )

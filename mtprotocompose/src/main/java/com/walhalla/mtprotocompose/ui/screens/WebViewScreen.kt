@@ -17,18 +17,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.ArrowBack
-import androidx.compose.material.icons.filled.MoreVert
-import androidx.compose.material.icons.filled.Refresh
-import androidx.compose.material3.DropdownMenu
-import androidx.compose.material3.DropdownMenuItem
-import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
-import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -40,11 +28,25 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.core.content.ContextCompat
+import com.slapps.cupertino.CupertinoActionSheet
+import com.slapps.cupertino.CupertinoIcon
+import com.slapps.cupertino.CupertinoIconButton
+import com.slapps.cupertino.CupertinoScaffold
+import com.slapps.cupertino.CupertinoText
+import com.slapps.cupertino.CupertinoTopAppBar
+import com.slapps.cupertino.ExperimentalCupertinoApi
+import com.slapps.cupertino.cancel
+import com.slapps.cupertino.default
+import com.slapps.cupertino.icons.CupertinoIcons
+import com.slapps.cupertino.icons.outlined.ArrowClockwise
+import com.slapps.cupertino.icons.outlined.ChevronBackward
+import com.slapps.cupertino.icons.outlined.Ellipsis
+import com.slapps.cupertino.theme.CupertinoTheme
 import com.walhalla.mtprotocompose.R
 import com.walhalla.mtprotocompose.util.copyToClipboard
 import com.walhalla.ui.DLog.handleException
 
-@OptIn(ExperimentalMaterial3Api::class)
+@OptIn(ExperimentalCupertinoApi::class)
 @Composable
 fun WebViewScreen(
     url: String,
@@ -67,60 +69,27 @@ fun WebViewScreen(
         }
     }
 
-    Scaffold(
+    CupertinoScaffold(
+        containerColor = CupertinoTheme.colorScheme.systemBackground,
         topBar = {
             Column {
-                TopAppBar(
-                    title = { Text(stringResource(R.string.webview_title, title)) },
+                CupertinoTopAppBar(
+                    title = { CupertinoText(stringResource(R.string.webview_title, title)) },
                     navigationIcon = {
-                        IconButton(onClick = onBack) {
-                            Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = null)
+                        CupertinoIconButton(onClick = onBack) {
+                            CupertinoIcon(CupertinoIcons.Default.ChevronBackward, contentDescription = null)
                         }
                     },
                     actions = {
-                        IconButton(onClick = {
+                        CupertinoIconButton(onClick = {
                             isLoading = true
                             webViewRef?.reload()
                             Toast.makeText(context, R.string.wwPageUpdated, Toast.LENGTH_SHORT).show()
                         }) {
-                            Icon(Icons.Default.Refresh, contentDescription = null)
+                            CupertinoIcon(CupertinoIcons.Default.ArrowClockwise, contentDescription = null)
                         }
-                        IconButton(onClick = { showMenu = true }) {
-                            Icon(Icons.Default.MoreVert, contentDescription = null)
-                        }
-                        DropdownMenu(
-                            expanded = showMenu,
-                            onDismissRequest = { showMenu = false },
-                        ) {
-                            DropdownMenuItem(
-                                text = { Text(stringResource(R.string.wv_menu_home)) },
-                                onClick = {
-                                    showMenu = false
-                                    isLoading = true
-                                    webViewRef?.loadUrl(homeUrl)
-                                },
-                            )
-                            DropdownMenuItem(
-                                text = { Text(stringResource(R.string.wv_menu_copy_url)) },
-                                onClick = {
-                                    showMenu = false
-                                    webViewRef?.url?.let { copyToClipboard(context, "url", it) }
-                                },
-                            )
-                            DropdownMenuItem(
-                                text = { Text(stringResource(R.string.wv_menu_clear_cookies)) },
-                                onClick = {
-                                    showMenu = false
-                                    clearWebCookies(context)
-                                },
-                            )
-                            DropdownMenuItem(
-                                text = { Text(stringResource(R.string.action_exit)) },
-                                onClick = {
-                                    showMenu = false
-                                    onBack()
-                                },
-                            )
+                        CupertinoIconButton(onClick = { showMenu = true }) {
+                            CupertinoIcon(CupertinoIcons.Default.Ellipsis, contentDescription = null)
                         }
                     },
                 )
@@ -177,6 +146,35 @@ fun WebViewScreen(
                 }
             },
             update = { webViewRef = it },
+        )
+    }
+
+    if (showMenu) {
+        CupertinoActionSheet(
+            visible = true,
+            onDismissRequest = { showMenu = false },
+            buttons = {
+                default(onClick = {
+                    showMenu = false
+                    isLoading = true
+                    webViewRef?.loadUrl(homeUrl)
+                }) { CupertinoText(stringResource(R.string.wv_menu_home)) }
+                default(onClick = {
+                    showMenu = false
+                    webViewRef?.url?.let { copyToClipboard(context, "url", it) }
+                }) { CupertinoText(stringResource(R.string.wv_menu_copy_url)) }
+                default(onClick = {
+                    showMenu = false
+                    clearWebCookies(context)
+                }) { CupertinoText(stringResource(R.string.wv_menu_clear_cookies)) }
+                default(onClick = {
+                    showMenu = false
+                    onBack()
+                }) { CupertinoText(stringResource(R.string.action_exit)) }
+                cancel(onClick = { showMenu = false }) {
+                    CupertinoText(stringResource(android.R.string.cancel))
+                }
+            },
         )
     }
 }

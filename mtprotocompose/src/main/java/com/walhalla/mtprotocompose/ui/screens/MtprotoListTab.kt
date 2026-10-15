@@ -9,20 +9,13 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
-import androidx.compose.material3.AlertDialog
-import androidx.compose.material3.CircularProgressIndicator
-import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
-import androidx.compose.material3.pulltorefresh.PullToRefreshBox
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -30,13 +23,18 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.slapps.cupertino.CupertinoActivityIndicator
+import com.slapps.cupertino.CupertinoAlertDialog
+import com.slapps.cupertino.CupertinoText
+import com.slapps.cupertino.ExperimentalCupertinoApi
+import com.slapps.cupertino.default
 import com.walhalla.mtprotocompose.R
 import com.walhalla.mtprotocompose.mtprotoApp
 import com.walhalla.mtprotocompose.ui.components.EmptyListMessage
 import com.walhalla.mtprotocompose.ui.components.InfoBottomSheet
-import com.walhalla.mtprotocompose.ui.components.PlayServicesHint
 import com.walhalla.mtprotocompose.ui.components.InfoTarget
 import com.walhalla.mtprotocompose.ui.components.MtprotoProxyCard
+import com.walhalla.mtprotocompose.ui.components.PlayServicesHint
 import com.walhalla.mtprotocompose.ui.components.QrCodeDialog
 import com.walhalla.mtprotocompose.ui.components.UnlockRewardDialog
 import com.walhalla.mtprotocompose.util.copyToClipboard
@@ -51,7 +49,7 @@ import com.walhalla.library.R as WadsR
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
-@OptIn(ExperimentalMaterial3Api::class)
+@OptIn(ExperimentalCupertinoApi::class)
 @Composable
 fun MtprotoListTab(
     onRefreshRequest: () -> Unit = {},
@@ -110,23 +108,17 @@ fun MtprotoListTab(
         }
     }
 
-    PullToRefreshBox(
-        isRefreshing = uiState.isLoading,
-        onRefresh = {
-            viewModel.refresh()
-            onRefreshRequest()
-        },
-        modifier = Modifier.fillMaxSize(),
-    ) {
+    // PullToRefresh not in cupertino — refresh via TopAppBar; show spinner while loading
+    Box(modifier = Modifier.fillMaxSize()) {
         when {
             uiState.isLoading && uiState.items.isEmpty() -> {
                 Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-                    CircularProgressIndicator()
+                    CupertinoActivityIndicator()
                 }
             }
             uiState.error != null && uiState.items.isEmpty() -> {
                 Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-                    Text(uiState.error.orEmpty(), modifier = Modifier.padding(16.dp))
+                    CupertinoText(uiState.error.orEmpty(), modifier = Modifier.padding(16.dp))
                 }
             }
             uiState.items.isEmpty() -> {
@@ -178,6 +170,16 @@ fun MtprotoListTab(
                 }
             }
         }
+        if (uiState.isLoading && uiState.items.isNotEmpty()) {
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(8.dp),
+                contentAlignment = Alignment.TopCenter,
+            ) {
+                CupertinoActivityIndicator()
+            }
+        }
     }
 
     infoTarget?.let { proxy ->
@@ -208,13 +210,13 @@ fun MtprotoListTab(
     }
 
     viewContent?.let { (title, content) ->
-        AlertDialog(
+        CupertinoAlertDialog(
             onDismissRequest = { viewContent = null },
-            title = { Text(stringResource(R.string.dialog_proxy_title, title)) },
-            text = { Text(content) },
-            confirmButton = {
-                TextButton(onClick = { viewContent = null }) {
-                    Text(stringResource(android.R.string.ok))
+            title = { CupertinoText(stringResource(R.string.dialog_proxy_title, title)) },
+            message = { CupertinoText(content) },
+            buttons = {
+                default(onClick = { viewContent = null }) {
+                    CupertinoText(stringResource(android.R.string.ok))
                 }
             },
         )

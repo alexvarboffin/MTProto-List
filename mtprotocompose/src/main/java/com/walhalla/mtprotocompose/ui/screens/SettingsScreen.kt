@@ -1,43 +1,42 @@
 package com.walhalla.mtprotocompose.ui.screens
 
+import android.content.res.Configuration
+import android.os.Build
 import androidx.activity.compose.LocalActivity
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.ArrowBack
-import androidx.compose.material3.AlertDialog
-import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.HorizontalDivider
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.RadioButton
-import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Switch
-import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
-import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringArrayResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.unit.dp
 import androidx.preference.PreferenceManager
 import com.franmontiel.localechanger.LocaleChanger
+import com.slapps.cupertino.CupertinoActionSheet
+import com.slapps.cupertino.CupertinoIcon
+import com.slapps.cupertino.CupertinoIconButton
+import com.slapps.cupertino.CupertinoScaffold
+import com.slapps.cupertino.CupertinoSwitch
+import com.slapps.cupertino.CupertinoText
+import com.slapps.cupertino.CupertinoTopAppBar
+import com.slapps.cupertino.ExperimentalCupertinoApi
+import com.slapps.cupertino.cancel
+import com.slapps.cupertino.default
+import com.slapps.cupertino.icons.CupertinoIcons
+import com.slapps.cupertino.icons.outlined.ChevronBackward
+import com.slapps.cupertino.section.CupertinoSection
+import com.slapps.cupertino.section.SectionItem
+import com.slapps.cupertino.section.SectionLink
+import com.slapps.cupertino.theme.CupertinoTheme
 import com.walhalla.mtproto.shared.config.AppConfig
 import com.walhalla.mtprotocompose.MainActivity
 import com.walhalla.mtprotocompose.R
@@ -48,12 +47,10 @@ import com.walhalla.shared.R as SharedR
 import com.walhalla.ui.plugins.DialogAbout.aboutDialog
 import com.walhalla.ui.plugins.Launcher
 import com.walhalla.ui.plugins.Module_U
-import android.content.res.Configuration
-import android.os.Build
 import java.util.Calendar
 import java.util.Locale
 
-@OptIn(ExperimentalMaterial3Api::class)
+@OptIn(ExperimentalCupertinoApi::class)
 @Composable
 fun SettingsScreen(
     onBack: () -> Unit,
@@ -71,17 +68,15 @@ fun SettingsScreen(
     }
     var showLangDialog by remember { mutableStateOf(false) }
     val currentYear = Calendar.getInstance().get(Calendar.YEAR)
-    val langCodesSummary = remember(langValues) {
-        "(${langValues.joinToString(", ")})"
-    }
 
-    Scaffold(
+    CupertinoScaffold(
+        containerColor = CupertinoTheme.colorScheme.systemBackground,
         topBar = {
-            TopAppBar(
-                title = { Text(stringResource(R.string.action_settings)) },
+            CupertinoTopAppBar(
+                title = { CupertinoText(stringResource(R.string.action_settings)) },
                 navigationIcon = {
-                    IconButton(onClick = onBack) {
-                        Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = null)
+                    CupertinoIconButton(onClick = onBack) {
+                        CupertinoIcon(CupertinoIcons.Default.ChevronBackward, contentDescription = null)
                     }
                 },
             )
@@ -93,203 +88,114 @@ fun SettingsScreen(
                 .padding(padding)
                 .verticalScroll(rememberScrollState()),
         ) {
-            Text(
-                text = stringResource(R.string.pref_category_lang),
-                style = MaterialTheme.typography.titleSmall,
-                modifier = Modifier.padding(16.dp),
-            )
-            Column(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .clickable { showLangDialog = true }
-                    .padding(horizontal = 16.dp, vertical = 14.dp),
+            CupertinoSection(
+                title = { CupertinoText(stringResource(R.string.pref_category_lang)) },
             ) {
-                Text(
-                    text = stringResource(R.string.pref_title_lang),
-                    style = MaterialTheme.typography.bodyLarge,
-                )
-                Text(
-                    text = langEntries.getOrElse(selectedLangIndex) { langEntries.first() },
-                    style = MaterialTheme.typography.bodyMedium,
-                    modifier = Modifier.padding(top = 4.dp),
-                )
-                Text(
-                    text = langCodesSummary,
-                    style = MaterialTheme.typography.bodySmall,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant,
-                    modifier = Modifier.padding(top = 2.dp),
+                SectionLink(
+                    onClick = { showLangDialog = true },
+                    caption = {
+                        CupertinoText(
+                            langEntries.getOrElse(selectedLangIndex) { langEntries.first() },
+                        )
+                    },
+                    title = { CupertinoText(stringResource(R.string.pref_title_lang)) },
                 )
             }
-            HorizontalDivider()
 
-            Text(
-                text = stringResource(R.string.pref_category_other),
-                style = MaterialTheme.typography.titleSmall,
-                modifier = Modifier.padding(16.dp),
-            )
-
-            SettingsInfoRow(
-
-                title = stringResource(R.string.pref_title_dev_name),
-
-                summary = stringResource(SharedR.string.play_google_pub),
-
-            )
-
-            SettingsInfoRow(
-
-                title = stringResource(R.string.pref_title_copyright),
-
-                summary = stringResource(R.string.pref_summary_copyright, currentYear),
-
-            )
-
-            SettingsRow(stringResource(R.string.action_privacy_policy)) {
-
-                Launcher.openBrowser(context, AppConfig.URL_PRIVACY_POLICY)
-
+            CupertinoSection(
+                title = { CupertinoText(stringResource(R.string.pref_category_other)) },
+            ) {
+                SectionItem(
+                    title = { CupertinoText(stringResource(R.string.pref_title_dev_name)) },
+                    trailingContent = {
+                        CupertinoText(
+                            stringResource(SharedR.string.play_google_pub),
+                            style = CupertinoTheme.typography.footnote,
+                        )
+                    },
+                )
+                SectionItem(
+                    title = { CupertinoText(stringResource(R.string.pref_title_copyright)) },
+                    trailingContent = {
+                        CupertinoText(
+                            stringResource(R.string.pref_summary_copyright, currentYear),
+                            style = CupertinoTheme.typography.footnote,
+                        )
+                    },
+                )
+                SectionLink(
+                    onClick = { Launcher.openBrowser(context, AppConfig.URL_PRIVACY_POLICY) },
+                    title = { CupertinoText(stringResource(R.string.action_privacy_policy)) },
+                )
+                SectionLink(
+                    onClick = { Launcher.rateUs(context) },
+                    title = { CupertinoText(stringResource(R.string.action_rate_app)) },
+                )
+                SectionLink(
+                    onClick = { aboutDialog(context) },
+                    title = { CupertinoText(stringResource(R.string.action_about)) },
+                )
+                SectionLink(
+                    onClick = { Module_U.moreApp(context) },
+                    title = { CupertinoText(stringResource(R.string.pref_title_more)) },
+                )
+                SectionLink(
+                    onClick = { Module_U.shareThisApp(context, "") },
+                    title = { CupertinoText(stringResource(R.string.action_share_app)) },
+                )
+                SectionItem(
+                    title = { CupertinoText(stringResource(R.string.pref_title_contributors)) },
+                    trailingContent = {
+                        CupertinoText(
+                            stringResource(R.string.pref_summary_contributors),
+                            style = CupertinoTheme.typography.footnote,
+                        )
+                    },
+                )
+                SectionItem(
+                    title = { CupertinoText(stringResource(R.string.pref_title_night_mode)) },
+                    trailingContent = {
+                        CupertinoSwitch(
+                            checked = nightMode,
+                            onCheckedChange = { enabled ->
+                                nightMode = enabled
+                                app.settingsRepository.setNightMode(enabled)
+                                activity?.recreateForSettingsChange()
+                            },
+                        )
+                    },
+                )
             }
-
-            SettingsRow(stringResource(R.string.action_rate_app)) {
-
-                Launcher.rateUs(context)
-
-            }
-
-            SettingsRow(stringResource(R.string.action_about)) {
-
-                aboutDialog(context)
-
-            }
-
-            SettingsRow(stringResource(R.string.pref_title_more)) {
-
-                Module_U.moreApp(context)
-
-            }
-
-            SettingsRow(stringResource(R.string.action_share_app)) {
-
-                Module_U.shareThisApp(context, "")
-
-            }
-
-            SettingsInfoRow(
-
-                title = stringResource(R.string.pref_title_contributors),
-
-                summary = stringResource(R.string.pref_summary_contributors),
-
-            )
-
-            RowWithSwitch(
-
-                title = stringResource(R.string.pref_title_night_mode),
-
-                checked = nightMode,
-
-                onCheckedChange = { enabled ->
-
-                    nightMode = enabled
-
-                    app.settingsRepository.setNightMode(enabled)
-
-                    activity?.recreateForSettingsChange()
-
-                },
-
-            )
-
         }
     }
 
     if (showLangDialog) {
-        AlertDialog(
+        CupertinoActionSheet(
+            visible = true,
             onDismissRequest = { showLangDialog = false },
-            title = { Text(stringResource(R.string.pref_title_lang)) },
-            text = {
-                Column(modifier = Modifier.verticalScroll(rememberScrollState())) {
-                    langEntries.forEachIndexed { index, entry ->
-                        Row(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .clickable {
-                                    selectedLangIndex = index
-                                    val code = langValues.getOrNull(index) ?: return@clickable
-                                    persistLanguage(context, code)
-                                    LocaleChanger.setLocale(localeFromValue(code))
-                                    showLangDialog = false
-                                    activity?.recreateForSettingsChange()
-                                }
-                                .padding(vertical = 4.dp),
-                            verticalAlignment = Alignment.CenterVertically,
-                        ) {
-                            RadioButton(
-                                selected = index == selectedLangIndex,
-                                onClick = {
-                                    selectedLangIndex = index
-                                    val code = langValues.getOrNull(index) ?: return@RadioButton
-                                    persistLanguage(context, code)
-                                    LocaleChanger.setLocale(localeFromValue(code))
-                                    showLangDialog = false
-                                    activity?.recreateForSettingsChange()
-                                },
-                            )
-                            Text(text = entry)
-                        }
+            title = { CupertinoText(stringResource(R.string.pref_title_lang)) },
+            buttons = {
+                langEntries.forEachIndexed { index, entry ->
+                    default(
+                        onClick = {
+                            selectedLangIndex = index
+                            val code = langValues.getOrNull(index) ?: return@default
+                            persistLanguage(context, code)
+                            LocaleChanger.setLocale(localeFromValue(code))
+                            showLangDialog = false
+                            activity?.recreateForSettingsChange()
+                        },
+                    ) {
+                        CupertinoText(
+                            if (index == selectedLangIndex) "✓ $entry" else entry,
+                        )
                     }
                 }
-            },
-            confirmButton = {
-                TextButton(onClick = { showLangDialog = false }) {
-                    Text(stringResource(android.R.string.cancel))
+                cancel(onClick = { showLangDialog = false }) {
+                    CupertinoText(stringResource(android.R.string.cancel))
                 }
             },
         )
-    }
-}
-
-
-
-@Composable
-private fun SettingsRow(title: String, onClick: () -> Unit) {
-    Text(
-        text = title,
-        modifier = Modifier
-            .fillMaxWidth()
-            .clickable(onClick = onClick)
-            .padding(horizontal = 16.dp, vertical = 14.dp),
-    )
-    HorizontalDivider()
-}
-
-@Composable
-private fun SettingsInfoRow(title: String, summary: String) {
-    Column(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(horizontal = 16.dp, vertical = 14.dp),
-    ) {
-        Text(text = title, style = MaterialTheme.typography.bodyLarge)
-        Text(text = summary, style = MaterialTheme.typography.bodySmall)
-    }
-    HorizontalDivider()
-}
-
-@Composable
-private fun RowWithSwitch(
-    title: String,
-    checked: Boolean,
-    onCheckedChange: (Boolean) -> Unit,
-) {
-    Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(horizontal = 16.dp, vertical = 8.dp),
-        verticalAlignment = Alignment.CenterVertically,
-    ) {
-        Text(text = title, modifier = Modifier.weight(1f))
-        Switch(checked = checked, onCheckedChange = onCheckedChange)
     }
 }
 

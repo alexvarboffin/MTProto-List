@@ -1,29 +1,29 @@
 package com.walhalla.mtprotocompose.ui.components
 
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Info
-import androidx.compose.material.icons.filled.QrCode
-import androidx.compose.material.icons.filled.Share
-import androidx.compose.material.icons.filled.Visibility
-import androidx.compose.material3.Card
-import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import com.slapps.cupertino.CupertinoSurface
+import com.slapps.cupertino.CupertinoText
+import com.slapps.cupertino.ExperimentalCupertinoApi
+import com.slapps.cupertino.icons.CupertinoIcons
+import com.slapps.cupertino.icons.filled.InfoCircle
+import com.slapps.cupertino.icons.filled.SquareAndArrowUp
+import com.slapps.cupertino.icons.outlined.Eye
+import com.slapps.cupertino.icons.outlined.Qrcode
+import com.slapps.cupertino.theme.CupertinoTheme
 import com.walhalla.mtprotolist.webproxy.ProxyInfo
 import com.walhalla.mtprotocompose.R
 
+@OptIn(ExperimentalCupertinoApi::class)
 @Composable
 fun WebProxyCard(
     proxy: ProxyInfo,
@@ -38,11 +38,11 @@ fun WebProxyCard(
     isShimmering: Boolean = false,
     modifier: Modifier = Modifier,
 ) {
-    Card(
+    CupertinoSurface(
         modifier = modifier
             .fillMaxWidth()
             .padding(horizontal = 8.dp, vertical = 4.dp),
-        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceVariant),
+        color = CupertinoTheme.colorScheme.secondarySystemBackground,
     ) {
         Row(
             modifier = Modifier
@@ -56,29 +56,29 @@ fun WebProxyCard(
                 modifier = Modifier.padding(end = 8.dp),
             ) {
                 CountryFlag(code = proxy.code)
-                Text(
+                CupertinoText(
                     text = stringResource(R.string.proxy_type_label),
-                    style = MaterialTheme.typography.labelSmall,
+                    style = CupertinoTheme.typography.caption2,
                 )
-                Text(
+                CupertinoText(
                     text = proxy.type.orEmpty(),
-                    style = MaterialTheme.typography.bodyMedium,
+                    style = CupertinoTheme.typography.body,
                     modifier = Modifier
                         .padding(top = 2.dp)
                         .clickable(onClick = onCopyType),
                 )
             }
             Column(modifier = Modifier.weight(1f).padding(start = 8.dp)) {
-                Text(
+                CupertinoText(
                     text = proxy.ip.orEmpty(),
-                    style = MaterialTheme.typography.titleMedium,
+                    style = CupertinoTheme.typography.headline,
                     maxLines = 1,
                     overflow = TextOverflow.Ellipsis,
                     modifier = Modifier.clickable(onClick = onCopyIp),
                 )
-                Text(
+                CupertinoText(
                     text = proxy.proxyUrl.orEmpty(),
-                    style = MaterialTheme.typography.bodySmall,
+                    style = CupertinoTheme.typography.footnote,
                     maxLines = 2,
                     overflow = TextOverflow.Ellipsis,
                     modifier = Modifier.clickable(onClick = onCopyUrl),
@@ -90,22 +90,22 @@ fun WebProxyCard(
             }
             Column(modifier = Modifier.padding(start = 8.dp)) {
                 ProxyCardActionButton(
-                    icon = Icons.Default.Info,
+                    icon = CupertinoIcons.Filled.InfoCircle,
                     tint = ProxyCardActionColors.info,
                     onClick = onInfo,
                 )
                 ProxyCardActionButton(
-                    icon = Icons.Default.Visibility,
+                    icon = CupertinoIcons.Default.Eye,
                     tint = ProxyCardActionColors.view,
                     onClick = onView,
                 )
                 ProxyCardActionButton(
-                    icon = Icons.Default.Share,
+                    icon = CupertinoIcons.Filled.SquareAndArrowUp,
                     tint = ProxyCardActionColors.share,
                     onClick = onShare,
                 )
                 ProxyCardActionButton(
-                    icon = Icons.Default.QrCode,
+                    icon = CupertinoIcons.Default.Qrcode,
                     tint = ProxyCardActionColors.qr,
                     onClick = onQr,
                 )

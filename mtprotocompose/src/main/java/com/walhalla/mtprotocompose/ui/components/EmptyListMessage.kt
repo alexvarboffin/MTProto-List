@@ -1,10 +1,9 @@
 package com.walhalla.mtprotocompose.ui.components
 
+import android.app.Activity
 import android.content.ComponentName
 import android.content.Intent
-import android.app.Activity
 import androidx.compose.foundation.text.ClickableText
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
@@ -15,7 +14,7 @@ import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.style.TextDecoration
-import androidx.compose.ui.text.withStyle
+import com.slapps.cupertino.theme.CupertinoTheme
 import com.walhalla.mtprotocompose.R
 import com.walhalla.ui.plugins.Module_U
 import java.util.Locale
@@ -26,13 +25,12 @@ fun EmptyListMessage(
 ) {
     val context = LocalContext.current
     val activity = context as? Activity
-    val uriHandler = LocalUriHandler.current
     val part1 = stringResource(R.string.part1).lowercase(Locale.getDefault())
     val part2 = stringResource(R.string.part2).lowercase(Locale.getDefault())
     val body = stringResource(R.string.msg_no_notes1)
     val lower = body.lowercase(Locale.getDefault())
 
-    val linkColor = MaterialTheme.colorScheme.primary
+    val linkColor = CupertinoTheme.colorScheme.accent
     val annotated = remember(body, part1, part2, linkColor) {
         buildAnnotatedString {
             append(body)
@@ -60,7 +58,7 @@ fun EmptyListMessage(
     ClickableText(
         text = annotated,
         modifier = modifier,
-        style = MaterialTheme.typography.bodyMedium,
+        style = CupertinoTheme.typography.body,
         onClick = { offset ->
             annotated.getStringAnnotations("network", offset, offset).firstOrNull()?.let {
                 activity?.let { act -> Module_U.actionWirelessSettings(act) }
@@ -93,8 +91,8 @@ fun PlayServicesHint(
     ClickableText(
         text = AnnotatedString(linkText),
         modifier = modifier,
-        style = MaterialTheme.typography.bodySmall.copy(
-            color = MaterialTheme.colorScheme.primary,
+        style = CupertinoTheme.typography.footnote.copy(
+            color = CupertinoTheme.colorScheme.accent,
             textDecoration = TextDecoration.Underline,
         ),
         onClick = {

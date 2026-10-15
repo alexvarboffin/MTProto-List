@@ -6,11 +6,9 @@ import androidx.activity.compose.LocalActivity
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
@@ -30,6 +28,7 @@ import androidx.compose.ui.viewinterop.AndroidView
 import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.WindowInsetsControllerCompat
+import com.slapps.cupertino.CupertinoText
 import com.walhalla.mtprotocompose.R
 import com.walhalla.mtprotocompose.mtprotoApp
 import com.walhalla.ui.DLog
@@ -120,7 +119,7 @@ fun SplashScreen(
             },
         )
 
-        Text(
+        CupertinoText(
             text = DLog.getAppVersion(context),
             color = Color.White,
             fontSize = 12.sp,
