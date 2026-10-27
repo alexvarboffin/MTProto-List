@@ -9,16 +9,28 @@ import androidx.appcompat.app.AppCompatDelegate
 import androidx.appcompat.app.LocaleChangerAppCompatDelegate
 import com.franmontiel.localechanger.LocaleChanger
 import com.walhalla.mtprotocompose.ui.MtprotoApp
+import com.walhalla.mtprotocompose.update.InAppUpdateController
+import com.walhalla.mtprotocompose.update.InAppUpdateRestartDialog
 
 class MainActivity : AppCompatActivity() {
     private var localeChangerDelegate: LocaleChangerAppCompatDelegate? = null
+    private lateinit var inAppUpdate: InAppUpdateController
 
     override fun onCreate(savedInstanceState: Bundle?) {
         applyNightMode()
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
+        // Play In-App Update; the check starts only on a fresh launch, not after rotation.
+        inAppUpdate = InAppUpdateController(this, checkForUpdate = savedInstanceState == null)
         setContent {
-            MtprotoApp()
+            MtprotoApp(overlay = {
+                if (inAppUpdate.restartPromptVisible) {
+                    InAppUpdateRestartDialog(
+                        onRestart = inAppUpdate::completeUpdate,
+                        onDismiss = inAppUpdate::dismissRestartPrompt,
+                    )
+                }
+            })
         }
     }
 

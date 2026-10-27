@@ -88,6 +88,8 @@ dependencies {
         exclude(group = "com.android.support")
     }
     implementation(libs.play.services.ads)
+    implementation(libs.play.app.update)
+    implementation(libs.play.app.update.ktx)
     implementation(libs.firebase.core)
     implementation(libs.firebase.crashlytics)
     implementation(libs.firebase.analytics)

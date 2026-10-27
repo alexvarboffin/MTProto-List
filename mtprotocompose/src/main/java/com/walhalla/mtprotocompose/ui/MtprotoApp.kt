@@ -28,7 +28,7 @@ object Routes {
 }
 
 @Composable
-fun MtprotoApp() {
+fun MtprotoApp(overlay: @Composable () -> Unit = {}) {
     ProvideAppLocale {
         MtprotoTheme {
             val navController = rememberNavController()
@@ -75,6 +75,7 @@ fun MtprotoApp() {
                     )
                 }
             }
+            overlay()
         }
     }
 }
