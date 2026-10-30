@@ -6,16 +6,13 @@ import android.content.SharedPreferences
 import android.os.Handler
 import android.os.Looper
 import android.widget.Toast
-import com.google.firebase.database.DataSnapshot
-import com.google.firebase.database.DatabaseError
-import com.google.firebase.database.FirebaseDatabase
-import com.google.firebase.database.ValueEventListener
 import com.walhalla.mtprotolist.Config
 import com.walhalla.mtprotolist.entity.MtprotoProxy
 import com.walhalla.mtprotolist.utils.HashUtils
 import com.walhalla.mtprotolist.webproxy.ProxyInfo
 import com.walhalla.ui.DLog.d
 import com.walhalla.ui.DLog.handleException
+import java.util.concurrent.Executor
 import java.util.regex.Pattern
 
 //package com.walhalla.mtprotolist.manager;
@@ -90,23 +87,7 @@ class VideoRepository(private val callback: Callback) {
                         val url =
                             String.format(Config.PROXY_HANDLER, data.host, data.port, data.secret)
                         val key = HashUtils.md5(url)
-
-                        //data.code=
-                        val reference = FirebaseDatabase.getInstance()
-                            .getReference(Config.REF_KEY_MTPROTO)
-                            .child(key)
-                        reference.addValueEventListener(object : ValueEventListener {
-                            override fun onDataChange(snapshot: DataSnapshot) {
-                                //if (key.equals(snapshot.getKey())) {
-                                d("Success!")
-                                //}
-                            }
-
-                            override fun onCancelled(error: DatabaseError) {
-                                d(error.message)
-                            }
-                        })
-                        reference.setValue(data)
+                        writeNode(Config.REF_KEY_MTPROTO, key, AdminRtdb.mtprotoValue(data))
                     }
                 }
             })
@@ -145,23 +126,29 @@ class VideoRepository(private val callback: Callback) {
     }
 
     private fun updateServerData(data: ProxyInfo) {
-        val key = HashUtils.md5(data.proxyUrl)
+        val url = data.proxyUrl?.trim().orEmpty()
+        if (url.isEmpty()) {
+            d("skip web proxy without url")
+            return
+        }
+        val key = HashUtils.md5(url)
+        writeNode(Config.REF_KEY_GLYPE, key, AdminRtdb.webProxyValue(data))
+    }
 
-        //data.code=
-        val reference = FirebaseDatabase.getInstance()
-            .getReference(Config.REF_KEY_GLYPE).child(key)
-        reference.addValueEventListener(object : ValueEventListener {
-            override fun onDataChange(snapshot: DataSnapshot) {
-                //if (key.equals(snapshot.getKey())) {
-                d("@@@ Success!")
-                //}
-            }
-
-            override fun onCancelled(error: DatabaseError) {
-                d("@@@ " + error.message)
-            }
-        })
-        reference.setValue(data)
+    private fun writeNode(path: String, key: String, value: Map<String, Any?>) {
+        try {
+            val future = AdminRtdb.enqueue(path, key, value)
+            future.addListener({
+                try {
+                    future.get()
+                    d("Success! $path/$key")
+                } catch (e: Exception) {
+                    d(e.message ?: "admin write failed")
+                }
+            }, Executor { command -> command.run() })
+        } catch (e: Exception) {
+            handleException(e)
+        }
     }
 
 

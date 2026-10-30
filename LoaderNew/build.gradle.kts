@@ -11,3 +11,8 @@ kotlin {
         jvmTarget = org.jetbrains.kotlin.gradle.dsl.JvmTarget.JVM_11
     }
 }
+
+dependencies {
+    implementation("com.google.firebase:firebase-admin:9.11.0")
+    testImplementation(libs.junit)
+}
