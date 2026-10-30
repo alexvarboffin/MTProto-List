@@ -235,14 +235,3 @@
 
 -keepattributes *Annotation*
 -repackageclasses 'com'
-
-# Firebase Admin SDK (service-account RTDB writes). Reflective serializers.
--keep class com.google.firebase.** { *; }
--keep class com.google.auth.** { *; }
--keep class com.google.api.** { *; }
--dontwarn com.google.firebase.**
--dontwarn com.google.auth.**
--dontwarn io.netty.**
--dontwarn io.grpc.**
--dontwarn javax.naming.**
--dontwarn org.apache.http.**

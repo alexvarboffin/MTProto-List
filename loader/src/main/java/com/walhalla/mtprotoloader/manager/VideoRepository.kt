@@ -6,13 +6,14 @@ import android.content.SharedPreferences
 import android.os.Handler
 import android.os.Looper
 import android.widget.Toast
+import com.google.firebase.database.FirebaseDatabase
+import com.walhalla.mtprotoloader.BuildConfig
 import com.walhalla.mtprotolist.Config
 import com.walhalla.mtprotolist.entity.MtprotoProxy
 import com.walhalla.mtprotolist.utils.HashUtils
 import com.walhalla.mtprotolist.webproxy.ProxyInfo
 import com.walhalla.ui.DLog.d
 import com.walhalla.ui.DLog.handleException
-import java.util.concurrent.Executor
 import java.util.regex.Pattern
 
 //package com.walhalla.mtprotolist.manager;
@@ -87,7 +88,7 @@ class VideoRepository(private val callback: Callback) {
                         val url =
                             String.format(Config.PROXY_HANDLER, data.host, data.port, data.secret)
                         val key = HashUtils.md5(url)
-                        writeNode(Config.REF_KEY_MTPROTO, key, AdminRtdb.mtprotoValue(data))
+                        writeNode(Config.REF_KEY_MTPROTO, key, data)
                     }
                 }
             })
@@ -132,20 +133,20 @@ class VideoRepository(private val callback: Callback) {
             return
         }
         val key = HashUtils.md5(url)
-        writeNode(Config.REF_KEY_GLYPE, key, AdminRtdb.webProxyValue(data))
+        writeNode(Config.REF_KEY_GLYPE, key, data)
     }
 
-    private fun writeNode(path: String, key: String, value: Map<String, Any?>) {
+    private fun writeNode(path: String, key: String, value: Any) {
+        if (!BuildConfig.DEBUG) {
+            d("RTDB write skipped")
+            return
+        }
         try {
-            val future = AdminRtdb.enqueue(path, key, value)
-            future.addListener({
-                try {
-                    future.get()
-                    d("Success! $path/$key")
-                } catch (e: Exception) {
-                    d(e.message ?: "admin write failed")
-                }
-            }, Executor { command -> command.run() })
+            FirebaseDatabase.getInstance()
+                .getReference(path)
+                .child(key)
+                .setValue(value)
+            d("Success! $path/$key")
         } catch (e: Exception) {
             handleException(e)
         }

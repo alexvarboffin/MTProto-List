@@ -34,6 +34,7 @@ android {
     buildFeatures {
         viewBinding = true
         dataBinding = true
+        buildConfig = true
     }
 
     bundle {
@@ -74,24 +75,6 @@ android {
     kotlinOptions {
         jvmTarget = "17"
     }
-
-    packaging {
-        resources {
-            excludes += setOf(
-                "META-INF/INDEX.LIST",
-                "META-INF/DEPENDENCIES",
-                "META-INF/LICENSE",
-                "META-INF/LICENSE.txt",
-                "META-INF/LICENSE.md",
-                "META-INF/NOTICE",
-                "META-INF/NOTICE.txt",
-                "META-INF/NOTICE.md",
-                "META-INF/AL2.0",
-                "META-INF/LGPL2.1",
-                "META-INF/io.netty.versions.properties",
-            )
-        }
-    }
 }
 
 dependencies {
@@ -121,7 +104,7 @@ dependencies {
     implementation(libs.firebase.crashlytics)
     implementation(libs.firebase.analytics)
     implementation(libs.play.services.ads)
-    implementation("com.google.firebase:firebase-admin:9.11.0")
+    implementation(libs.firebase.database)
 
     implementation(libs.androidx.lifecycle.process)
     implementation(libs.androidx.lifecycle.runtime)
