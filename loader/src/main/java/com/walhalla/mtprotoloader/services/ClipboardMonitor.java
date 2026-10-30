@@ -24,7 +24,7 @@ import android.widget.Toast;
 
 import androidx.annotation.RequiresApi;
 import androidx.core.app.NotificationCompat;
-import androidx.multidex.BuildConfig;
+import com.walhalla.mtprotoloader.BuildConfig;
 
 
 import com.walhalla.mtprotolist.Config;

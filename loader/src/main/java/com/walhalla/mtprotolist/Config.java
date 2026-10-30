@@ -1,7 +1,7 @@
 package com.walhalla.mtprotolist;
 
 
-import com.walhalla.ui.BuildConfig;
+import com.walhalla.mtprotoloader.BuildConfig;
 
 public class Config {
 

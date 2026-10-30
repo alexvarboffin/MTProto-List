@@ -37,4 +37,15 @@ class FirebaseApiWriteGateTest {
         assertEquals(true, toggled.exceptionOrNull()?.message?.contains("disabled"))
         client.close()
     }
+
+    @Test
+    fun createLeavesWritesDisabled() = runBlocking {
+        val repository = ProxyRepository.create()
+        val web = ProxyInfo()
+        web.proxyUrl = "https://example.com/proxy"
+        val result = repository.toggleWebProxyEnabled(web)
+        assertTrue(result.isFailure)
+        assertEquals("Firebase RTDB writes are disabled", result.exceptionOrNull()?.message)
+        assertEquals(false, web.enabled)
+    }
 }

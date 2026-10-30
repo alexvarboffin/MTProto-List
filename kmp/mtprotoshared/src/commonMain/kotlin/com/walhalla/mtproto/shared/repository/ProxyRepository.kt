@@ -50,7 +50,7 @@ class ProxyRepository(
     }
 
     companion object {
-        fun create(writesEnabled: Boolean = true): ProxyRepository {
+        fun create(writesEnabled: Boolean = false): ProxyRepository {
             val client = createHttpClient()
             return ProxyRepository(
                 firebaseApi = FirebaseApi(client, writesEnabled = writesEnabled),
