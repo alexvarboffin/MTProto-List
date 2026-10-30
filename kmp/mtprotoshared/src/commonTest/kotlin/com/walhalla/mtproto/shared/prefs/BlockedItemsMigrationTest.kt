@@ -8,7 +8,7 @@ import kotlin.test.assertTrue
 class BlockedItemsMigrationTest {
     @Test
     fun copiesOnlyBlockedItemKeysThatAreMissing() {
-        val legacy = mapOf(
+        val legacy = mapOf<String, Any?>(
             "blocked_items_" to setOf("4", "6"),
             "blocked_items_extra" to "1",
             "other" to "nope",
@@ -25,7 +25,7 @@ class BlockedItemsMigrationTest {
     @Test
     fun emptyLegacyCopiesNothing() {
         assertTrue(
-            BlockedItemsMigration.entriesToCopy(emptyMap(), emptySet()).isEmpty(),
+            BlockedItemsMigration.entriesToCopy(emptyMap<String, Any?>(), emptySet<String>()).isEmpty(),
         )
     }
 
