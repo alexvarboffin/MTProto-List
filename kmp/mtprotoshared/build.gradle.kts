@@ -35,7 +35,7 @@ kotlin {
 
 android {
     namespace = "com.walhalla.mtproto.shared"
-    compileSdk = libs.versions.android.compileSdk.get().toInt()
+    compileSdk = 36
     defaultConfig {
         minSdk = libs.versions.android.minSdk.get().toInt()
         consumerProguardFiles("consumer-rules.pro")
