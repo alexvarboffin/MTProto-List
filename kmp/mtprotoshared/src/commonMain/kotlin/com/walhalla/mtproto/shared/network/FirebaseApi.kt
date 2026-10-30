@@ -81,10 +81,7 @@ class FirebaseApi(
             Triple(key, proxy, updateAt)
         }
         return slots
-            .sortedWith(
-                compareBy<Triple<String, MtprotoProxy?, Long?>>(nullsFirst()) { it.third }
-                    .thenBy { it.first },
-            )
+            .sortedWith(compareBy({ it.third }, { it.first }))
             .map { it.second }
     }
 
