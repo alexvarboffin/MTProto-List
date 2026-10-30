@@ -1,8 +1,6 @@
 package com.walhalla.mtprotocompose.data
 
 import android.content.Context
-import android.content.SharedPreferences
-import androidx.core.content.edit
 import androidx.preference.PreferenceManager
 import com.walhalla.mtproto.shared.config.AppConfig
 import com.walhalla.mtproto.shared.prefs.BlockedItemsMigration
@@ -13,17 +11,24 @@ class LockedItemsStore(context: Context) {
         .split(',')
         .mapNotNull { it.trim().toIntOrNull() }
         .toSet()
+    private val defaultStrings = defaultLocked.map(Int::toString).toSet()
 
     init {
         migrateFromLegacy(context)
     }
 
     fun lockedPositions(): Set<Int> {
-        val stored = prefs.getStringSet(KEY_LOCKED, null)
-            ?.mapNotNull { it.toIntOrNull() }
-            ?.toSet()
-            ?: defaultLocked
-        return stored
+        val stored = try {
+            prefs.getStringSet(BlockedItemsMigration.KEY, null)
+        } catch (e: ClassCastException) {
+            return defaultLocked
+        }
+        if (stored == null) return defaultLocked
+        return try {
+            stored.mapNotNull { it.toIntOrNull() }.toSet()
+        } catch (e: ClassCastException) {
+            defaultLocked
+        }
     }
 
     fun isLocked(position: Int): Boolean = lockedPositions().contains(position)
@@ -31,35 +36,40 @@ class LockedItemsStore(context: Context) {
     fun unlock(position: Int) {
         val updated = lockedPositions().toMutableSet()
         updated.remove(position)
-        prefs.edit {
-            putStringSet(KEY_LOCKED, updated.map(Int::toString).toSet())
-        }
+        prefs.edit()
+            .putStringSet(BlockedItemsMigration.KEY, updated.map(Int::toString).toHashSet())
+            .apply()
     }
 
     private fun migrateFromLegacy(context: Context) {
-        if (prefs.getBoolean(BlockedItemsMigration.MIGRATED_FLAG, false)) return
-        val legacy = PreferenceManager.getDefaultSharedPreferences(context)
-        val editor = prefs.edit()
-        val copied = BlockedItemsMigration.entriesToCopy(legacy.all, prefs.all.keys)
-        for ((key, value) in copied) {
-            putPreference(editor, key, value)
+        val alreadyMigrated = try {
+            prefs.getBoolean(BlockedItemsMigration.MIGRATED_FLAG, false)
+        } catch (e: ClassCastException) {
+            false
         }
-        editor.putBoolean(BlockedItemsMigration.MIGRATED_FLAG, true).apply()
-    }
-
-    private fun putPreference(editor: SharedPreferences.Editor, key: String, value: Any) {
-        when (value) {
-            is Set<*> -> editor.putStringSet(key, value.mapNotNull { it as? String }.toSet())
-            is String -> editor.putString(key, value)
-            is Boolean -> editor.putBoolean(key, value)
-            is Int -> editor.putInt(key, value)
-            is Long -> editor.putLong(key, value)
-            is Float -> editor.putFloat(key, value)
-        }
+        val legacyValue = PreferenceManager.getDefaultSharedPreferences(context)
+            .all[BlockedItemsMigration.KEY]
+        BlockedItemsMigration.run(
+            alreadyMigrated = alreadyMigrated,
+            legacyValue = legacyValue,
+            defaultStrings = defaultStrings,
+            commitValues = { values ->
+                prefs.edit()
+                    .putStringSet(BlockedItemsMigration.KEY, HashSet(values))
+                    .commit()
+            },
+            readBack = {
+                prefs.getStringSet(BlockedItemsMigration.KEY, null)?.toSet()
+            },
+            commitFlag = {
+                prefs.edit()
+                    .putBoolean(BlockedItemsMigration.MIGRATED_FLAG, true)
+                    .commit()
+            },
+        )
     }
 
     companion object {
         private const val PREFS_NAME = "mtproto_compose_prefs"
-        private const val KEY_LOCKED = "blocked_items_"
     }
 }

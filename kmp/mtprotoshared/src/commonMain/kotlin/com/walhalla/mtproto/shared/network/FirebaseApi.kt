@@ -26,7 +26,7 @@ class FirebaseApi(
 ) {
     suspend fun fetchMtprotoProxies(): Result<List<IndexedMtproto>> = runCatching {
         val body = client.get("${AppConfig.FIREBASE_BASE_URL}/${AppConfig.REF_KEY_MTPROTO}.json").body<String>()
-        decodeMtprotoInQueryOrder(body).withLegacySourceIndex()
+        decodeMtprotoInQueryOrder(body, json).withLegacySourceIndex()
     }
 
     suspend fun fetchWebProxies(): Result<List<ProxyInfo>> = runCatching {
@@ -63,32 +63,6 @@ class FirebaseApi(
         if (!response.status.isSuccess()) {
             error("Firebase update failed: ${response.status.value}")
         }
-    }
-
-    private fun decodeMtprotoInQueryOrder(body: String): List<MtprotoProxy?> {
-        if (body == "null" || body.isBlank()) return emptyList()
-        val element = json.parseToJsonElement(body)
-        if (element !is kotlinx.serialization.json.JsonObject) return emptyList()
-        val slots = element.map { (key, value) ->
-            val proxy = runCatching {
-                json.decodeFromJsonElement(MtprotoProxy.serializer(), value)
-            }.getOrNull()
-            val updateAt = if (proxy != null) {
-                proxy.update_at
-            } else {
-                jsonLong(value)
-            }
-            Triple(key, proxy, updateAt)
-        }
-        return slots
-            .sortedWith(compareBy({ it.third }, { it.first }))
-            .map { it.second }
-    }
-
-    private fun jsonLong(value: kotlinx.serialization.json.JsonElement): Long? {
-        val raw = (value as? kotlinx.serialization.json.JsonObject)?.get("update_at") ?: return null
-        val primitive = raw as? kotlinx.serialization.json.JsonPrimitive ?: return null
-        return primitive.content.toLongOrNull() ?: primitive.content.toDoubleOrNull()?.toLong()
     }
 
     private fun <T> decodeMap(body: String, serializer: kotlinx.serialization.KSerializer<T>): List<T> {
