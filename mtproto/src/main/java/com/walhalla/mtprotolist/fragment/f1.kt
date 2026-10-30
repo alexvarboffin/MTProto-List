@@ -30,6 +30,7 @@ import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
+import com.walhalla.mtproto.shared.config.AppConfig
 import com.walhalla.mtprotolist.Config
 import com.walhalla.mtprotolist.MyTextUtils
 import com.walhalla.mtprotolist.ProtoAdapterCallback
@@ -223,11 +224,10 @@ class f1 : CompatFragment(),
         //m = new MProtoFragmentPresenter(getContext(), this);
         m = KSUtil.getInstance(requireContext())
         rm = RewardManager.instance
-        val data: MutableSet<Int> = HashSet()
-        data.add(4)
-        data.add(6)
-        data.add(7)
-        data.add(9)
+        val data: MutableSet<Int> = AppConfig.LOCKED_MTPROTO_POSITIONS
+            .split(',')
+            .mapNotNull { it.trim().toIntOrNull() }
+            .toMutableSet()
         m!!.initialize(data)
 
 

@@ -9,6 +9,8 @@
 /.idea/assetWizardSettings.xml
 .DS_Store
 /build
+buildSrc/build/
+*-firebase-adminsdk-*.json
 /captures
 .externalNativeBuild
 kmp/mtprotoshared/build/

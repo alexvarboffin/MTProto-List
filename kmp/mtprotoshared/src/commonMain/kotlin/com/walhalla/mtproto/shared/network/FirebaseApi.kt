@@ -1,6 +1,8 @@
 package com.walhalla.mtproto.shared.network
 
 import com.walhalla.mtproto.shared.config.AppConfig
+import com.walhalla.mtproto.shared.list.IndexedMtproto
+import com.walhalla.mtproto.shared.list.withLegacySourceIndex
 import com.walhalla.mtprotolist.entity.MtprotoProxy
 import com.walhalla.mtprotolist.webproxy.ProxyInfo
 import io.ktor.client.HttpClient
@@ -15,16 +17,16 @@ import kotlinx.serialization.json.Json
 
 class FirebaseApi(
     private val client: HttpClient,
+    val writesEnabled: Boolean = true,
     private val json: Json = Json {
         ignoreUnknownKeys = true
         isLenient = true
         encodeDefaults = true
     },
 ) {
-    suspend fun fetchMtprotoProxies(): Result<List<MtprotoProxy>> = runCatching {
+    suspend fun fetchMtprotoProxies(): Result<List<IndexedMtproto>> = runCatching {
         val body = client.get("${AppConfig.FIREBASE_BASE_URL}/${AppConfig.REF_KEY_MTPROTO}.json").body<String>()
-        decodeMap(body, MtprotoProxy.serializer())
-            .sortedByDescending { it.update_at }
+        decodeMtprotoInQueryOrder(body, json).withLegacySourceIndex()
     }
 
     suspend fun fetchWebProxies(): Result<List<ProxyInfo>> = runCatching {
@@ -35,15 +37,22 @@ class FirebaseApi(
     }
 
     suspend fun saveMtprotoProxy(proxy: MtprotoProxy): Result<Unit> {
+        writesDisabled()?.let { return it }
         val key = proxy.firebaseKey()
         if (key.isEmpty()) return Result.failure(IllegalArgumentException("Invalid proxy data"))
         return putValue(AppConfig.REF_KEY_MTPROTO, key, json.encodeToString(MtprotoProxy.serializer(), proxy))
     }
 
     suspend fun saveWebProxy(proxy: ProxyInfo): Result<Unit> {
+        writesDisabled()?.let { return it }
         val key = proxy.firebaseKey()
         if (key.isEmpty()) return Result.failure(IllegalArgumentException("Invalid proxy data"))
         return putValue(AppConfig.REF_KEY_GLYPE, key, json.encodeToString(ProxyInfo.serializer(), proxy))
+    }
+
+    private fun writesDisabled(): Result<Unit>? {
+        if (writesEnabled) return null
+        return Result.failure(IllegalStateException("Firebase RTDB writes are disabled"))
     }
 
     private suspend fun putValue(path: String, key: String, payload: String): Result<Unit> = runCatching {

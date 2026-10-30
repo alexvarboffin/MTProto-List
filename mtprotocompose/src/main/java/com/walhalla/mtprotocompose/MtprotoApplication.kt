@@ -138,7 +138,7 @@ class MtprotoApplication : MultiDexApplication(), DefaultLifecycleObserver, Appl
 
 
 
-        repository = ProxyRepository.create()
+        repository = ProxyRepository.create(writesEnabled = BuildConfig.DEBUG)
 
         lockedItemsStore = LockedItemsStore(this)
 

@@ -10,6 +10,7 @@ import android.widget.Toast
 import androidx.core.net.toUri
 import androidx.fragment.app.DialogFragment
 import com.google.firebase.database.FirebaseDatabase
+import com.walhalla.mtprotolist.BuildConfig
 import com.walhalla.mtprotolist.Config
 import com.walhalla.mtprotolist.HashUtils
 import com.walhalla.mtprotolist.R
@@ -22,7 +23,8 @@ import com.walhalla.ui.DLog.handleException
 
 class InfoGlypeDialog : DialogFragment() {
     private lateinit var binding: InfoDialogBinding
-    private val videoRepository = VideoRepository()
+    private val writesEnabled = BuildConfig.DEBUG
+    private val videoRepository = VideoRepository(writesEnabled = writesEnabled)
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -139,6 +141,12 @@ class InfoGlypeDialog : DialogFragment() {
         binding.disable.isEnabled = false
 
         val key = HashUtils.md5(proxyUrl)
+        if (!writesEnabled) {
+            server.enabled = !server.enabled
+            binding.disable.isEnabled = true
+            updateDisableButtonLabel(server)
+            return
+        }
         FirebaseDatabase.getInstance()
             .getReference(Config.REF_KEY_GLYPE)
             .child(key)

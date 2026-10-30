@@ -8,8 +8,10 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.launch
 
-class VideoRepository {
-    private val repository = ProxyRepository.create()
+class VideoRepository(
+    writesEnabled: Boolean = false,
+) {
+    private val repository = ProxyRepository.create(writesEnabled = writesEnabled)
     private val scope = CoroutineScope(SupervisorJob() + Dispatchers.Main.immediate)
 
     fun updateMtprotoGeo(

@@ -1,10 +1,18 @@
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -19,7 +27,6 @@ import java.util.regex.Pattern;
  */
 public class MyClass {
 
-    private static final String FIREBASE_URL = "https://mtprotolist.firebaseio.com/a";
     private static final String PROXY_FILE = "proxies.txt";
     private static final int REQUEST_DELAY_MS = 1500; // ip-api ~45 req/min
     /** Do not wipe/pollute Firebase with empty or broken scrapes. */
@@ -29,6 +36,12 @@ public class MyClass {
 
     public static void main(String[] args) {
         System.out.println("--- MTProto Desktop Loader (with Rate Limiting) ---");
+        try {
+            AdminRtdb.credentialsFile(System.getenv("GOOGLE_APPLICATION_CREDENTIALS"));
+        } catch (RuntimeException e) {
+            System.err.println("ABORT: " + e.getMessage());
+            return;
+        }
         List<ProxyData> proxies = readProxiesFromFile(PROXY_FILE);
 
         if (proxies.isEmpty()) {
@@ -124,70 +137,43 @@ public class MyClass {
                     p.host, p.port, p.secret
             );
             String key = md5(fullUrl);
-
-            String city = extract(geoJson, "city");
-            String country = extract(geoJson, "country");
-            String countryCode = extract(geoJson, "countryCode");
-            String lat = extract(geoJson, "lat");
-            String lon = extract(geoJson, "lon");
-
-            String firebaseJson = String.format(
-                    Locale.US,
-                    "{\"host\":\"%s\",\"port\":\"%s\",\"secret\":\"%s\",\"enabled\":true,\"update_at\":%d,"
-                            + "\"city\":\"%s\",\"country\":\"%s\",\"code\":\"%s\",\"lat\":%s,\"lon\":%s}",
-                    escapeJson(p.host),
-                    escapeJson(p.port),
-                    escapeJson(p.secret),
-                    updateAt,
-                    escapeJson(city),
-                    escapeJson(country),
-                    escapeJson(countryCode),
-                    emptyAsNullNumber(lat),
-                    emptyAsNullNumber(lon)
-            );
-
-            String putUrl = FIREBASE_URL + "/" + key + ".json";
-            sendPutRequest(putUrl, firebaseJson);
+            AdminRtdb.setChild("a", key, mtprotoBody(p, geoJson, updateAt));
             System.out.println("OK key=" + key);
         } catch (Exception e) {
             System.err.println("Ошибка Firebase: " + e.getMessage());
         }
     }
 
-    private static String escapeJson(String s) {
-        if (s == null) {
-            return "";
-        }
-        return s.replace("\\", "\\\\").replace("\"", "\\\"");
+    static Map<String, Object> mtprotoBody(ProxyData p, String geoJson, long updateAt) {
+        Map<String, Object> body = new LinkedHashMap<>();
+        body.put("host", p.host);
+        body.put("port", p.port);
+        body.put("secret", p.secret);
+        body.put("enabled", Boolean.TRUE);
+        body.put("update_at", updateAt);
+        body.put("city", extract(geoJson, "city"));
+        body.put("country", extract(geoJson, "country"));
+        body.put("code", extract(geoJson, "countryCode"));
+        body.put("lat", parseNumber(extract(geoJson, "lat")));
+        body.put("lon", parseNumber(extract(geoJson, "lon")));
+        return body;
     }
 
-    private static String emptyAsNullNumber(String s) {
+    private static double parseNumber(String s) {
         if (s == null || s.isEmpty()) {
-            return "0";
+            return 0d;
         }
-        return s;
+        try {
+            return Double.parseDouble(s);
+        } catch (NumberFormatException e) {
+            return 0d;
+        }
     }
 
     private static String extract(String json, String key) {
         Pattern p = Pattern.compile("\"" + key + "\":\"?([^,\"}]+)\"?");
         Matcher m = p.matcher(json);
         return m.find() ? m.group(1) : "";
-    }
-
-    private static String sendPutRequest(String urlStr, String json) throws IOException {
-        URL url = new URL(urlStr);
-        HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-        conn.setRequestMethod("PUT");
-        conn.setDoOutput(true);
-        conn.setConnectTimeout(5000);
-        try (OutputStream os = conn.getOutputStream()) {
-            os.write(json.getBytes(StandardCharsets.UTF_8));
-        }
-        int code = conn.getResponseCode();
-        if (code >= 400) {
-            throw new IOException("HTTP error: " + code);
-        }
-        return readStream(conn.getInputStream());
     }
 
     private static String sendGetRequest(String urlStr) throws IOException {

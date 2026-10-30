@@ -8,7 +8,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -30,6 +30,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.walhalla.mtprotocompose.BuildConfig
 import com.walhalla.mtprotocompose.R
 import com.walhalla.mtprotocompose.mtprotoApp
 import com.walhalla.mtprotocompose.ui.components.EmptyListMessage
@@ -139,7 +140,9 @@ fun MtprotoListTab(
             }
             else -> {
                 LazyColumn(modifier = Modifier.fillMaxSize()) {
-                    itemsIndexed(uiState.items) { index, proxy ->
+                    items(uiState.items, key = { it.sourceIndex }) { row ->
+                        val index = row.sourceIndex
+                        val proxy = row.proxy
                         val locked = app.lockedItemsStore.isLocked(index)
                         MtprotoProxyCard(
                             proxy = proxy,
@@ -184,21 +187,29 @@ fun MtprotoListTab(
         InfoBottomSheet(
             target = InfoTarget.Mtproto(proxy),
             onDismiss = { infoTarget = null },
-            onToggleEnabled = {
-                scope.launch {
-                    app.repository.toggleMtprotoEnabled(proxy).onSuccess { updated ->
-                        infoTarget = updated
-                        viewModel.refresh()
+            onToggleEnabled = if (BuildConfig.DEBUG) {
+                {
+                    scope.launch {
+                        app.repository.toggleMtprotoEnabled(proxy).onSuccess { updated ->
+                            infoTarget = updated
+                            viewModel.refresh()
+                        }
                     }
                 }
+            } else {
+                null
             },
-            onUpdateGeo = {
-                scope.launch {
-                    app.repository.refreshMtprotoGeo(proxy).onSuccess { updated ->
-                        infoTarget = updated
-                        viewModel.refresh()
+            onUpdateGeo = if (BuildConfig.DEBUG) {
+                {
+                    scope.launch {
+                        app.repository.refreshMtprotoGeo(proxy).onSuccess { updated ->
+                            infoTarget = updated
+                            viewModel.refresh()
+                        }
                     }
                 }
+            } else {
+                null
             },
         )
     }

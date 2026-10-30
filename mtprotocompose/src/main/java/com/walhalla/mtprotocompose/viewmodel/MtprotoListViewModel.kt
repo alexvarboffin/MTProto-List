@@ -8,9 +8,9 @@ import androidx.lifecycle.AndroidViewModel
 
 import androidx.lifecycle.viewModelScope
 
-import com.walhalla.mtproto.shared.repository.ProxyRepository
+import com.walhalla.mtproto.shared.list.IndexedMtproto
 
-import com.walhalla.mtprotolist.entity.MtprotoProxy
+import com.walhalla.mtproto.shared.repository.ProxyRepository
 
 import com.walhalla.mtprotocompose.data.FirebaseProxyStreams
 
@@ -32,7 +32,7 @@ data class MtprotoListUiState(
 
     val isLoading: Boolean = false,
 
-    val items: List<MtprotoProxy> = emptyList(),
+    val items: List<IndexedMtproto> = emptyList(),
 
     val error: String? = null,
 
