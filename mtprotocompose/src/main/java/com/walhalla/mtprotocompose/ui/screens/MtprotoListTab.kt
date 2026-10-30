@@ -8,7 +8,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -140,7 +140,9 @@ fun MtprotoListTab(
             }
             else -> {
                 LazyColumn(modifier = Modifier.fillMaxSize()) {
-                    itemsIndexed(uiState.items) { index, proxy ->
+                    items(uiState.items, key = { it.sourceIndex }) { row ->
+                        val index = row.sourceIndex
+                        val proxy = row.proxy
                         val locked = app.lockedItemsStore.isLocked(index)
                         MtprotoProxyCard(
                             proxy = proxy,

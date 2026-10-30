@@ -5,6 +5,8 @@ import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
 import com.walhalla.mtproto.shared.config.AppConfig
+import com.walhalla.mtproto.shared.list.IndexedMtproto
+import com.walhalla.mtproto.shared.list.withLegacySourceIndex
 import com.walhalla.mtprotolist.entity.MtprotoProxy
 import com.walhalla.mtprotolist.webproxy.ProxyInfo
 import kotlinx.coroutines.channels.awaitClose
@@ -12,15 +14,16 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
 
 object FirebaseProxyStreams {
-    fun mtprotoList(): Flow<Result<List<MtprotoProxy>>> = callbackFlow {
+    fun mtprotoList(): Flow<Result<List<IndexedMtproto>>> = callbackFlow {
         val reference = FirebaseDatabase.getInstance()
             .getReference(AppConfig.REF_KEY_MTPROTO)
             .orderByChild("update_at")
         val listener = object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
-                val items = snapshot.children.mapNotNull { child ->
+                val inQueryOrder = snapshot.children.map { child ->
                     runCatching { child.getValue(MtprotoProxy::class.java) }.getOrNull()
-                }.asReversed()
+                }.toList()
+                val items = inQueryOrder.withLegacySourceIndex()
                 if (items.isEmpty()) {
                     trySend(Result.failure(IllegalStateException("Database is empty, reinstall the Application")))
                 } else {

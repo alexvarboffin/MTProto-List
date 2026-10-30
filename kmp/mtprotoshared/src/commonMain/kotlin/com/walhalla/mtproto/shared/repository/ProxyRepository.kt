@@ -1,5 +1,6 @@
 package com.walhalla.mtproto.shared.repository
 
+import com.walhalla.mtproto.shared.list.IndexedMtproto
 import com.walhalla.mtprotolist.entity.MtprotoProxy
 import com.walhalla.mtprotolist.webproxy.ProxyInfo
 import com.walhalla.mtproto.shared.network.GeoApi
@@ -10,7 +11,7 @@ class ProxyRepository(
     private val firebaseApi: FirebaseApi,
     private val geoApi: GeoApi,
 ) {
-    suspend fun loadMtprotoList(): Result<List<MtprotoProxy>> = firebaseApi.fetchMtprotoProxies()
+    suspend fun loadMtprotoList(): Result<List<IndexedMtproto>> = firebaseApi.fetchMtprotoProxies()
 
     suspend fun loadWebProxyList(): Result<List<ProxyInfo>> = firebaseApi.fetchWebProxies()
 
