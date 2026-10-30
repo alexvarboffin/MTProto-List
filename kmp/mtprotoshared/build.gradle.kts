@@ -26,6 +26,10 @@ kotlin {
         androidMain.dependencies {
             implementation(libs.ktor.client.okhttp)
         }
+        commonTest.dependencies {
+            implementation(kotlin("test"))
+            implementation("io.ktor:ktor-client-mock:${libs.versions.ktor.get()}")
+        }
     }
 }
 

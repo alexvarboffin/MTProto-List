@@ -1,5 +1,4 @@
-import java.text.SimpleDateFormat
-import java.util.Date
+import com.walhalla.build.DailyVersionCode
 
 plugins {
     alias(libs.plugins.android.application)
@@ -7,10 +6,6 @@ plugins {
     alias(libs.plugins.kotlin.compose)
     alias(libs.plugins.google.services)
     alias(libs.plugins.firebase.crashlytics)
-}
-
-fun versionCodeDate(): Int {
-    return SimpleDateFormat("yyMMdd").format(Date()).toInt()
 }
 
 android {
@@ -21,9 +16,12 @@ android {
         applicationId = "com.walhalla.mtprotolist"
         minSdk = 24
         targetSdk = libs.versions.android.targetSdk.get().toInt()
-        val code = versionCodeDate()
-        versionCode = code
-        versionName = "1.1.$code"
+        val daily = DailyVersionCode.resolve(
+            findProperty("dailyBuildNumber") as? String,
+            System.getenv("DAILY_BUILD_NUMBER"),
+        )
+        versionCode = daily.versionCode
+        versionName = "1.1.${daily.datePart}"
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         multiDexEnabled = true
     }

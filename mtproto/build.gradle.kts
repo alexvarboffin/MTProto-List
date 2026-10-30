@@ -1,7 +1,6 @@
 import com.android.build.gradle.internal.dsl.SigningConfig
+import com.walhalla.build.DailyVersionCode
 import java.io.FileInputStream
-import java.text.SimpleDateFormat
-import java.util.Date
 import java.util.Properties
 
 plugins {
@@ -9,10 +8,6 @@ plugins {
     alias(libs.plugins.kotlin.android)
     id("kotlin-kapt")
     alias(libs.plugins.firebase.crashlytics)
-}
-
-fun versionCodeDate(): Int {
-    return SimpleDateFormat("yyMMdd").format(Date()).toInt()
 }
 
 android {
@@ -24,9 +19,12 @@ android {
         minSdkVersion(libs.versions.android.minSdk.get().toInt())
         targetSdkVersion(libs.versions.android.targetSdk.get().toInt())
 
-        val code = versionCodeDate()
-        versionCode = code
-        versionName = "1.1.$code"
+        val daily = DailyVersionCode.resolve(
+            findProperty("dailyBuildNumber") as? String,
+            System.getenv("DAILY_BUILD_NUMBER"),
+        )
+        versionCode = daily.versionCode
+        versionName = "1.1.${daily.datePart}"
         setProperty("archivesBaseName", "com.walhalla.mtprotolist")
 
         resConfigs(

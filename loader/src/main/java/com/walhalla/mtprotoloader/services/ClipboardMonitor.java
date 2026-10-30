@@ -62,17 +62,16 @@ public class ClipboardMonitor extends Service
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        String action = (intent.getAction() == null) ? "" : intent.getAction();
-        if (START_FOREGROUND_ACTION.equals(action)) {
-            if (BuildConfig.DEBUG) {
+        String action = intent == null ? null : intent.getAction();
+        if (action == null || START_FOREGROUND_ACTION.equals(action)) {
+            if (BuildConfig.DEBUG && START_FOREGROUND_ACTION.equals(action)) {
                 Toast.makeText(this, "START_FOREGROUND_ACTION", Toast.LENGTH_SHORT).show();
             }
-            startInForeground0(getApplicationContext());
-            //none showNotification(getApplicationContext());
+            startInForeground0();
         } else if (STOP_FOREGROUND_ACTION.equals(action)) {
             stopForegroundService();
         } else {
-            DLog.d("Null pointer" + action);
+            DLog.d("Unhandled clipboard action " + action);
         }
         return START_STICKY;
     }
@@ -89,15 +88,20 @@ public class ClipboardMonitor extends Service
         // Stop foreground service and remove the notification.
         stopForeground(true);
         stopSelf();// Stop the foreground service.
-        manager.removePrimaryClipChangedListener(mOnPrimaryClipChangedListener);
+        if (manager != null) {
+            manager.removePrimaryClipChangedListener(mOnPrimaryClipChangedListener);
+        }
     }
 
-    private void startInForeground0(Context context) {
+    private void startInForeground0() {
         Notification notification = createStartForegroundNotification();
         prefs = getSharedPreferences(KEY_TKT_LOADER, MODE_PRIVATE);
         editor = prefs.edit();
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-            startForeground(NOTIFICATION_ID, notification, ServiceInfo.FOREGROUND_SERVICE_TYPE_DATA_SYNC);
+            startForeground(
+                    NOTIFICATION_ID,
+                    notification,
+                    ServiceInfo.FOREGROUND_SERVICE_TYPE_DATA_SYNC);
         } else {
             startForeground(NOTIFICATION_ID, notification);
         }
@@ -263,10 +267,11 @@ public class ClipboardMonitor extends Service
         if (!ServiceHelper.isMyServiceRunning(context, ClipboardMonitor.class)) {
             Intent intent = new Intent(context, ClipboardMonitor.class);
             intent.setAction(START_FOREGROUND_ACTION);
-            //intent.putExtra(Constants.EXTRA.PLAY_EXTRA, songList.get(position).file);
-            //ForegroundService.IS_SERVICE_RUNNING = true;
-            //button.setText("Stop Service");
-            context.startService(intent);
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                context.startForegroundService(intent);
+            } else {
+                context.startService(intent);
+            }
         }
     }
 }

@@ -30,6 +30,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.walhalla.mtprotocompose.BuildConfig
 import com.walhalla.mtprotocompose.R
 import com.walhalla.mtprotocompose.mtprotoApp
 import com.walhalla.mtprotocompose.ui.components.EmptyListMessage
@@ -184,21 +185,29 @@ fun MtprotoListTab(
         InfoBottomSheet(
             target = InfoTarget.Mtproto(proxy),
             onDismiss = { infoTarget = null },
-            onToggleEnabled = {
-                scope.launch {
-                    app.repository.toggleMtprotoEnabled(proxy).onSuccess { updated ->
-                        infoTarget = updated
-                        viewModel.refresh()
+            onToggleEnabled = if (BuildConfig.DEBUG) {
+                {
+                    scope.launch {
+                        app.repository.toggleMtprotoEnabled(proxy).onSuccess { updated ->
+                            infoTarget = updated
+                            viewModel.refresh()
+                        }
                     }
                 }
+            } else {
+                null
             },
-            onUpdateGeo = {
-                scope.launch {
-                    app.repository.refreshMtprotoGeo(proxy).onSuccess { updated ->
-                        infoTarget = updated
-                        viewModel.refresh()
+            onUpdateGeo = if (BuildConfig.DEBUG) {
+                {
+                    scope.launch {
+                        app.repository.refreshMtprotoGeo(proxy).onSuccess { updated ->
+                            infoTarget = updated
+                            viewModel.refresh()
+                        }
                     }
                 }
+            } else {
+                null
             },
         )
     }
